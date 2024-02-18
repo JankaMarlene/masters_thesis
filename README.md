@@ -7,7 +7,7 @@ gantt
     dateFormat YYYY-MM-DD
 
     section Phase
-    Datenerhebung              : 2023-08-01, 2023-12.31
+    Datenerhebung              : 2023-08-01, 2023-12-31
     Literaturrecherche         : 2023-11-01, 2023-11-28
     Hypothesenentwicklung      : 2023-11-28, 2023-12-15
     Planungsvotrag entwickeln : 2023-12-01, 2024-01-15

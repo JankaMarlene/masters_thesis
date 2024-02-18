@@ -17,9 +17,9 @@ gantt
     Urlaub                     : 2024-03-15, 2024-03-25
     Auswertung EEG Daten       : 2024-03-25, 2024-04-30
     Schreiben                  : 2024-04-01, 2024-05-20
-    Methode & Ergebnisse
-    Diskussion & Einleitung    
-    Abstract & Zusammenfassung 
+    Methode & Ergebnisse       : 2024-04-01, 2024-05-20
+    Diskussion & Einleitung    : 2024-04-01, 2024-05-20
+    Abstract & Zusammenfassung : 2024-04-01, 2024-05-20
     Korrekturlesen             : 2024-04-20, 2024-06-03
     Korrektureinarbeiten       : 2024-06-04, 2024-06-10           
     Abgabe                     : 2024-06-10, 2024-06-18

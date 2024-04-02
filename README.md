@@ -29,6 +29,9 @@ gantt
     Abgabe                     : 2024-06-10, 2024-06-18
 ```
 
+## 📔📝notes
+- to-dos
+- questions
 ## 📚 literature
 contains all the literature 
 

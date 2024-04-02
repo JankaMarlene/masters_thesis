@@ -1,4 +1,4 @@
-# 👩‍🎓 masterthesis 👩‍🎓
+# 👩‍🎓 Janka's Master's Thesis 👩‍🎓
 GitHub Repository for my master's thesis
 
 ## 📋 protocols

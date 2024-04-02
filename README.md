@@ -29,7 +29,7 @@ gantt
     Abgabe                     : 2024-06-10, 2024-06-18
 ```
 
-## 📔📝notes
+## 📝 notes
 - to-dos
 - questions
 ## 📚 literature

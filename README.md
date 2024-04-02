@@ -1,8 +1,10 @@
-# masterthesis
+# 👩‍🎓 masterthesis 👩‍🎓
+GitHub Repository for my master's thesis
 
-## 📋: protocols
+## 📋 protocols
+contains all the meeting transcripts
 
-## :calendar: Timetable
+## 📆 timetable
 ```mermaid
 gantt
     title Project Schedule
@@ -27,4 +29,8 @@ gantt
     Abgabe                     : 2024-06-10, 2024-06-18
 ```
 
-## 📚📖: literature
+## 📚 literature
+contains all the literature 
+
+## 🗣️ presentations
+- Planungsvortrag

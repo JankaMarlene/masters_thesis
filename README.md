@@ -32,5 +32,5 @@ gantt
 ## 📚 literature
 contains all the literature 
 
-## 🗣️ presentations
+## 🖼️ presentations
 - Planungsvortrag

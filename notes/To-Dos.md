@@ -1,5 +1,5 @@
 # To-Dos
 
-[ ] erste Aufgabe
-[ ] zweite Aufgabe
+- [ ] erste Aufgabe
+- [ ] zweite Aufgabe
 - [ ] dritte Aufgabe

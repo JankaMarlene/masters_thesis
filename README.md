@@ -1,6 +1,6 @@
 # masterthesis
 
-## :&#x1F4CB: protocols
+## 📋: protocols
 
 ## :calendar: Timetable
 ```mermaid
@@ -26,3 +26,5 @@ gantt
     Korrektureinarbeiten       : 2024-06-04, 2024-06-10           
     Abgabe                     : 2024-06-10, 2024-06-18
 ```
+
+## 📚📖: literature

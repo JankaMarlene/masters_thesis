@@ -19,6 +19,7 @@
   - **Ähnlichkeitsmaße** bestimmt Übereinstimmungen der Werte
   - Da Distanzmaße Gegenstück der Ähnlichkeitsmaße ist Unterschied nicht wesentlich
 - In Abhängigkeit vom Skalenniveau (intervall- oder nominalskaliert) der zu transformierenden Daten stehen verschiedene Maße zur    Verfügung *(Pospeschill, 2012)*
+  
 ### Proximitätsmaße für intervallskalierte Daten
 - Maße basieren nahezu auf gleichem Prinzip: Ergeben sich aus Differenzen der einzelnen Wertepaare der beiden zu vergleichenden Objekte
 - Maße unterscheiden sich in Art, mit der einzelne Differenzen der verschiedenen Wertepaare zu einer Maßzahl zusammengefasst werden
@@ -31,6 +32,7 @@
   - Typisches Ähnlichkeitsmaß
   - z-standardisierten Werte der Fälle/Variablen werden paarweise multipliziert, summiert und durch Anzahl der Wertepaare minus eins dividiert
   - Korrelationskoeffizient
+    
 ### Proximitätsmaße für nominalskalierte Daten
 - Große Fülle an Vorschlägen
 - Im Falle **binärer Daten** (vorhanden = 1; nicht vorhanden = 0) folgende Ähnlichkeitsindizes vorgeschlagen:
@@ -39,5 +41,32 @@
   - **Jaccard (Tanimoto)**
     - Der Quotient aus Anzahl der Wertepaare, in denen bei beiden Objekten das jeweilige Merkmal vorliegt, und Anzahl der Wertepaare, in denen bei mindestens einem Objekt ein Merkmal vorliegt
   - (Beschrieben, wann was am besten geigenet ist anhand von Beispielen)
-  - 
-  
+
+## Clusteralgorithmen
+### Partitionierungsverfahren 
+  1. Start mit Ausgangspartition, für die pro Cluster ein Mittelwert für jede Eigenschaft bestimmt wird -> Dadurch wird **Gruppenzentroid** definiert
+  2. Für bestehende Gruppenzuordnung kann dann ein Maß der Heterogenität berechnet werden
+  3. Wird untersucht, durch welche Objektverlagerung von einem Cluster zu einem anderen das Maß der Heterogenität verkleinert werden kann
+  4. Das Objekt, das dieses Kriterium maximal erfüllt, wird verschoben
+  5. Spiel beginnt von vorne, bis es keine Objektverlagerung mehr gibt, die zu einer Verbesserung führen würde
+- Da aufgrund kombinatorischer Gegebenheiten nicht alle möglichen Gruppenzuordnungen geprüft werden können (n Objekte auf k Gruppen aufgeteilt ergeben k^n Aufteilungsmöglichkeiten), wird im Ergebnis nur ein **lokales**, aber **kein globales** Optimum erreicht
+- Auch Startposition entscheidet mit über das erzielbare Optimum des Clusterprozesses
+  - Empirisch ermittelte Anfangspositionen z.B. durch **Agglomerierungsverfahren** sind daher zufälligen Aufteilungen vorzuziehen
+#### Agglomerierungsverfahren
+- Verschiedene Algorithmen kommen zur Anwendung
+1. Ausgangspunkt: Jedes Objekt zunächst als eigenen Cluster zu betrachten und sämtliche Distanzen zu berechnen
+2. Cluster mit geringsten Distanz werden zu neuen Cluster zusammengefasst
+3. Für die um eins reduzierte Clusteranzahl werden neue Distanzen bestimmt, die in Abhängigkeit vom verwendeten agglomerativen Verfahren unterschiedlich berechnet werden
+4. Nach Abschluss werden wiedrum die Cluster mit größten Ähnlichkeit/geringsten Distanz zusammengeführt
+5. Prozess wird fortgeführt, bis sich sämtliche Objekte in einem Cluster befinden
+- Distanzberechnung zwischen zwei Clustern A und B erfolgtv in Abhängigkeit vom agglomerativen Verfahren unterschiedlich
+  - **Average Linkage**
+    - Distanz aller Objektpaare wird berechnet, die sich zwischen den beiden Clustern bilden lassen. Durchschnitt dieser Distanzen wird als Distanz zwischen den Clustern angesehen und bildet Kriterium für Agglomerierung
+    - Alle Objekte eines Clusters werden berücksichtigt. Distanz kann nicht von einzelnen Objekten bestimmt werden
+  - **Average Group Linkage**
+    - Alle Objekte beider Cluster werden zusammengenommen und alle möglichen Objektpaare aus ihnen gebildet
+    - Auch zwei Objekte desselben Clusters können ein Paar bilden
+    - Für jedes Objektpaar wird Distanz berechnet; aus allen Distanzen wird dann der Durchschnitt ermittelt
+    - Methode führt dazu, dass durchschnittliche Distanz des neuen Clusters möglichst gering ist
+  - **Single Linkage**
+    - 

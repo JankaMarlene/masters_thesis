@@ -90,3 +90,11 @@
     - Annahme: In etwa gleich große Cluster mit gleicher Varianz; In Größe stark variierende Cluster werden durch Algorithmus häufig nicht erkannt
 - Bei **konservativen Verfahren** nur Verwendung von Distanzmaßen sinnvoll
 - Bei verbleibenden Verfahren kann jedes Proximitätsmaß zum Einsatz kommen
+
+## Festlegung einer Clusterlösung
+- Clusteranalysen ermitteln keine finale Lösung zu "korrekten" Anzahl der Cluster -> Selber bestmögliche Lösung identifizieren
+- Bereits vor Anwendung theoretisch begründete Annahme zur Anzahl der Gruppen vorliegen (Bei mir 2: kognitive Einschränkung vs. keine
+- Durch Verwendung eines **Dendrogramms** kann Fusionierungsprozess nachvollzogen und zur Entscheidung für Gruppenaufteilung hinzugezogen werden
+- Mittels **Elbow-Kriteriums** wird Heterogenitätsentwicklung visualisiert
+  - Heterogenitätsmaß auf Ordinate gegen Anzahl der Cluster auf der Abszisse abgetragen
+  - Der Knick ("Ellenbogen") im Linienverlauf wird als Kriterium für Clusteranzahl verwendet

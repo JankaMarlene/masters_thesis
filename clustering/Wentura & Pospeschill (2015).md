@@ -11,7 +11,13 @@
   - **Hierarchische** Verfahren
     - Anzahl der Cluster wird erst im nachhinein bestimmt
     - Die (Un-)Ähnlichkeiten werden unter Verwendung spezifischer Distanz- oder Ähnlichkeitsmaße gewonnen, ein Algorithmus zur          Zusammenführung der Objekte gewäht und schließlich Anzahl der Cluster bestimmmt
-      
+### Voraussetzungen
+- Relativ voraussetzungsarm
+- Verwendete Distanz- o. Ähnlcihkeitsmaße für Daten angemessen sein
+- Ergebnisse von Clusteranalysen sollte man grundsätzlich als vorläufig ansehen und durch unabhängige Stichproben bestätigen
+- Für metrische Variablen Normalverteilung vorausgesetzt
+- Für kategoriale Variablen eine multinominale Verteilung vorausgesetzt
+  
 ## Proximitätsmaße
 - Umfassen Distanz- und Ähnlichkeitsmaße
   - Dienen dazu, die Stärke der (Un-)Ähnlichkeit zweier Objekte zu quantifizieren
@@ -98,3 +104,30 @@
 - Mittels **Elbow-Kriteriums** wird Heterogenitätsentwicklung visualisiert
   - Heterogenitätsmaß auf Ordinate gegen Anzahl der Cluster auf der Abszisse abgetragen
   - Der Knick ("Ellenbogen") im Linienverlauf wird als Kriterium für Clusteranzahl verwendet
+
+#### Hierarchische Clusteranalyse
+- Voraussetzung: Intervallskalierte o. ordinalskalierte o. binäre Variablen
+
+#### Clustezentrenanalyse
+- Voraussetzung: Intervallskalierte Variablen
+- Clusteranzahl und Anfangswerte für Clustezentren müssen vorher festgelegt sein
+  - Kann durch hierarchische Clusteanalyse unter Verwendung einer Substichprobe gewonnen werden
+- Bei großen Objektzahlen
+
+#### Two-Step-Clusteranalyse
+- Intervall- und kategorialskalierte und kontinuierliche Variablen können gleichzeitig verwendet werden
+- Clusteranzahl wird automatisch ermittelt
+- Bei großen Objektzahlen möglich
+- Voraussetzung: Variablen im Clustermodell unabhängig, kontinuierlichen Variablen normalverteilt und die kategorialen Variablen mulinominal verteilt sind
+- **Likelihood-Maß** wird verwendet, um Ähnlichkeit zwischen den Clustern festzustellen im Falle gemischter Skalenniveaus
+  - Setzt voraus, dass alle Variablen im Clustermodell unabhängig sind -> Vorher durch **bivariater Korrelationen** prüfen
+- **Euklidische Maß** kann nur im Falle kontinuierlicher Variablen gewählt werden
+- Unterteilt Daten im ersten Schritt über eine Baumstruktur (Cluster feature (CF) tree) in verschiedene Subcluster
+  - Dient Vorsortierung der Daten und Reduzierung des Datenvolumens
+  - Gegebenenfalls mehrmals erneut aufgebaut und modifiziert
+- Falls ich Verfahren verwenden sollte genauer angucken, ist im Buch beschrieben
+- Allgorithmus gilt als robust gegenüber einer Verletzung der Voraussetzungen
+
+## Literatur
+- Einführung in Clusteranalyse: *Backhaus et al. (2011)*
+- Weiterführende Literatur: *Bacher et al. (2010)*; *Everitt, Landau, Leese und Stahl (2011)*

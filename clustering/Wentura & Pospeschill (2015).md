@@ -15,4 +15,10 @@
   - Dienen dazu, die Stärke der (Un-)Ähnlichkeit zweier Objekte zu quantifizieren
   - **Distanzmaße** bestimmt Abweichung
   - **Ähnlichkeitsmaße** bestimmt Übereinstimmungen der Werte
+  - Da Distanzmaße Gegenstück der Ähnlichkeitsmaße ist Unterschied nicht wesentlich
+- In Abhängigkeit vom Skalenniveau (intervall- oder nominalskaliert) der zu transformierenden Daten stehen verschiedene Maße zur    Verfügung *(Pospeschill, 2012)*
+### Proximitätsmaße für intervallskalierte Daten
+- Maße basieren nahezu auf gleichem Prinzip: Ergeben sich aus Differenzen der einzelnen Wertepaare der beiden zu vergleichenden Objekte
+- Maße unterscheiden sich in Art, mit der einzelne Differenzen der verschiedenen Wertepaare zu einer Maßzahl zusammengefasst werden
+### Proximitätsmaße für nominalskalierte Daten
   

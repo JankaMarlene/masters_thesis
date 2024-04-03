@@ -34,6 +34,7 @@ gantt
 ## 📝 notes
 - to-dos
 - questions
+- sources
   
 ## 📚 literature
 contains all the literature 

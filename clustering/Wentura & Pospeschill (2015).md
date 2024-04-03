@@ -68,5 +68,25 @@
     - Auch zwei Objekte desselben Clusters können ein Paar bilden
     - Für jedes Objektpaar wird Distanz berechnet; aus allen Distanzen wird dann der Durchschnitt ermittelt
     - Methode führt dazu, dass durchschnittliche Distanz des neuen Clusters möglichst gering ist
-  - **Single Linkage**
-    - 
+  - **Single Linkage** (nächstgelegener Nachbar) (**kontrahierender Algirithmus** -> neigt zur Bildung weniger großer Cluster, denen viele kleine Cluster gegenüberstehen; Geeignet um Objekte mit extremen Merkmalen zu identifizieren)
+    - Aus allen Objekten beider Cluster werden die beiden am nächsten beieinanderliegenden Objekte ausgewählt, die aus unterschiedlichen Clustern stammen
+    - Für diese beiden Objekte wird Distanz berechnet und dann als Distanz zwischen den Clustern betrachtet
+    - Eignet sich für erste Analyse, um Objekte mit extremen Ausprägungen zu identifizieren und gegebenenfalls zu entfernen
+  - **Complete Linkage** (entferntester Nachbar) (**dilatierendes Verfahren** -> neigt zur Bildung etwa gleich großer Cluster)
+    - Objektpaar mit größten Distanz aus beiden Clustern gewählt, die aus unterschiedlichen Clustern stammen
+    - Distanz zwischen diesen Objekten gilt als Distanz zwischen den beiden Clustern
+  - **Zentroid-Clustering** (konservatives Verfahren)
+    - Für jeden Cluster werden Objektmittelwerte der in dem Cluster enthaltenen Objekte berechnet
+      - Dies bedeutet für einen neuen Cluster, dass sein Zentroid dem gewogenen Mittel der beiden Zentroiden der Ausgangscluster entspricht, wobei die Objektzahlen der Ausgangscluster die Gewichte bilden
+      - Distanz zwischen zwei Clustern ergibt sich dann aus den Mittelwerten
+  - **Median-Clustering** (konservatives Verfahren)
+    - Zentroid eines neuen Clusters wird aus Zentroiden der Ausgangscluster berechnet, die beide mit gleichen Gewicht in das neue Zentroid eingehen
+  - **Ward-Methode** (konservatives Verfahren)
+    1. Mittelwerte der einzelnen Objekte für jeden Cluster berechnen
+    2. Die quadierten Euklidischen Distanzen der einzelnen Objekte eines Clusters werden zu dem Clustermittelwert ermittelt
+    3. Die sich so ergebenden Distanzen der einzelnen Objekte zu den jeweiligen Clustermittelwerten werden für alle Objekte aufsummiert
+    4. Es werden jeweils die beiden Cluster zu einem neuen Cluster vereinigt, durch deren Vereinigung sich der geringste Zuwachs in der Gesamtsumme der quadrierten Distanzen ergibt
+    - Gilt als besonders verlässlicher Algorithmus, vorausgestezt, Variablen besitzen **metrisches** Skalenniveau, sind unkorreliert und weisen keine Ausreißer auf
+    - Annahme: In etwa gleich große Cluster mit gleicher Varianz; In Größe stark variierende Cluster werden durch Algorithmus häufig nicht erkannt
+- Bei **konservativen Verfahren** nur Verwendung von Distanzmaßen sinnvoll
+- Bei verbleibenden Verfahren kann jedes Proximitätsmaß zum Einsatz kommen

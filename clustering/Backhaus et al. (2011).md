@@ -208,4 +208,19 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
       - Dafür wird häufig auf **K-Means-Clusteranalyse** zurückgegriffen
 
 #### Beurteilung von Robustheit und Güte einer Cluster-Lösung
+- Nachdem Clusteranzahl bestimmt stellt sich die Frage, wie robust die gefundene Clusterlösung ist
+- Gibt selten objektive Vergleichskriterien, die bei der Clusteranalyse zur Robustheitsprüfung herangezogen werden können (**Bei mir eventuell schon, ich habe ja die subjektive Einschätzung**)
+1. Ausreißer eliminieren
+2. Wie sensibel sind Ergebnisse, wenn unterschiedliche Methoden zur Clusterung herangezogen werden
+   - Nur Methoden der gleichen Kategorie von Clusterverfahren können vergleichend betrachtet werden
+   - Untersceiden sich Ergebnisse nicht/nur wenig = robuste Lösung
+- **Split Half-Verfahren**
+  - Daten werden zufällig in 2 Stichproben aufgeteilt
+    - Für jede Gruppe mit gleichem Verfahren eine Clusteranalyse durchführen
+      - Gleiche/ähnliche Clusterstruktur? -> Robustheit
+- Zur Beurteilung der Güte **Diskriminanzanalyse**
+  - Ergibt meist relativ hohe Güte
+    - Da die zur Clusterung herangezogenen Variablen & die unabhängigen Variablen der Diskriminanzanalyse identisch sind
+
+### 5. Interpretation einer Cluster-Lösung
   

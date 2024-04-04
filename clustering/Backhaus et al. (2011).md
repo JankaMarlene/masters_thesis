@@ -185,3 +185,27 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Variablen unkorreliert sind
     - Zu erwarten ist, dass die Elementzahl in jeder Gruppe ungefährt gleich groß ist (Nicht in der Lage, langgestreckte Gruppen oder solche mit kleiner Elementzahl zu erkennen)
     - Die Gruppen in etwa die gleiche Ausdehnung besitzen
+
+### 4. Bestimmung der Clusterzahl
+- Bestimmung der Clusterzahl sollte sich an statistischen Kriterien orientieren und nicht sachlogisch (im Hinblick auf den Gruppen zugeordneten Fällen) begründet werden
+- Bei Entscheidung besteht immer Zielkonflikt zwischen "Homogenitätsanforderung an die Cluster-Lösung" & der "Handhabbarkeit der Cluster-Lösung"
+  - Zum Lösen können auch sachlogische Überlegungen herangezogen werden, die sich allerdings nu auf Anzahl der zu wählenden Cluster bezieht und nicht an den in den Clustern zusammengefassten Fällen ausgerichtet sein sollten
+
+#### Verschiedene Möglichkeiten, um optimale Clusteranzahl zu bestimmen
+- **Analyse von Scree-Plot & Elbow-Kriterium**
+  - Bei Konstruktion des entsprechenden Diagramms sollte Ein-Cluster-Lösung nicht berücksichtigt werden
+    - Beim Übergang von Zwei- zur Ein-Cluster-Lösung immer größter Heterogenitätssprung & sich daher bei dessen Berücksichtigung bei nahezu allen Anwenndungsfällen ein Elbow herausbildet
+  - Hängt stark von subjektiven Einschätzung der/des Anwender:in ab
+- **Regeln zur Bestimmung Clusterzahl**
+  - statistisch und weitgehend objektive Anhaltspunkte zur Bestimmung optimaler Clusteranzahl bei Anwendung hierarchishen Clusteranalysen liefern
+  - **Regel nach Calinski/Harabasz**
+    - Metrische Merkmale
+    - Analogie zur Varianzanalyse
+  - **Test von Mojena**
+    - Relativ einfach selbst durchführbar mit Tabellenkalkulation
+  - **Optimierung einer Clusterlösung mit Hilfe von K-Means**
+    - Ist finale Clusterzahl gefunden, kann weiterhin geprüft werden, ob sich durch die Verschiebung von Objekten innerhalb der gefundenen Cluster eine Verbesserung (Streuung innerhalb der Gruppe möglichst klein und zwischen Gruppen möglichst groß) der Lösung erreicht werden kann
+      - Dafür wird häufig auf **K-Means-Clusteranalyse** zurückgegriffen
+
+#### Beurteilung von Robustheit und Güte einer Cluster-Lösung
+  

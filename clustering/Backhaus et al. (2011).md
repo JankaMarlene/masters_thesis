@@ -84,4 +84,41 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
 - In Abhängigkeit des Skalenniveaus der betrachteten Merkmale Vielzahl an Proximitätsmaßen
   - *Tab.8.4* Übersicht über Proximitätsmaße für hierarchische Clusteranalyse
 - Im folgenden konzentriert auf metrisch skalierte Variablen (Wenn Variablen nominal skaliert oder liegen binäre Variablen vor, so ändern sich auch die Maße die zur Bestimmung der Proximität herangezogen werden können
-##### Proximitätsmaße bei metrisch skalierten Variablen
+##### Proximitätsmaße bei metrisch skalierten Variablen (genauer angucken, wenn nötig)
+- **Einfache und quadrierte Euklidische Distanz (L2-Norm)** 
+- **City-Block-Metrik (L1-Norm)**
+- **Minkowski-Metrik (L-Normen)**
+- **Pearson Korrelationskoeffizient als Ähnlichkeitsmaß**
+
+### 3. Auswahl des Fusionierungsalgorithmus
+- Die gewonnene Distanz- o. Ähnlichkeitsmatrix (mit Hilfe von Proximitätsmaßen ermittelt) bildet nun Ausgangspunkt der Clusteralgorithmen, die Zusammenfassung der Objekte zum Ziel haben
+- Breites Spektrum an Algorithmen zur Grupierung einer gegebenen Objektmenge
+- Vorteil Clusteranalyse: Simultan können eine Vielzahl an Variablen zur Gruppierung der Objekte herangezogen werden
+- Einteilung der Clusterverfahren lässt sich entsprechend der Vorgehensweise im Fusionierungsprozess vornehmen
+#### Clusterverfahren Übersicht
+- **Hierarchische Verfahren**
+  - Bei praktischen Anwendungen große Bedeutung beizumessen
+  - **Agglomerative Verfahren**
+    - Große praktische Bedeutung
+    - Ausgangspunkt: Feinste Partition (Entspricht der Anzahl der Untersuchungsobjekte)
+      - Somit charakterisiert durch Zusammenfassung von Gruppen
+    - Link zwischen Gruppen (beliebiges Skalenniveau)
+    - Link innerhalb Gruppen (beliebiges Skalenniveau)
+    - Nächstgelegener Nachbar (Single Linkage) (beliebiges Skalenniveau)
+    - Entferntester Nachbar (Complete Linkage) (beliebiges Skalenniveau)
+    - Zentroid-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+    - Median-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+    - Ward-Methode (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+  - **Divisive Verfahren**
+    - Ausgangspunkt: Gröbste Partition (alle Untersuchungsobjekte befinden sich in einer Gruppe)
+      - Somit charakterisiert durch Aufteilung einer Gesamtheit in Gruppen
+- **Partionierende Verfahren**
+  - **Teilungsverfahren**
+    - Optimales Verfahren
+    - Paralleles Verfahren
+  - **Minimal-Distanz-Verfahren (K-Means)**
+    - Sequentielles Verfahren
+    - Paralleles Verfahren
+
+#### Ablaufschritte der hierarchisch-agglomerativen Verfahren
+- 

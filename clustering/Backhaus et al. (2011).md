@@ -102,17 +102,19 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Große praktische Bedeutung
     - Ausgangspunkt: Feinste Partition (Entspricht der Anzahl der Untersuchungsobjekte)
       - Somit charakterisiert durch Zusammenfassung von Gruppen
-    - Verfahren:
-      - Link zwischen Gruppen (beliebiges Skalenniveau)
-      - Link innerhalb Gruppen (beliebiges Skalenniveau)
-      - Nächstgelegener Nachbar (Single Linkage) (beliebiges Skalenniveau)
-      - Entferntester Nachbar (Complete Linkage) (beliebiges Skalenniveau)
-      - Zentroid-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
-      - Median-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
-      - Ward-Methode (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+    - Verfahren, die in Praxis häufig zur Anwendung kommen:
+      - Link zwischen Gruppen (Alle Proximitätsmaße möglich) (beliebiges Skalenniveau)
+      - Link innerhalb Gruppen (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+      - Nächstgelegener Nachbar (Single Linkage) (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+      - Entferntester Nachbar (Complete Linkage) (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+      - Zentroid-Clustering (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+      - Median-Clustering (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+      - Ward-Methode (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+        - Skalenniveau scheint doch auch bei den letzten drei Verfahren beliebig sein zu können. Wichtig ist nur, dass die verwendeten Proximitätsmaße auf das Skalenniveau der Daten (metrisch o. nicht-metrisch) abgestimmt werden
   - **Divisive Verfahren**
     - Ausgangspunkt: Gröbste Partition (alle Untersuchungsobjekte befinden sich in einer Gruppe)
       - Somit charakterisiert durch Aufteilung einer Gesamtheit in Gruppen
+    - Eher geringe Bedeutung
 - **Partionierende Verfahren**
   - **Teilungsverfahren**
     - Optimales Verfahren
@@ -122,4 +124,17 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Paralleles Verfahren
 
 #### Ablaufschritte der hierarchisch-agglomerativen Verfahren
-- 
+- Konkrete Ablauf eines Fusionierungsprozessses wird i.d.R. anhand einer Tabelle (sog. Zuordnungsübersicht) und auch grafisch mittels Dendrogramm o. Eiszapfendiagramm verdeutlicht
+- **Startpunkt**: Gestartet wird mit feinster Partition, d.h. jeses Objekt stellt ein Cluster dar. Bei *N* Objekten bestehen *N* Ein-Objekt-Cluster
+- **Schritt 1**: Für die auf einer Fusionierungsstufe enthaltenen Objekte (Cluster) werden die paarweisen Distanzen bzw. Ähnlichkeiten zwischen den Objekten (Clustern) berechnet
+- **Schritt 2**: Die beiden Objekte (Cluster) mit geringsten Distanz (o. größten Ähnlichkeit) gesucht & zu neuem Cluster zusammengefasst. Zahl der Objekte bzw. bisher gebildeten Gruppen nimmt damit um 1 ab.
+- **Schritt 3**: Abstände zwischen den neuen und den übrigen Objekten/Gruppen werden berechnet, wodurch sich die sog. **reduzierte Distanzmatrix** ergibt
+- **Schritt 4**: Schritte 2 & 3 werden so lange wiederholt, bis alle Untersuchungsobjekte in einer Gruppe enthalten sind (sog. Ein-Cluster-Lösung). Bei *N* Objekten werden insgesamt *N*-1 Fusionierungsschritte durchlaufen
+##### Unterschiede in der Distanzberechnung hierarchisch-agglomerativer Clusterverfahren
+- Unterschied liegt in Art und Weise, wie Distanz zwischen einem Objekt (Cluster) *R* & dem neuen Cluster (*P*+*Q*) in **Schritt 4** gebildet wird
+- Sind zwei Objekte (Cluster) *P* & *Q* zu vereinigen, so ergibt sich die Distanz *D*(*R;P*+*Q*) zwischen irgendeiner Gruppe R & der neuen Gruppe (*P*+*Q*) durch folgende Transformation *(vgl. Kaufmann & Rousseeuw 2005, S. 225 ff.; Steinhausen & Langer 1977, S.76)*:
+  - *D*(*R;P*+*Q*) = *A*x*D*(*R,P*) + *B*x*D*(*R,Q*) + *E*x*D*(*P,Q*) + *G*x|*D*(*R,P*)-*D*(*R,Q*)|
+    - mit *D*(*R,P*): Distanz zwischen Gruppe *R* & *P*
+    - mit *D*(*R,Q*): Distanz zwischen Gruppe *R* & *Q*
+    - mit *D*(*P,Q*): Distanz zwischen Gruppe *P* & *Q*
+    - Größen A, B, E & G sind **Konstanten**, die je nach verwendetem Algorithmus variieren

@@ -30,7 +30,9 @@ gantt
 ```
 
 ## 🧩🔍 clustering
-
+- Summary: Backhaus et al.,  2011
+- Summary: Wentura & Pospeschill, 2015
+  
 ## 📝 notes
 - to-dos
 - questions

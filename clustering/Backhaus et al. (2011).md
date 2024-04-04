@@ -138,3 +138,14 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - mit *D*(*R,Q*): Distanz zwischen Gruppe *R* & *Q*
     - mit *D*(*P,Q*): Distanz zwischen Gruppe *P* & *Q*
     - Größen A, B, E & G sind **Konstanten**, die je nach verwendetem Algorithmus variieren
+##### Verdeutlichung des Fusionierungsprozesses in einer Zuordnungsübersicht (Agglomeration Schedule)
+- In Tabelle wird für jeden Fusionierungsschritt aufgezeigt, wekche beiden Objekte bzw. Cluster auf welchem **Heterogenitätsniveau** zusammengefasst werden
+- Wir auch angegeben, auf welcher Stufe das gebildete Cluster als nächstes betrachtet wird
+##### Verdeutlichung des Fusionierungsprozesses mithilfe eines Dendrogramms
+- Verlauf eines Fusionierungsprozesses grafisch veranschaulicht
+- Gibt an, mit welchem **Heterogenitätsmaß** eine bestimmte Anzahl an Cluster verbunden ist
+  - Bei hierarchischen Clusterverfahren deshlab i.d.R. auf vertikalen Achse alle in einer Untersuchung betrachteten Objekte aufgelistet
+  - Im Ausgangspunkt **Heterogenitätsmaß** von "0" verbunden, da ja jedes Objekt ein eigenes Cluster bildet
+  - Mit fortschreitender Fusionierung steigt dann auch das **Heterogenitäsmaß**, wobei das Dendrogramm grafisch dijenigen Objekte verbindet, die auf einer bestimmten Fusionierungsstufe miteinander verbunden werden
+
+##### Single Linkage, Complete Linkage und Ward-Verfahren

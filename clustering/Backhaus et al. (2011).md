@@ -102,15 +102,22 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Große praktische Bedeutung
     - Ausgangspunkt: Feinste Partition (Entspricht der Anzahl der Untersuchungsobjekte)
       - Somit charakterisiert durch Zusammenfassung von Gruppen
-    - Verfahren, die in Praxis häufig zur Anwendung kommen:
+    - **Verfahren, die in Praxis häufig zur Anwendung kommen**:
       - Link zwischen Gruppen (Alle Proximitätsmaße möglich) (beliebiges Skalenniveau)
+        - Charakteristiker: Konservativ, alle Proximitätsmaße verwendbar
       - Link innerhalb Gruppen (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+        - Charakteristiker: Konservativ, alle Proximitätsmaße verwendbar
       - Nächstgelegener Nachbar (Single Linkage) (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+        - Charakteristiker: Kontrahierend, neigt zur Kettenbildung, alle Proximitätsmaße verwendbar
       - Entferntester Nachbar (Complete Linkage) (Alle Proximitäsmaße möglich) (beliebiges Skalenniveau)
+        - Charakteristiker: Dilatierend, neigt zu kleinen Gruppen, alle Proximitätsmaße verwendbar
       - Zentroid-Clustering (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+        - Charakteristiker: Konservativ, nur Distanzmaße als Proximitätsmaße verwendbar
       - Median-Clustering (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+        - Charakteristiker: Konservativ, nur Distanzmaße als Proximitätsmaße verwendbar
       - Ward-Methode (Nur sinnvoll Verwendung Distanzmaß) (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
         - Skalenniveau scheint doch auch bei den letzten drei Verfahren beliebig sein zu können. Wichtig ist nur, dass die verwendeten Proximitätsmaße auf das Skalenniveau der Daten (metrisch o. nicht-metrisch) abgestimmt werden
+        - Charakteristiker: Konservativ, Bildet etwa gleich große Gruppen, nur Distanzmaße als Proximitätsmaße verwendbar
   - **Divisive Verfahren**
     - Ausgangspunkt: Gröbste Partition (alle Untersuchungsobjekte befinden sich in einer Gruppe)
       - Somit charakterisiert durch Aufteilung einer Gesamtheit in Gruppen
@@ -148,4 +155,33 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
   - Im Ausgangspunkt **Heterogenitätsmaß** von "0" verbunden, da ja jedes Objekt ein eigenes Cluster bildet
   - Mit fortschreitender Fusionierung steigt dann auch das **Heterogenitäsmaß**, wobei das Dendrogramm grafisch dijenigen Objekte verbindet, die auf einer bestimmten Fusionierungsstufe miteinander verbunden werden
 
-##### Single Linkage, Complete Linkage und Ward-Verfahren
+##### Fusionierungseigenschaften/Charakteristiker 
+- **Dilatierende Verfahren**: Neigt dazu, die Objekte verstärkt in einzelne etwa gleich große Gruppen zusammenzufassen. Außreiser werden nicht entdeckt und können zur Verzerrung des Gruppierungsprozesses führen, daher müssen Ausreißer vorher eliminiert werden
+- **Kontrahierende Algorithmen**: Tendieren dazu, zunächst wenige große Gruppen zu bilden, denen viele kleine gegenüberstehen. Geeignet um "Ausreißer" in einem Objektraum zu identifizieren
+- **Konservative Verfahren**: Wenn weder Tendenzen zur Dilatation noch zur Kontraktion aufweisen
+- **Kettenbildung**: Im Fusionierungsprozess werden primär einzelne Objekte aneinandergereiht & so eher große Gruppen gebildet. "Schlecht" getrennte Gruppen können dadurch nur schwer aufgedeckt werden
+  
+##### Single Linkage, Complete Linkage und Ward-Verfahren 
+- **Single Linkage** (In Abschnitt 8.2.3.2.1. genau erklärt)
+  - (Nächstgelegener Nachbar)
+  - Kleinste Distanz zwischen den Mitgliedern aus zwei Gruppen/Objekten
+  - Charakteristiker: Kontrahierend, neigt zur Kettenbildung, alle Proximitätsmaße verwendbar
+- **Complete Linkage** (In Abschnitt 8.2.3.2.2. genau erklärt)
+  - (Entferntester Nachbar)
+  - Größte Distanz zwischen den Mitgliedern aus zwei Gruppen/Objekten
+  - Charakteristiker: Dilatierend, neigt zu kleinen Gruppen, alle Proximitätsmaße verwendbar
+- **Ward-Methode** (In Abschnitt 8.2.3.2.3. genau erklärt)
+  - (Minimum-Varianz)
+  - Geringster Anstieg der Fehlerquadratsumme (Varianzkriterium)
+  - In Praxis große Verbreitung gefunden
+  - Unterscheidet von Linkage-Verfahren sich nicht nur durch Art der neuen Distanzbildung, sondern auch durch Vorgehensweise bei Fusion von Gruppen
+  - Es werden nicht die Gruppen zusammengefasst, die die geringste Distanz aufweisen, sondern es werden die Objekte (Gruppen) vereinigt, die die Varianz (Fehlerquadratsumme) in einer Gruppe möglichst wenig erhöhen
+  - Charakteristiker: Konservativ, Bildet etwa gleich große Gruppen, nur Distanzmaße als Proximitätsmaße verwendbar
+  - Untersuchung von *Bergs (1981, S.96 f.)*: Im Vergleich in den meisten Fällen sehr gute Partitionen findet & Elemente den Gruppen meist auch korrekt zuordnet
+  - Sehr guter Fusionierungsalgorithmus, wenn (*vgl. Milligan 1980, S 332 ff.; Punj & Stewart 1983, S. 141 ff.*):
+    - Verwendung eines Distanzmaßes ein (inhaltlich) sinnvolles Kriterium zur Ähnlichkeitsbestimmung darstellt
+    - Alle Variablen auf metrischem Skalenniveau gemessen wurden
+    - Keine Ausreißer in einer Objektmenge enthalten sind bzw. vorher eliminiert wurden
+    - Variablen unkorreliert sind
+    - Zu erwarten ist, dass die Elementzahl in jeder Gruppe ungefährt gleich groß ist (Nicht in der Lage, langgestreckte Gruppen oder solche mit kleiner Elementzahl zu erkennen)
+    - Die Gruppen in etwa die gleiche Ausdehnung besitzen

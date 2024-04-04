@@ -102,13 +102,14 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Große praktische Bedeutung
     - Ausgangspunkt: Feinste Partition (Entspricht der Anzahl der Untersuchungsobjekte)
       - Somit charakterisiert durch Zusammenfassung von Gruppen
-    - Link zwischen Gruppen (beliebiges Skalenniveau)
-    - Link innerhalb Gruppen (beliebiges Skalenniveau)
-    - Nächstgelegener Nachbar (Single Linkage) (beliebiges Skalenniveau)
-    - Entferntester Nachbar (Complete Linkage) (beliebiges Skalenniveau)
-    - Zentroid-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
-    - Median-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
-    - Ward-Methode (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+    - Verfahren:
+      - Link zwischen Gruppen (beliebiges Skalenniveau)
+      - Link innerhalb Gruppen (beliebiges Skalenniveau)
+      - Nächstgelegener Nachbar (Single Linkage) (beliebiges Skalenniveau)
+      - Entferntester Nachbar (Complete Linkage) (beliebiges Skalenniveau)
+      - Zentroid-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+      - Median-Clustering (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
+      - Ward-Methode (metrisches Skalenniveau (bevorzugt: Quadr. Euklid))
   - **Divisive Verfahren**
     - Ausgangspunkt: Gröbste Partition (alle Untersuchungsobjekte befinden sich in einer Gruppe)
       - Somit charakterisiert durch Aufteilung einer Gesamtheit in Gruppen

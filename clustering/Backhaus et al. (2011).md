@@ -26,3 +26,28 @@
 5. Inhaltliche Interpretation der gefundenen Cluster
 
 ### 1. Auswahl der Clustervariablen
+- "Korrekte" Bestimmung der Clustervariablen entscheidet darüber, wie gut die Ergebnisse einer Clusteranalyse später genutzt werden können
+- Folgende Eigenschaften sollten durch Clustervariablen erfüllt sein:
+  - **Gruppierungsrelevanz**
+    - Für inhaltliche Zielsetzung einer Clusteranalyse müssen Variablen hohe Relevanz besitzen
+      - z.B. Ziel: Gruppe von Personen mit ähnlichem Verhalten zu finden
+        - Clustervariablen müssen Verhaltensrelevanz aufweisen
+    - Wichtig: Nur sollche Merkmale im Gruppierungsprozess berücksichtigen, die aus theorteischen bzw. sachlogischen Überlegungen als relevant für den zu untersuchenden Sachverhalt anzusehen sind
+    - Merkmale, die für Untersuchungszusammenhang bedeuutungslos, müssen ausgeschlossen werden
+  - **Unabhängigkeit**
+    - Wichtig, dass Variablen keine hohen Korrelationen aufweisen sonst "**implizite Gewichtung**" bestimmter Aspekte im Clusteringprozess -> Verzerrung der Ergebnisse
+    - Bei korrelierenden Clustervariablen folgende Möglichkeiten
+      - *Ausschluss von Variablen*
+        - Informationen, die hoch korrelierte Variablen liefern, werden größtenteils durch andere Variable miterfasst und können daher als redundant angesehen werden. Daher Ausschluss sinvoll, um Gleichgewichtung der Daten sicherzustellen
+      - *Vorschaltung einer Faktorenanalyse (Hauptkomponentenanalyse)*
+        - Hoch korrelierte Variablen können auf unabhängige Faktoren verdichtet werden
+        - Hauptkomponentenanalyse als Extraktionsverfahren
+      - *Mahalanobis-Distanz als Proximitätsmaß*
+        - Bei Verwendung lassen sich dadurch bereits im Rahmen der Distanzberechnung zwischen den Objekten etwaige Korrelationen zwischen Variablen ausschließen
+        - Stellt allerdings bestimmte Voraussetzungen an Daten, die häufig bei Clusteranalyseproblemen nicht erfüllt sind
+  - **Messbarkeit**
+  - **Vergleichbarkeit der Messdimensionen**
+  - **Beeinflussbarkeit**
+  - **Trennkraft**
+  - **Repräsentativität**
+  - **Clusterstabilität**

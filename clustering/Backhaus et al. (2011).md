@@ -46,8 +46,42 @@
         - Bei Verwendung lassen sich dadurch bereits im Rahmen der Distanzberechnung zwischen den Objekten etwaige Korrelationen zwischen Variablen ausschließen
         - Stellt allerdings bestimmte Voraussetzungen an Daten, die häufig bei Clusteranalyseproblemen nicht erfüllt sind
   - **Messbarkeit**
+    - Nach Möglichkeit manifeste Variablen, in Wirklichkeit auch beobachtbar sind und gemessen werden können
   - **Vergleichbarkeit der Messdimensionen**
+    - Verschiedene Messdimensionen (Skalen) führen allein dadurch zu Vergrößerung von Distanzen zwischen Objekten
+    - Um Vergleichbarkeit zwischen Variablen herzustellen, sollte deshalb bei **mentrisch** skalierten Clustervariablen vorab eine Standardisierung vorgenommen werden
+      - Dies hat zur Folge, dass alle (standardisierten) Variablen einen Mittelwert von 0 und Varianz von 1 besitzen
+      - *Vgl. zur Standardisierung von Variablen in Abschnitt 1.2.*
   - **Beeinflussbarkeit**
+    - Anwender:innen möchten i. d. R. die gefundenen Cluster durch spezifische Maßnahmen bearbeiten. Maßnahmen auf Besonderheiten der Cluster ausgerichtet. Daher bei Auwahl der Variablen schon drauf achten, ob sie beeinflussbar sind
   - **Trennkraft**
+    - Sollen Cluster untereinander möglichst heterogen sein, Clustervariablen so wählen, dass sie hohe Trennkraft zur Unterscheidung von Clustern aufweisen
+    - Clustervariablen, die bei allen Objekten nahezu gleiche ausprägung aufweisen (sog. konstante Merkmale), führen zu einer Nivellierung der Unterschiede zwischen den Objekten und rufen dadurch Verzerrungen bei Fusionierung hervor
+    - Konstante Merkmale sind nicht trennungswirksam, daher vorab aus Analyse ausschließen (Besonders für Merkmale, die fast überall Null-Werte aufweisen
   - **Repräsentativität**
+    - Wird Clusteranalyse auf Basis einer Stichprobe durchgeführt & sollen aufgrund der gefundenen Gruppierung Rückschlüsse auf Grundgesamtheit gezogen werden, so muss sichergestellt werdem dass auch genügend Elemente in den einzelnen Gruppen enthalten sind, um die entsprechende Teilgruppen in der Grundgesamtheit zu repräsentieren
+    - Da i. d. R. im Vorfeld nicht bekannt, welche Gruppen in einer Grundgesamtheit vertreten sind (Auffinden sollcher Gruppen ja Ziel der Clusteranalyse) Ausreißer in Datenmengen eliminieren
+      - Ausreißer beeinflussen Fusionierungsprozess, erschweren das Erkennen von Zusammenhöngen zwischen Objekten und führen insgesamt zu Verzerrungen in Ergebnissen
+        - *Vgl. zur Analyse von Ausreißern in Abschnitt 1.5.1. sowie Darstellung Single Linkage-Verfahren in Abschnitt 8.2.3.2.*
   - **Clusterstabilität**
+    - Charakter von Clustern kann sich im Zeitablauf verändern
+    - Für Bearbeitung aber wichtig, dass Charakter zumindest für gewisse Zeit stabil bleibt, da Maßnahmen erst auf Basis einer Clusterung entwickelt werden und sie dann auch meist eine gewisse Zeit benötigen, bis sie sich entfalten können
+
+### 2. Bestimmung der Ähnlichkeiten 
+- Ausgangspunkt Clusteranalyse: Rohdatenmatrix mit *N* Objekten (z.B.Personen), die durch *J* Variablen berschrieben werden
+  - Im Inneren der Matrix objektbezogene metrische und/oder nicht metrische Variablenwerte
+1. Quantifizierung der Ähnlickeit zwischen Objekten duch eine statistische Maßzahl
+   - Dafür in Distanz- und Ähnlichkeitsmatrix überführt, die immer eine quadratische (NxN)-Matrix darstellt
+   - Matrix enthält Ähnlichkeits- oder Unähnlichkeitswerte (Distanzwerte) zwischen den betrachteten Objekten, die unter Verwendung der objektbezogenen Variablenwerte aus der Rohdatenmatrix berechnet werden
+   - Maße, die Ähnlichkeit oder Distanz zwischen Objekten ermöglichen = **Proximitätsmaße**
+#### Proximitätsmaße
+- **Ähnlichkeitsmaße** spiegeln die Ähnlichkeit zwischen zwei Objekten wider: Je größer
+der Wert eines Ähnlichkeitsmaßes wird, desto ähnlicher sind sich zwei Objekte
+- **Distanzmaße** messen die Unähnlichkeit zwischen zwei Objekten: Je größer die
+Distanz wird, desto unähnlicher sind sich zwei Objekte. Sind zwei Objekte als vollkommen
+identisch anzusehen, so ergibt sich eine Distanz von Null.
+- Ähnlichkeits- und Distanzmaße sind komplementär d.h. Ähnlichkeit = 1-Unähnlichkeit
+- In Abhängigkeit des Skalenniveaus der betrachteten Merkmale Vielzahl an Proximitätsmaßen
+  - *Tab.8.4* Übersicht über Proximitätsmaße für hierarchische Clusteranalyse
+- Im folgenden konzentriert auf metrisch skalierte Variablen (Wenn Variablen nominal skaliert oder liegen binäre Variablen vor, so ändern sich auch die Maße die zur Bestimmung der Proximität herangezogen werden können
+##### Proximitätsmaße bei metrisch skalierten Variablen

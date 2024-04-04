@@ -223,4 +223,25 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
     - Da die zur Clusterung herangezogenen Variablen & die unabhängigen Variablen der Diskriminanzanalyse identisch sind
 
 ### 5. Interpretation einer Cluster-Lösung
+- Sollte sich an Auspregung der Clustervariablen in den ermittelten Clustern orientieren
+- Dabei Sinnvoll Vergleich mit Erhebungsgesamtheit vorzunehmen
+- Hilfreich dafür Berechnung von **t- und F-Werten**
+  - **t-Werte**
+    - Negative t-Werte = Variable in betrachteter Gruppe im Vergleich zur Erhebungsgesamtheit unterrepräsentiert
+    - Positive t-Werte = Variablen überrepräsentiert
+    - Dienen nicht zur Beurteilung der Güte, nur für Charakterisierung
+- Zur Analyse der Unterschiede zwischen gefundenen Clustern ist zusätzlich Durchführung **Diskriminanzanalyse** sinnvoll
+  - Gefundene Cluster = abhängige Variable (nominal skaliert)
+  - Zur Clusterung herangezogene Größen = unabhängige Variablen (metrisch skaliert)
+  - Welche Variablen in besonderer Weise für Trennung zwischen Clustern verantwortlich?
+
+### Empfehlungen zum Ablauf einer hierarchischen agglomerativen Clusteranalyse
+1. Single Linkage-Verfahren um Ausreißer zu identifizieren
+2. Eliminierung der Ausreißer & anschließende Anwendung weiteren Verfahrens (z.B. Ward) auf reduzierten Datensatz
+   - Auswahl des Verfahrens hat vor Hintergrund der jeweiligen Anwendungssituation & den Fusionierungseigenschaften der Clustermethodik zu erfolgen
+3. Optimierung der in Schritt 2 gefundenen Clusterlösung mithilfe des K-Means-Verfahrens
+4. Beurteilung der Robustheit einer Clusteranalyse & inhaltliche Interpretation der Ergebnisse
+
+### Durchführung einer Cluster Analyse mit SPSS in Abschnitt 8.3.2. beschrieben
+- Starke Anleitung
   

@@ -6,3 +6,5 @@
 - Bräuchte man beim **TMT** eine Leistungs- & Altersnorm? Normal, dass Leistung mit dem Alter abnimmt(?)
 - Kann ich beim **nBack** miss & false alarm zusammenfassen als Fehler?
 ## Technische Fragen
+- Wenn im Kommentar steht: "N-back_2 nicht verstanden." Drin lassen? Die Variable nicht verwenden? VP komplet rausschmeißen?
+- MoCA Ergebnisse ordinale oder metrische Variable?

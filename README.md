@@ -11,10 +11,10 @@ gantt
     dateFormat YYYY-MM-DD
 
     section Phase
-    Datenerhebung✔️            : 2024-04-01, 2024-04-01
-    Themenfindung✅            : 2024-04-01, 2024-04-01
-    Planungsvortrag✔           : 2024-04-01, 2024-04-01
-    Literaturrecherche         : 2023-08-01, 2024-03-14
+    Datenerhebung✔            : 2024-04-01, 2024-04-01
+    Themenfindung✔            : 2024-04-01, 2024-04-01
+    Planungsvortrag✔          : 2024-04-01, 2024-04-01
+    Literaturrecherche Clusteranalyse : 2024-04-01, 2024-04-15
     Exposé schreiben           : 2024-02-20, 2024-03-14
     Clustering analysis        : 2024-02-20, 2024-03-14
     Urlaub                     : 2024-03-15, 2024-03-25

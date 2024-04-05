@@ -17,20 +17,20 @@ gantt
     Literaturrecherche         : 2024-04-01, 2024-04-30
     Clusteranalyse             : 2024-04-01, 2024-04-15
     Exposé schreiben           : 2024-04-15, 2024-04-30
-    Schreiben Teil 1           : 2024-04-15, 2024-05-31
+    Schreiben Teil 1           : 2024-04-15, 2024-05-20
     Auswertung EEG Daten       : 2024-04-16, 2024-05-31
-    Korrekturlesen Teil 1      : 2024-06-01, 2024-06-14
-    Schreiben Teil 2           : 2024-06-01, 2024-06-30
-    Korrekturlesen Teil 2      : 2024-07-01, 2024-07-15
-    Korrektureinarbeiten Teil 1 : 2024-07-01, 2024-07-05
-    Allgemeine Diskussion      : 2024-07-06, 2024-07-13
-    Abstract & Zusammenfassung : 2024-07-14, 2024-07-16
-    Korrektureinarbeiten Teil 2 : 2024-07-16, 2024-07-22
-    Alles durchlesen ich       : 2024-07-23, 2024-07-23
-    Probelesen lassen          : 2024-07-24, 2024-07-30
-    Laptob bleibt zu           : 2024-07-24, 2024-07-30
-    Korrektureinarbeiten       : 2024-08-31, 2024-08-01           
-    Abgabe                     : 2024-08-02, 2024-08-03
+    Korrekturlesen Teil 1      : 2024-05-20, 2024-06-04
+    Schreiben Teil 2           : 2024-05-20, 2024-06-30
+    Korrektureinarbeiten Teil 1 : 2024-06-05, 2024-06-10
+    Korrekturlesen Teil 2      : 2024-07-01, 2024-07-12
+    Allgemeine Diskussion      : 2024-07-01, 2024-07-10
+    Abstract & Zusammenfassung : 2024-07-11, 2024-07-13
+    Korrektureinarbeiten Teil 2 : 2024-07-13, 2024-07-20
+    Alles durchlesen ich       : 2024-07-21, 2024-07-21
+    Probelesen lassen          : 2024-07-22, 2024-07-29
+    Laptob bleibt zu           : 2024-07-22, 2024-07-29
+    Korrektureinarbeiten       : 2024-07-30, 2024-08-01           
+    Abgabe                     : 2024-08-01, 2024-08-03
 ```
 
 ## 🧩🔍 clustering

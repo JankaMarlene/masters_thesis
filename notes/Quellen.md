@@ -25,6 +25,7 @@
       - Everitt, B., Landau, S., Leese, M., & Stahl, D. (2011). Cluster analysis (5. Aufl.). New York: Wiley.
       - Hennig, C., Meila, M., Murtagh, F., & Rocci, R. (Hrsg.). (2015). Handbook of cluster analysis. London: Chapman & Hall/CRC.
       - Romesberg, C. (2004). Cluster analysis for researchers. Lulu.com.
+        - *In Uni Bib erhältlich, aber nicht online*
       - Wierzchoń, S., & Kłopotek, M. (2018). Modern algorithms of cluster analysis. Berlin: Springer Nature.
         
 - Distanzberechnung zwischen Clustern: vgl. Kaufmann & Rousseeuw 2005, S. 225 ff.; Steinhausen & Langer 1977, S.76

@@ -41,6 +41,7 @@ gantt
 - to-dos
 - questions
 - sources
+- structure
   
 ## 📚 literature
 contains all the literature 

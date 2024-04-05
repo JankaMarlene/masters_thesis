@@ -21,11 +21,11 @@ gantt
     Auswertung EEG Daten       : 2024-04-16, 2024-05-31
     Korrekturlesen Teil 1      : 2024-06-01, 2024-06-14
     Schreiben Teil 2           : 2024-06-01, 2024-06-30
-    Korrekturlesen Teil 2      : 2024-07-01, 2024-07-14
-    Korrektureinarbeiten Teil 1 : 2024-07-01, 2024-07-06
+    Korrekturlesen Teil 2      : 2024-07-01, 2024-07-15
+    Korrektureinarbeiten Teil 1 : 2024-07-01, 2024-07-05
     Allgemeine Diskussion      : 2024-07-06, 2024-07-13
-
-    Abstract & Zusammenfassung : 2024-04-01, 2024-05-20
+    Abstract & Zusammenfassung : 2024-07-14, 2024-07-16
+    Korrektureinarbeiten Teil 2 : 2024-07-16, 2024-07-23
     Korrekturlesen             : 2024-04-20, 2024-06-03
     Korrektureinarbeiten       : 2024-06-04, 2024-06-10           
     Abgabe                     : 2024-06-10, 2024-06-18

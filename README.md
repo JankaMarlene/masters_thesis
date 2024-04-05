@@ -22,8 +22,8 @@ gantt
     Korrekturlesen Teil 1      : 2024-05-20, 2024-06-04
     Schreiben Teil 2           : 2024-05-20, 2024-06-30
     Korrektureinarbeiten Teil 1 : 2024-06-05, 2024-06-10
-    Korrekturlesen Teil 2      : 2024-07-01, 2024-07-12
-    Allgemeine Diskussion      : 2024-07-01, 2024-07-10
+    Korrekturlesen Teil 2      : 2024-06-30, 2024-07-12
+    Allgemeine Diskussion      : 2024-06-30, 2024-07-10
     Abstract & Zusammenfassung : 2024-07-11, 2024-07-13
     Korrektureinarbeiten Teil 2 : 2024-07-13, 2024-07-20
     Alles durchlesen ich       : 2024-07-21, 2024-07-21

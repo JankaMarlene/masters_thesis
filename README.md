@@ -31,6 +31,7 @@ gantt
 
 ## 🧩🔍 clustering
 - Summary: Backhaus et al.,  2011
+  - Ablaufschritte und Entscheidungsprobleme der Clusteranalyse
 - Summary: Wentura & Pospeschill, 2015
   
 ## 📝 notes

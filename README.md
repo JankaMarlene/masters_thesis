@@ -30,9 +30,6 @@ gantt
     Laptob bleibt zu           : 2024-07-22, 2024-07-29
     Korrektureinarbeiten       : 2024-07-30, 2024-08-01           
     Abgabe                     : 2024-08-01, 2024-08-03
-
-
-
 ```
 
 ## 🧩🔍 clustering

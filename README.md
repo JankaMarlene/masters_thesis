@@ -13,7 +13,7 @@ gantt
     section Phase
     Datenerhebung✔️            : 2024-04-01, 2024-04-01
     Themenfindung✅            : 2024-04-01, 2024-04-01
-    Planungsvortrag✔           :
+    Planungsvortrag✔           : 2024-04-01, 2024-04-01
     Literaturrecherche         : 2023-08-01, 2024-03-14
     Exposé schreiben           : 2024-02-20, 2024-03-14
     Clustering analysis        : 2024-02-20, 2024-03-14

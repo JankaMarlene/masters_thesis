@@ -12,7 +12,6 @@ gantt
 
     section Phase
     Datenerhebung✔            : 2024-04-01, 2024-04-01
-    Themenfindung✔            : 2024-04-01, 2024-04-01
     Planungsvortrag✔          : 2024-04-01, 2024-04-01
     Literaturrecherche         : 2024-04-01, 2024-04-30
     Clusteranalyse             : 2024-04-01, 2024-04-15
@@ -31,6 +30,9 @@ gantt
     Laptob bleibt zu           : 2024-07-22, 2024-07-29
     Korrektureinarbeiten       : 2024-07-30, 2024-08-01           
     Abgabe                     : 2024-08-01, 2024-08-03
+
+
+
 ```
 
 ## 🧩🔍 clustering

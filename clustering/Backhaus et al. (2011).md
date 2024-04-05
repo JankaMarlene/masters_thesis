@@ -273,4 +273,50 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
   3. Einteilung in Klassen
      - Bildung von Klassen bzw. Intervallen
 
-## Zentrale partionierende Clusterverfahren
+## Zentrale partitionierende Clusterverfahren
+- Hierarchische, agglomerative Clusterverfahren große Bedeutung in Anwendungspraxis
+  - Allerdings schnell an rechentechnische Grenzen, vorallem wenn große Fallzahl
+    - Ausweg aus Problematik: **Partitionierende Clusterverfahren**
+      - Gehen von einer vorgegebenen Gruppierung der Objekte aus (Startpartition) und nehmen dann im Hinblick auf bestimmtes Zielkriterium eine sukzessive Verbesserung dieser Startpartition vor
+        - Dabei werden einzelnen Objekte mithilfe eines Austauschalgorithmus zwischen Gruppen so lange umsortiert, bis vorgegebene Zielkriterium erfüllt ist
+      - Vorteil: Während Fusionierungsprozesses können Elemente zwischen den Gruppen getauscht werden (Bei hierarchisch nicht möglich, eine einmal gebildete Gruppe kann nicht mehr aufgelöst werden im Fusionierungsprozess)
+        - Größere Flexibilität
+      - **K-Means-Clusteranalyse (KM-CA)** & **Two-Step-Clusteranalyse (TS-CA)**
+        - Gerade bei großen Datenmengen deutliche Vorteile gegenüber den hierarchischen Verfahren bieten
+        - Effiziente Rechenmethoden, um Gruppen in großem Datensatz zu erkennen
+### K-Means Clusteranalyse
+- Geht im Ausgangspunkt von einer Partitionierung eines Datensatzes in *k* Cluster aus
+  - Dabei wird jedes Cluster durch dessen "Schwerpunkt" (Gruppen-Zentroid) repräsentiert
+    - Durch Mittelwertbildung der dem Cluster *i* zugeordneten Fälle errechnet
+  - Formeln im *Abschnitt 8.4.2.1*
+#### Vorgehensweise
+1. Zufällige Festlegung von k initialen Clusterzentren
+2. Zuordnung der Fälle (Datenpunkten) zu den initialen Clusterzentren in Abhängigkeit der Cluster-Varianzen
+   - **Euklidische Distanz** wird zwischen allen Datenpunkten und den Clusterzentren berechnet
+   - Dann: Datenpunkt wiwrd demjenigen Cluster zugeordnet, bei dem das sog. **Varianzkriterium** am wenigsten vergrößert wird
+3. Neuberechnung der Clusterzentren
+   - Neu berechnetes Clusterzentrum ergibt sich als Mittelwert der zu einem Cluster *i* gehörenden Datenpunkte
+   - Anschließend werden mit neuen Clusterzentren erneut Cluster-Varianzen (wie in Schritt 2) berechnet & geprüft, ib eine Verringerung der Cluster-Varianzen erreicht werden konnte
+     - So wird kontrolliert, ob Datenpunkte nicht doch besser einem anderen Cluster zugeordnet werden sollten
+4. Prüfung eines Konvergenzkriteriums
+   - Schritt 2 & 3 so lange wiederholen, bis die Varianzen in den Clustern durch anderen Zuordnungen der Fälle nicht mehr verringert werden können
+   - Sobald sich Varianzkriterium nicht mehr iterativ verkleinern lässt, sind die finalen Clusterzentren in Form der Gruppenmittelwerte gefunden
+     - Wert gilt als "Repräsentant" eines Clusters & dient zur Beschreibung des Clusters
+    - Zur Interpretation der Cluster in SPSS sog. ANOVA-Tabelle angefordert werden, die für jede Variable den sog. F-Wert & zugehörige Signifikanzniveau ausweist
+      - Allerdings werden die beobachteten Signifikanzniveaus nicht korrigiert und können daher auch nicht als statistische Tests für die Hypothese der Gleichzeit der Clustermittelwerte interpretiert werden
+      - Daher nur beschreibende Funktion und geben nur Hinweis darauf, ob sich Ausprägungen der Variablen in den Clustern unterscheiden
+      - Um Stabilität einer gefundenen Lösung zu prüfen, die KM-CA mehrmals durchführen, bei denen die Fälle in jeweils unterschiedlicher, zufällig ausgewählter Reihenfolge zugeordnet werden
+      - Berechnung der Clusterzentren hängt von subjektiven initialen Einteilung der Cluster ab
+        - Daher Gefahr, dass Lösung zwar ein lokales Optimun, jedoch kein globales Optimum darstellt
+        - Daher versch. initiale Einteilungen ausprobieren & Ergebnisse miteinander zu vergleichen
+- Durchführung in SPSS beschrieben in *Abschnitt 8.4.2.1.2.*
+### Two-Step Clusteranalyse
+- Große Datenmengen
+- Kann Variablen mit unterschiedlichem Messviveau verarbeiten
+- Ausreißer im Datensatz können erkannt werden
+- Optimale Anzahl an Clustern kann bestimmt werden
+- **Robustes Clusterverfahren**:
+  - reagiert nicht sehr empfindlich auf Verletzungen von Annahmen
+  - insgesamt leicht interpretierbare Ergebnisse erzeugt
+#### Vorgehensweise
+1. 

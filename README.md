@@ -26,9 +26,11 @@ gantt
     Allgemeine Diskussion      : 2024-07-06, 2024-07-13
     Abstract & Zusammenfassung : 2024-07-14, 2024-07-16
     Korrektureinarbeiten Teil 2 : 2024-07-16, 2024-07-23
-    Korrekturlesen             : 2024-04-20, 2024-06-03
-    Korrektureinarbeiten       : 2024-06-04, 2024-06-10           
-    Abgabe                     : 2024-06-10, 2024-06-18
+    Alles durchlesen ich       : 2024-07-24, 2024-07-24
+    Probelesen lassen          : 2024-07-24, 2024-07-31
+    Laptob bleibt zu           : 2024-07-24, 2024-07-31
+    Korrektureinarbeiten       : 2024-08-31, 2024-08-02           
+    Abgabe                     : 2024-08-02, 2024-08-02
 ```
 
 ## 🧩🔍 clustering

@@ -319,4 +319,50 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
   - reagiert nicht sehr empfindlich auf Verletzungen von Annahmen
   - insgesamt leicht interpretierbare Ergebnisse erzeugt
 #### Vorgehensweise
-1. 
+1. Stufe
+   - Die Fälle im Ausgangsdatensatz werden den Knoten eines Entscheidungsbaums zugeordnet (sog. **Cluster Feature-Tree; CF-Tree**)
+   - Anzahl der Knoten kann vorgegeben werden o. durch SPSS automatisch erzeugt werden
+   - Im Ausgangspunkt sind zunächst alle Fälle in einem Knoten enthalten
+     - Dieser wird dann nach Muster eines Entscheidungsbaums auf nächsten Ebene in weitere Knoten unterteilt, denen die ursprünglichen Fälle basierend auf ihren Ähnlichkeiten zugeordnet werden
+     - Aufteilung in weitere Ebenene wird sukzessive fortgesetzt
+     - Pro Ebene können maximal 8 Knoten gebildet werden
+     - Auf 3. Ebene werden die in einem Schlussknoten enthaltenen Datenpunkte jeweils durch Mittelwertbildung zu einem Fall zusammengefasst
+     - Ausreißer können identifiziert werden, die am Ende in einem eigenen Schlussknoten zusammengefasst werden
+2. Stufe
+   - Auf Schlussknoten der ersten Stufe (ohne Ausreißer) wird **hierarchische Clusteranalyse** angewandt
+   - Alle Schlussknoten metrisch? Zur Distanzberechnung **Euklidische Distanz**
+   - Unterschiedliches Skalenniveau? Wahrscheinlichkeitstheoretischen Modellansatz der **Log-Likelihood-Distanz** nutzen (Auch bei rein metrisch skalierten Variablen verwendbar
+- Durchführung mit SPSS beschrieben in *Abschnitt 8.4.2.2.2.**
+### Vergleich K-Means & Two-Step
+- Skalenniveau der Variablen
+  - K-Means: Nur metrisch
+  - Two-Step: Metrisch & nominal
+- Finale Clusterzahl
+  - K-Means: Vom Anwender festzulegen; zufällig v. SPSS bestimmt
+  - Two-Step: Vom Answender festzulegen; optimale Zahl durch SPSS bestimmbar
+- Ausreißer
+  - K-Means: Müssen vorab identifiziert werden
+  - Two-Step: Automatisch identifiziert und verarbeitet
+- Reihenfolge der Eingabedaten
+  - K-Means: Kann Ergebnis beeinflussen
+  - Two-Step: Keine Auswirkungen auf Ergebnis
+- Verletzung der Annahmen
+  - K-Means: Relativ robust gegenüber Annahmeverletzungen
+  - Two-Step: Relativ robust gegenüber Annahmeverletzungen
+### Problematiken der partitionierenden Verfahren
+- Ergebnisse verstärkt durch die der "Umordnung" der Objekte zugrunde liegenden Zielfunktion beeinflusst
+- Wahl der Startpartition ist häufig subjetiv begründet & kann ebenfalls Ergebnisse beeinflussen
+- Nur lokale & keine globalen Optima
+- Sind das nicht eher alles Probleme des K-Means & nicht der Two-Step-Analyse?
+
+## Anwendungsempfehlung
+- **Ward-Verfahren** hervorzuheben (Studie von *Bergs 1981, S.97*)
+- Ablaufschritte & Entscheidungsprobleme der  Clusteranalyse grafisch dargestellt 
+
+## Bei Darstellung der Ergebnisse folgende Fragen begründen
+1. Welches Ähnlichkteismaß und welcher Algorithmus wurden gewählt?
+2. Was waren die Gründe für die Wahl?
+3. Wie stabil sind die Ergebnisse bei
+   - Veränderung des Ähnlichkeitsmaßes
+   - Wechsel des Algorithmus
+   - Veränderung der Gruppenzahl?

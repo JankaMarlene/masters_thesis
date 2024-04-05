@@ -21,6 +21,7 @@
         
     - Weiterführende Literatur:
       - Anderberg, M. R. (2014). Cluster analysis for applications: Probability and mathematical statistics: A series of monographs and textbooks (19. Aufl.). New York: Academic press.
+        - Nur zum Kauf
       - Eisen, M. B., Spellman, P. T., Brown, P. O., & Botstein, D. (1998). Cluster analysis and display of genome-wide expression patterns. Proceedings of the National Academy of Sciences, 95(25), 14863–14868.
       - Everitt, B., Landau, S., Leese, M., & Stahl, D. (2011). Cluster analysis (5. Aufl.). New York: Wiley.
       - Hennig, C., Meila, M., Murtagh, F., & Rocci, R. (Hrsg.). (2015). Handbook of cluster analysis. London: Chapman & Hall/CRC.

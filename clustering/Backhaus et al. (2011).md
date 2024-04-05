@@ -244,4 +244,33 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
 
 ### Durchführung einer Cluster Analyse mit SPSS in Abschnitt 8.3.2. beschrieben
 - Starke Anleitung
-  
+
+### 8.3.4. SPSS-Kommandos
+- Falls ich die brauche
+- Auch R-Befehle (*Seite 550*)
+
+## Proximitätsmaße bei nicht metrischen Daten
+### Nominales Skalenniveau
+- 2 Möglichkeiten, Variablen in Clusteranalyse zu berücksichtigen:
+  1. Transformation in binäre Variablen
+     - Alle Ausprägungen werden als eigenständige Binär-Variable betrachtet & mit 0/1 kodiert. 1 = "Merkmalsausprägung vorhanden"; 0 = "Merkmalsausprägung nicht vorhanden"
+  2. Analyse von Häufigkeitsdaten
+     - Da keine Rechenoperationen möglich sind, werden häufig Häufigkeiten angegeben, mit der Variable in Erhebung auftritt
+     - Lässt sich prüfen, ob zwischen nominalen Variablen eine statistische Abhängigkeit besteht
+### Binäre Variablen
+- Relativ gut hier beschrieben, mit vielen Möglichkeiten, aber für mich erstmal nicht interessant
+### Gemischt skalierte Variablenstruktur
+- Clusteranalytische Verfahren verlangen kein spezielles Skalenniveau der Merkmale
+- Wie können Merkmale mit unterschiedlichem Skalenniveau gemeinsam Berücksichtigung finden? Vorgehensweise:
+  1. Getrennte Berechnung für metrische und nicht-metrische Variablen
+     - Getrennte Berechnung von **Ähnlichkeitskoeffizienten bzw. Distanzen**
+     - Gesamtähnlichkeit ermittelt sich dann als ungewichteter o. gewichteter Mittelwert der im vorherigen Schritt berechneten Größe
+  2. Transformation auf ein niedrigeres Skalenniveau
+     - Eine Möglichkeit zur Umwandlung der vorliegenden Verhältnisskalen in binäre Skalen besteht in **Dichotomisierung**
+       - Hierbei ist Schwelle festzulegen, die zu einer Trennug z.B. niedrig- und hochpreisig (kognitiv eingeschränkt vs. nicht) führt. Alle die unter liegen = 0, alle drüber = 1
+       - Einfach und schnell anwendbar aber hoher Informationsverlust & Problem beim Schwellen festlegen
+       - Kann aber auch Intervalle bilden und Intervall binär kodieren (besser, aber ja auch etwas willkührlich oder?)
+  3. Einteilung in Klassen
+     - Bildung von Klassen bzw. Intervallen
+
+## Zentrale partionierende Clusterverfahren

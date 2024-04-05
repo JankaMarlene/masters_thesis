@@ -6,3 +6,4 @@
 - [ ] Everitt et al., 2011 lesen
 - [ ] Paul schreiben(?)
 - [ ] Nach aktuellen Papern gucken bzgl. der Validierung von Clusterverfahren/Fusionierungsalgorithmen
+- [ ] Zeitplan überarbeiten

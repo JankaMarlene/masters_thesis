@@ -107,3 +107,29 @@ Inwiefern die Vorstellungen, die mit der Wahl eines bestimmten Clusteranalysever
   - AutoClass (bayesianische Clusteranalyse)
   - CLUSTER 3.0 Software zum K-Median-Verfahren
 - Programmpaket: ALMO
+
+## Häufig gestellte Anwendungsfragen
+
+### Welches Verfahren?
+Hängt von untersuchten Fragestellung, den vorhandenen Daten und verfügbaren Stoftware ab
+Folgende Fragestellungen sollen unterschieden werden.
+1. Bildung abgeleiteter Variablen
+2. Räumliche Darstellung von Variablen o. Objekten
+3. Hierarchische Ähnlichkeitsdarstellung von Variablen o. Objekten
+4. Klassifikation von Variablen
+5. Klassifikation von Objekten
+6. Klassifikatiom von Verläufen (siehe Kapitel 19)
+
+#### 1. Bildung abgeleiteter Variablen
+- Wenn möglich empfolen Analyse mit **abgeleiteten Variablen** (Faktor- o. Gesamtpunktwerte)
+- Messfehler & somit Einfluss irrelevanter Variablen reduziert, für deterministische Clusteranalyse von Bedeutung
+- Außerdem: Übersichtlichkeit und damit leichtere Interpretierbarkeit ermöglicht
+- Empfehlung: **Faktorenanalyse** (Hauptkomponenten- o. Hauptachsenanalyse mit anschließender Rotation)
+  - Setzt quantitative o. - der Forschungspraxis folgend - ordinalskalierte Variablen voraus
+  - Auch bei dichotomen Variablen einsetztbar, wenn Items nicht zu unterschiedlich schwierig sind
+  - Nicht geeignet für:
+    - Nominale Items mit mehr als zwei Ausprägungen
+    - Präferenzdaten mit fester Auswahl
+    - Mehrdimensionale Items
+
+#### 2. Räumliche Darstellung von Objekten o. Variablen

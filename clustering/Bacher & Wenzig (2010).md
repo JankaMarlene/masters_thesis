@@ -133,3 +133,4 @@ Folgende Fragestellungen sollen unterschieden werden.
     - Mehrdimensionale Items
 
 #### 2. Räumliche Darstellung von Objekten o. Variablen
+Auf diesen und die nächsten Punkte gehe ich erstmal nicht ein, da mir unwichig erscheint für jetzt

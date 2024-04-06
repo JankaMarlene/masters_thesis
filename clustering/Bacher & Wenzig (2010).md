@@ -18,3 +18,20 @@
 8. Cluster selbst sollen gewisse Mindestgröße haben. Dies soll zur Stabilität (Kriterium 4) beitragen
 
 ### Clusteranalyseverfahren
+- **Unvollständige Clusteranalyseverfahren**
+- **Deterministische Clusteranalyseverfahren**
+  - Klassifikationsobjekte werden mit einer W. von 1 einem o. mehreren Clustern zugeordnet
+  - **hierarchische Verfahren**
+  - **Partitionierende Verfahren**
+  - Gibt auch **überlappende Clusteranalyseverfahren**
+    - Klassifikationsobjekt mit "W." von 1 zwei o. mehreren Clustern angehören
+- **Probabilistische Clusteranalyseverfahren**
+  - Nicht mit W. 1 o. 0, sondern mit dazwischen liegender W. zugeordnet
+  - Als Verallgemeinerung der deterministischen Clusteranalyseverfahren vorzustellen
+- Unterscheidung in **modellbasierte** & **heuristische Verfahren** vorzufinden
+  - Vorteil modellbasiert: Formal besser abgesicherte Teststatisken zur Bestimmung der Clusterzahl bereitstellen
+  - modellbasiertes Verfahren mit deterministischer Zuordnung: **Two-Step-Clusterverfahren**
+    - Nimmt deterministische Zuordnung vor, basiert aber auf Wahrscheinlichkeitsmodell
+    - Beu Clusterbildung selbst wird hierarchisch vorgegangen 
+
+### Grundlage der Clusterbildung

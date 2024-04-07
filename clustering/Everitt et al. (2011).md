@@ -75,4 +75,20 @@
 - Comparing partitions
 - Comparing dendrograms
 - Comparing proximity matrices
+  
 ### Internal cluster quality, influence and robustness
+- **Internal cluster quality** taken to refer to extent to which cluster meet the requirements for good clusters, as defined by *Cormack (1971)*, namely isolation and cohesion
+  - *9.5.1*
+- **Robustness** refers to effects of errors in data or missing observations, and changes in the data or methods
+  - *9.5.2*
+- ***9.5.3*** **Influence of individual points**
+
+### Displaying cluster solutions graphically
+- Before applying any clustering method, some graphical representation of the data should be obtained
+- *Chapter 2*
+
+### Illustrative examples
+- further illustrative examples given
+- 2 applications: How data matrices, priximity matrices & alternative hierarchical clusterings can be compared
+- 1 application: Using model-based technique, which illustrates how number of steps can be applied to reduce the complexity of data
+- 

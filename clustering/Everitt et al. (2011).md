@@ -68,3 +68,11 @@
    - Graphical representation (*Section 9.6*)
    - Descriptive statistics
    - Standard statistical tests such as analysis of variance are inappropriate for comparing clustering variables between clusters, since the clustering technique will have maximized between-cluster differences on these variables in some way
+### Testing for absence of structure
+- Verstehe noch nicht ganz, ob ich das brauche oder nicht
+- Not necessary, if reason for clustering is practical (e.g. for organizational purpose)
+### Methods for comparing cluster solutions
+- Comparing partitions
+- Comparing dendrograms
+- Comparing proximity matrices
+### Internal cluster quality, influence and robustness

@@ -33,6 +33,8 @@ gantt
 ```
 
 ## 🧩🔍 clustering
+- Summary: Everitt et al., 2011
+  - Overview of data types and applicable clustering methods
 - Summary: Bacher & Wenzig, 2010
 - Summary: Backhaus et al.,  2011
   - Ablaufschritte und Entscheidungsprobleme der Clusteranalyse

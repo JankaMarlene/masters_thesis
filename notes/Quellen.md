@@ -29,7 +29,7 @@
         - *In Uni Bib erhältlich, aber nicht online*
       - Wierzchoń, S., & Kłopotek, M. (2018). Modern algorithms of cluster analysis. Berlin: Springer Nature.
 
-## Everitt et al., 2011
+### Everitt et al., 2011
 - *Dubes and Jain, 1979* - Liste von Fragen, die in Interpretation beantwortet werden müssen
 - *Page 260* - Package overview
 - *Milligan (1996)* - Steps in typical cluster analysis
@@ -45,7 +45,8 @@
 - *9.5.2* - Robustness
 - *9.5.3* - Influence of individual points
 - *Chapter 2* - Displaying cluster solutions graphically
-        
+
+### Andere
 - Distanzberechnung zwischen Clustern: vgl. Kaufmann & Rousseeuw 2005, S. 225 ff.; Steinhausen & Langer 1977, S.76
 - Weiterführende Literatur: *Bacher et al. (2010)*; *Everitt, Landau, Leese und Stahl (2011)*
 - Untersuchung von *Bergs (1981, S.96 f.)*: Im Vergleich in den meisten Fällen sehr gute Partitionen findet & Elemente den Gruppen meist auch korrekt zuordnet

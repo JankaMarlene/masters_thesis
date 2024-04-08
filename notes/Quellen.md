@@ -28,6 +28,23 @@
       - Romesberg, C. (2004). Cluster analysis for researchers. Lulu.com.
         - *In Uni Bib erhältlich, aber nicht online*
       - Wierzchoń, S., & Kłopotek, M. (2018). Modern algorithms of cluster analysis. Berlin: Springer Nature.
+
+## Everitt et al., 2011
+- *Dubes and Jain, 1979* - Liste von Fragen, die in Interpretation beantwortet werden müssen
+- *Page 260* - Package overview
+- *Milligan (1996)* - Steps in typical cluster analysis
+- Variable standardization
+  - *Section 3.8*
+  - *Chapeter 6*
+- *Chapter 3* *Section 3.9* - Guidlines for Proximitymeasure
+- *Section 9.5* - Techniques for assessing internal validity
+- *Section 9.4* - Quality assessment
+- *Section 9.6* - Graphical representation
+- *9.5.1* ; *Cormack (1971)* - Internal cluster quality
+- *9.3.* - Testing for absence of structure
+- *9.5.2* - Robustness
+- *9.5.3* - Influence of individual points
+- *Chapter 2* - Displaying cluster solutions graphically
         
 - Distanzberechnung zwischen Clustern: vgl. Kaufmann & Rousseeuw 2005, S. 225 ff.; Steinhausen & Langer 1977, S.76
 - Weiterführende Literatur: *Bacher et al. (2010)*; *Everitt, Landau, Leese und Stahl (2011)*

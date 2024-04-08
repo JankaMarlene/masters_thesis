@@ -1,4 +1,4 @@
-# Fragen
+# Fürs Treffen mit Christian am 08.04.24
 ## Allgemeine Fragen
 1. Bei Fragen bei Christian per Mail oder Whats App melden?
 2. Mit Kaernbach besprechen, ob ich Arbeit auf Englisch verfassen darf?

@@ -33,12 +33,12 @@ gantt
 ```
 
 ## 🧩🔍 clustering
-- Summary: Everitt et al., 2011
-  - Overview of data types and applicable clustering methods
-- Summary: Bacher & Wenzig, 2010
-- Summary: Backhaus et al.,  2011
-  - Ablaufschritte und Entscheidungsprobleme der Clusteranalyse
-- Summary: Wentura & Pospeschill, 2015
+- summary: Everitt et al., 2011
+  - overview of data types and applicable clustering methods
+- summary: Bacher & Wenzig, 2010
+- summary: Backhaus et al.,  2011
+  - ablaufschritte und Entscheidungsprobleme der Clusteranalyse
+- summary: Wentura & Pospeschill, 2015
   
 ## 📝 notes
 - to-dos
@@ -50,4 +50,4 @@ gantt
 contains all the literature 
 
 ## 🖼️ presentations
-- Planungsvortrag
+- planungsvortrag

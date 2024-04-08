@@ -91,4 +91,7 @@
 - further illustrative examples given
 - 2 applications: How data matrices, priximity matrices & alternative hierarchical clusterings can be compared
 - 1 application: Using model-based technique, which illustrates how number of steps can be applied to reduce the complexity of data
-- 
+
+### Summary
+- Valuable tools in exploration of multivariate data
+- Organizing such data into subgroups or clusters, clustering may help investigator discover characteristics of any structure or pattern present

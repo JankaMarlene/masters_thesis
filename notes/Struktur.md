@@ -1,5 +1,7 @@
 # Struktur
 
+- Was muss ich jetzt wissen, um Clusteranalyse durchzuführen?
+  
 ## Teil 1: Clusteranalyse
 - Einführung in das Konzept der Clusteranalyse und ihre Bedeutung für Ihre Forschungsfrage
 - Beschreibung der angewandten Methoden und Verfahren zur Durchführung der Clusteranalyse

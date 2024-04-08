@@ -19,6 +19,14 @@
 - Quantitative Variablen?
 - Mehrdimensionale Items?
 - Warum soll ich Variablen ableiten vor der Clusteranalyse? Mit Hilfe von Faktorenanaylse?
+- Was muss ich jetzt wissen, um Clusteranalyse durchzuführen?
+- Würden überlappende Cluster bei mir Sinn ergeben?
+- Wie viel muss ich eigentlich auf Long Covid eingehen?
+- Clustering auf Basis der Fragebögen? Geht das überhaupt alle Fragebögen in eins zu nehmen? Messen ja schließlich unterschiedliche Dinge, was könnte ich dann über Cluster aussagen?
+- Benennen des Clusters als *(nicht) kog. eingeschränkt" woran mache ich das fest? -> Oder eher Tendenz
+- Was sind masking variables?
+- Was ist cross-validation technique?
+- Testing for absence of structure wichtig?
 ## Technische Fragen
 - Wenn im Kommentar steht: "N-back_2 nicht verstanden." Drin lassen? Die Variable nicht verwenden? VP komplet rausschmeißen?
 - MoCA Ergebnisse ordinale oder metrische Variable?

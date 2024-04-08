@@ -8,6 +8,7 @@
    - Teil 2
    - Allgemeine Diskussion und Schlussfolgerung
 4. Wie viel muss ich eigentlich auf Long Covid eingehen?
+5. Zeitplan angepasst, sah einfach scheiße aus
 ## Zu den Daten
 5. N-back:
   - Wenn im Kommentar steht: "N-back_2 nicht verstanden." Drin lassen? Die Variable nicht verwenden? VP komplet rausschmeißen?

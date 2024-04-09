@@ -10,3 +10,11 @@
 - [ ] Glossar anfertigen?
 - [ ] Fragen.md durchgehen
 - [ ] Step-by-Step Durchführung
+- [ ] Christian Kaernbach Mail schreiben, dass ich Arbeit auf Englisch verfasse. Christian in CC setzen
+- [ ] Prüfen, ob keine Multikoliniarität gegeben sein darf
+- [ ] R und RStudio runterladen
+- [ ] R-Skript erstellen
+      - [ ] Daten einlesen
+      Bereinigen
+  - Filtern
+  - Clusteranalyse

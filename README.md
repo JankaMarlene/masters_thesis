@@ -34,7 +34,7 @@ gantt
 
 ## 📈 analysis
 
-## 📜 scripts
+## 📃 scripts
 
 ## 💾 data
 - raw data

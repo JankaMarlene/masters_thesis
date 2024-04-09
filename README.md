@@ -32,6 +32,10 @@ gantt
     Abgabe                     : 2024-08-01, 2024-08-03
 ```
 
+## 📈 analysis
+
+## 📜 scripts
+
 ## 💾 data
 - raw data
 

@@ -32,6 +32,8 @@ gantt
     Abgabe                     : 2024-08-01, 2024-08-03
 ```
 
+## 💾 data
+
 ## 🧩🔍 clustering
 - summary: Everitt et al., 2011
   - overview of data types and applicable clustering methods

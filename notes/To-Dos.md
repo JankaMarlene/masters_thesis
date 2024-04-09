@@ -14,7 +14,3 @@
 - [ ] Prüfen, ob keine Multikoliniarität gegeben sein darf
 - [ ] R und RStudio runterladen
 - [ ] R-Skript erstellen
-      - [ ] Daten einlesen
-      Bereinigen
-  - Filtern
-  - Clusteranalyse

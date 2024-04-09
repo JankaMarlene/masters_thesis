@@ -56,7 +56,8 @@ gantt
 ## 📚 literature
 contains all the literature 
 
-## 📑docs
+## 📑documents
+- Richtlinien zur Erstellung von Abschlussarbeiten
 
 ## 🖼️ presentations
 - planungsvortrag

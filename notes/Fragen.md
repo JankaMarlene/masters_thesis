@@ -1,6 +1,5 @@
 # Fragen
 ## Allgemeine Fragen
-- Jeden oder jedes Cluster?
 - Ab wann gilt eine Datenmenge als groß?
 ## Inhaltliche Fragen
 - Kann **K-Means** Variablen mit unterschiedlichem Messniveau bearbeiten?

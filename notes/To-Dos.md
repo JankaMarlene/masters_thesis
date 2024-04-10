@@ -4,13 +4,14 @@
 - [x] Backhaus et al., 2011 lesen
 - [x] Bacher & Wenzig, 2010 lesen
 - [x] Everitt et al., 2011 lesen
-- [ ] Paul schreiben(?)
 - [ ] Nach aktuellen Papern gucken bzgl. der Validierung von Clusterverfahren/Fusionierungsalgorithmen
 - [x] Zeitplan überarbeiten
-- [ ] Glossar anfertigen?
-- [ ] Fragen.md durchgehen
+- [x] Glossar anfertigen?
+- [x] Fragen.md durchgehen
 - [ ] Step-by-Step Durchführung
-- [ ] Christian Kaernbach Mail schreiben, dass ich Arbeit auf Englisch verfasse. Christian in CC setzen
-- [ ] Prüfen, ob keine Multikolinearität gegeben sein darf
-- [ ] R und RStudio runterladen
-- [ ] R-Skript erstellen
+- [x] Christian Kaernbach Mail schreiben, dass ich Arbeit auf Englisch verfasse. Christian in CC setzen
+- [x] Prüfen, ob keine Multikolinearität gegeben sein darf
+- [x] R und RStudio runterladen
+- [x] R-Skript erstellen
+- [ ] Preprocessing fertigstellen
+- [ ] Für Clusteralgorithmus entscheiden

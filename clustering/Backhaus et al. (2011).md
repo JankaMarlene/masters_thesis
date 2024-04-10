@@ -16,7 +16,7 @@
        
 ## Vorgehensweise
 1. Entscheidung darüber, welche Variablen zur Clusterung einer Objektmenge herangezogen werden
-   - Von Wahl der Clustervariable ist es abhängig, wodurch später homohene Gruppen beschrieben sind
+   - Von Wahl der Clustervariable ist es abhängig, wodurch später homogene Gruppen beschrieben sind
 2. Entscheidung, wie Ähnlichkeiten/Unähnlichkeiten zwischen Objekten bestimmt werden soll
    - Vielzahl an Kriterien stehen zur Verfügung (**Proximitätsmaße**), mit deren Hilfe die (Un-)Ähnlichkeit (Distanz) zwischen Untersuchungsobjekten auf Basis der Clusterbariable bestimmt werden kann
      - **Proximitätsmaße** drücken Ähnlichkeit bzw. Unähnlichkeit zwischen zwei Objekten durch numerische Werte aus

@@ -1,6 +1,8 @@
-# Preprocessing data
+# Installing tidyverse package
+# install.packages("tidyverse")
+library(tidyverse)
 
-alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", header = TRUE)
+alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", na.strings = "n/a", header = TRUE)
 
 # List off important column
 
@@ -23,3 +25,13 @@ cog_subset <- alldata[,cognitive_columns]
 
 cutoff_score <- 25
 cog_subset$moca <- ifelse(cog_subset$moca > cutoff_score, 1, 0)
+
+# Checking for missing values
+any(is.na(cog_subset))
+# Missing values = TRUE
+# Removing rows with missing values
+cog_subset_clean <- cog_subset[complete.cases(cog_subset), ]
+# Imputation of missing values
+cog_subset_imputed <- na.mean(cog_subset)
+# Compute correlation matrix
+## cor(cog_subset)

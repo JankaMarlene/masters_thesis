@@ -51,6 +51,27 @@ cog_subset_clean <- cog_subset %>%
 cog_subset_clean %>%
    summary()
 
+# variables for which outliers are to be identified and removed
+variables <- c("pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
+
+# Loop over all variables
+for (variable in variables) {
+  # Detect outliers
+  box_plot <- boxplot(cog_subset_clean[[variable]])$out
+  mtext(paste("Outliers for", variable, ":", paste(box_plot,
+                                  collapse = ",")))
+  # Identify rows containing outliers
+  out_ind <- which(cog_subset_clean[[variable]] %in% c(box_plot))
+  cat("Indices of outliers for", variable, ":", out_ind, "\n")
+  cat("Rows with outliers for", variable, ":\n")
+  print(cog_subset_clean[out_ind,])
+  # out_ind
+  # cog_subset_clean[out_ind,]
+  # Remove outliers
+  outliers <- boxplot(cog_subset_clean[[variable]] , plot = F)$out
+  cog_subset_clean_clean <- cog_subset_clean[-which(cog_subset_clean[[variable]] %in% outliers),]  
+}
+
 # Detect outliers
 box_plot <- boxplot(cog_subset_clean$pvt_reaction_time)$out
 mtext(paste("Outliers :", paste(box_plot,
@@ -70,8 +91,8 @@ cog_subset_clean_clean <- cog_subset_clean[-which(cog_subset_clean$pvt_reaction_
 #  mutate_all(~ replace_na(., mean(.,na.rm = TRUE)))
 
 # Detect outliers
-selected_variables <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
-boxplot(selected_variables, main = "Boxplot of cog_subset_clean")
+# selected_variables <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
+# boxplot(selected_variables, main = "Boxplot of cog_subset_clean")
 
 # Compute correlation matrix
 ## cor(cog_subset)
@@ -96,8 +117,8 @@ cog_subset_clean |>
   round(2)
 
 # Standardization
+cog_subset_clean_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
 cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
-
 # Get columns of interest
 cog_subset_clean_cog <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
 
@@ -116,17 +137,17 @@ cog_subset_clean_cog_clean <- cog_subset_clean_cog[-which(cog_subset_clean_cog$p
 
 
 # Detect outliers
-box_plot <- boxplot(cog_subset_clean_cog)$out
-mtext(paste("Outliers :", paste(box_plot,
-                                collapse = ",")))
+# box_plot <- boxplot(cog_subset_clean_cog)$out
+# mtext(paste("Outliers :", paste(box_plot,
+#                                collapse = ",")))
 # Identify rows containing outliers
-out_ind <- which(cog_subset_clean_cog %in% c(box_plot))
-out_ind
-cog_subset_clean_cog[out_ind,]
+# out_ind <- which(cog_subset_clean_cog %in% c(box_plot))
+# out_ind
+# cog_subset_clean_cog[out_ind,]
 
 # Remove outliers
- outliers <- boxplot(cog_subset_clean_cog, plot = F)$out
- cog_subset_clean_cog[-which(cog_subset_clean_cog %in% outliers),]
+# outliers <- boxplot(cog_subset_clean_cog, plot = F)$out
+# cog_subset_clean_cog[-which(cog_subset_clean_cog %in% outliers),]
 
 # boxplot(cog_subset_clean_cog, main = "Boxplot of cog_subset_clean_cog")
 

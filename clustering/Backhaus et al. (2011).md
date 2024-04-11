@@ -258,7 +258,8 @@ identisch anzusehen, so ergibt sich eine Distanz von Null.
      - Da keine Rechenoperationen möglich sind, werden häufig Häufigkeiten angegeben, mit der Variable in Erhebung auftritt
      - Lässt sich prüfen, ob zwischen nominalen Variablen eine statistische Abhängigkeit besteht
 ### Binäre Variablen
-- Relativ gut hier beschrieben, mit vielen Möglichkeiten, aber für mich erstmal nicht interessant
+- Binäre Variablenstruktur, wenn alle Merkmalsvariablen nur Ausprägungen Null und 1 besitzen.
+  - Stimmt bei mir ja nicht, ich habe ja nur eine Variable, die binär ist
 ### Gemischt skalierte Variablenstruktur
 - Clusteranalytische Verfahren verlangen kein spezielles Skalenniveau der Merkmale
 - Wie können Merkmale mit unterschiedlichem Skalenniveau gemeinsam Berücksichtigung finden? Vorgehensweise:

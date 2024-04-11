@@ -50,7 +50,20 @@ cog_subset_clean <- cog_subset %>%
 # Summarize cleaned dataframe
 cog_subset_clean %>%
    summary()
-  
+
+# Detect outliers
+box_plot <- boxplot(cog_subset_clean$pvt_reaction_time)$out
+mtext(paste("Outliers :", paste(box_plot,
+                                collapse = ",")))
+# Identify rows containing outliers
+out_ind <- which(cog_subset_clean$pvt_reaction_time %in% c(box_plot))
+out_ind
+cog_subset_clean[out_ind,]
+
+# Remove outliers
+outliers <- boxplot(cog_subset_clean$pvt_reaction_time , plot = F)$out
+cog_subset_clean_clean <- cog_subset_clean[-which(cog_subset_clean$pvt_reaction_time %in% outliers),]  
+
 # Imputation of missing values
 # Funktioniert nicht, da z.B. beim n-back Werte nicht zwischen 0 und 1 annehmen kann. Auch mit round hat er Probleme
 # cog_subset_impute <- cog_subset %>%
@@ -87,6 +100,35 @@ cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alar
 
 # Get columns of interest
 cog_subset_clean_cog <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
+
+# Detect outliers
+box_plot <- boxplot(cog_subset_clean_cog$pvt_reaction_time)$out
+mtext(paste("Outliers :", paste(box_plot,
+                                collapse = ",")))
+# Identify rows containing outliers
+out_ind <- which(cog_subset_clean_cog$pvt_reaction_time %in% c(box_plot))
+out_ind
+cog_subset_clean_cog[out_ind,]
+
+# Remove outliers
+outliers <- boxplot(cog_subset_clean_cog$pvt_reaction_time , plot = F)$out
+cog_subset_clean_cog_clean <- cog_subset_clean_cog[-which(cog_subset_clean_cog$pvt_reaction_time %in% outliers),]  
+
+
+# Detect outliers
+box_plot <- boxplot(cog_subset_clean_cog)$out
+mtext(paste("Outliers :", paste(box_plot,
+                                collapse = ",")))
+# Identify rows containing outliers
+out_ind <- which(cog_subset_clean_cog %in% c(box_plot))
+out_ind
+cog_subset_clean_cog[out_ind,]
+
+# Remove outliers
+ outliers <- boxplot(cog_subset_clean_cog, plot = F)$out
+ cog_subset_clean_cog[-which(cog_subset_clean_cog %in% outliers),]
+
+# boxplot(cog_subset_clean_cog, main = "Boxplot of cog_subset_clean_cog")
 
 # Hierarchical clustering/Preprocessing
 
@@ -137,6 +179,14 @@ library(dendextend)
 avg_dend_obj <- as.dendrogram(hclust_avg)
 avg_col_dend <- color_branches(avg_dend_obj, h = 2)
 plot(avg_col_dend)
+
+# Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao
+# install.packages("factoextra")
+# library(factoextra)
+# cluster_obj <- list(data = cog_df_sc, cluster = cut_avg)
+# fviz_cluster(cluster_obj)
+# rownames(cog_df_sc) <- paste(cog_label, 1:dim(cog_df) [1], sep = "_")
+# fviz_cluster(list(data=cog_df_sc))
 
 # Cross-checking clustering results using table funcion
 table(cog_df_cl$cluster,cog_label)

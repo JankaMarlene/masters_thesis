@@ -68,3 +68,56 @@ ggplot(cog_subset, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
 # Scatter plot of nback_miss_1 vs. nback_miss_2 faceted by age
 ggplot(cog_subset, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
   geom_point()
+
+
+# Clustering
+
+# Test correlation
+library(dplyr)
+cog_subset_clean |>
+  select(moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time) |>
+  cor(use = "pairwise.complete.obs") |>
+  round(2)
+
+# Standardization
+cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
+
+# Get columns of interest
+cog_subset_clean_cog <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
+
+set.seed(123)
+km.out <- kmeans(cog_subset_clean_cog, centers = 2, nstart = 20)
+km.out
+
+# Decide how many clusters to look at
+n_clusters <- 10
+
+# Initialize total within sum of squares error: wss
+wss <- numeric(n_clusters)
+
+set.seed(123)
+
+# Look over 1 to n possible clusters
+for (i in 1:n_clusters) {
+  # Fit the model: km.out
+  km.out <- kmeans(cog_subset_clean_cog, centers = i, nstart = 20)
+  # Save the within cluster sum of squares
+  wss[i] <- km.out$tot.withinss
+}
+
+# Produce a screen plot
+wss_df <- tibble(clusters = 1:n_clusters, wss = wss)
+
+scree_plot <- ggplot(wss_df, aes(x = clusters, y = wss, group = 1)) +
+  geom_point(size = 4) +
+  geom_line() +
+  scale_x_continuous(breaks = c(2, 4, 6, 8, 10)) +
+  xlab('Number of clusters')
+scree_plot
+
+scree_plot +
+  geom_hline(
+    yintercept = wss, 
+    linetype = 'dashed', 
+    col = c(rep('#000000',3),'#FF0000', rep('#000000', 6))
+  )

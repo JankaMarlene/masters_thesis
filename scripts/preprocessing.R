@@ -121,3 +121,16 @@ scree_plot +
     linetype = 'dashed', 
     col = c(rep('#000000',3),'#FF0000', rep('#000000', 6))
   )
+
+# Select number of clusters
+k <- 4
+set.seed(123)
+# Build model with k clusters: km.out
+km.out <- kmeans(cog_subset_clean_cog, centers = k, nstart = 20)
+
+# Only possible with two variables, but I have more
+# cog_subset_clean_cog$cluster_id <- factor(km.out$cluster)
+# ggplot(cog_subset_clean_cog, aes(number_of_reviews, price, color = cluster_id)) +
+  # geom_point(alpha = 0.25) +
+  # xlab("Number of reviews") +
+  # ylab("Price")

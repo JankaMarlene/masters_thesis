@@ -113,10 +113,29 @@ summary(cog_df_sc)
 # Done with preprocessing
 # Now build distance matrix
 # Since all values are continuous numerical values I use euclidean distance method
-dist_ma <- dist(cog_df_sc, method = 'euclidean')
+dist_mat <- dist(cog_df_sc, method = 'euclidean')
+
+# Now decide which linkage method to use
+# Try different kinds of linkage methods after decide which performed better
+# Build dendrogram by plotting hierarchical cluster object with hclust
+# Specify linkage method via 'method' argument
+# Here average linkage, but single linkage good for detecting outliers
+hclust_avg <- hclust(dist_mat, method = 'average')
+plot(hclust_avg)
+# Create the desired number of clusters
+# Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
+cut_avg <- cutree(hclust_avg, k = 2)
+# To visualize clusters on dendrogram use abline function to draw the cut line
+plot(hclust_avg)
+rect.hclust(hclust_avg, k = 2, border = 2:6)
+abline(h = 6, col = 'red')
 
 
 
+
+# Single linkage (Good for detecting outliers as they will be merged at the end)
+hclust_sing <- hclust(dist_mat, method = 'single')
+plot(hclust_sing)
 
 
 # Outliers

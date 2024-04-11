@@ -88,13 +88,35 @@ cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alar
 # Get columns of interest
 cog_subset_clean_cog <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
 
-# Hierarchical clustering
+# Hierarchical clustering/Preprocessing
+
+# Extract relevant columns from cog_subset_clean
 cog_df <- cog_subset_clean[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
+
+# Check structure and summarize contents of cog_df
+# Check for missing values (I alredy removed them earlier in script)
 str(cog_df)
 summary(cog_df)
+any(is.na(cog_df))
+
+# Store group labels in a separate variable and exclude label (group column) from the dataset to do clustering
+# Later true labels will be used to check how good clustering turned out
 cog_label <- cog_df$group
 cog_df$group <- NULL
 str(cog_df)
+
+# Use scale function to scale all column values
+# Mean of all columns is now 0 and standard deviation is 1
+cog_df_sc <- as.data.frame(scale(cog_df))
+summary(cog_df_sc)
+
+# Done with preprocessing
+# Now build distance matrix
+# Since all values are continuous numerical values I use euclidean distance method
+dist_ma <- dist(cog_df_sc, method = 'euclidean')
+
+
+
 
 
 # Outliers

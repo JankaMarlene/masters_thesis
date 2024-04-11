@@ -128,15 +128,28 @@ cut_avg <- cutree(hclust_avg, k = 2)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_avg)
 rect.hclust(hclust_avg, k = 2, border = 2:6)
-abline(h = 6, col = 'red')
+abline(h = 2, col = 'red')
+# Visualize tree with different colored branches
+# Install dendextend
+install.packages("dendextend")
+library(dendextend)
 
+avg_dend_obj <- as.dendrogram(hclust_avg)
+avg_col_dend <- color_branches(avg_dend_obj, h = 2)
+plot(avg_col_dend)
 
-
-
+# Cross-checking clustering results using table funcion
+table(cog_df_cl$cluster,cog_label)
 # Single linkage (Good for detecting outliers as they will be merged at the end)
 hclust_sing <- hclust(dist_mat, method = 'single')
 plot(hclust_sing)
 
+# Append cluster results obtained back in the original dataframe 
+# Use mutate
+# Count how many observations were assigned to each cluster with the count function
+suppressPackageStartupMessages(library(dplyr))
+cog_df_cl <- mutate(cog_df, cluster = cut_avg)
+count(cog_df_cl,cluster)
 
 # Outliers
 # boxplot(cog_subset_clean_cog, main = "Boxplot of cog_subset_clean_cog")

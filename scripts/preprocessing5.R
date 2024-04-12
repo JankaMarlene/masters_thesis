@@ -247,7 +247,7 @@ set.seed(123)
 km.out <- kmeans(clean_data_cog, centers = k, nstart = 20)
 
 # Only possible with two variables, but I have more
-# cog_subset_clean_cog$cluster_id <- factor(km.out$cluster)
+clean_data_cog$cluster_id <- factor(km.out$cluster)
 # ggplot(cog_subset_clean_cog, aes(number_of_reviews, price, color = cluster_id)) +
   # geom_point(alpha = 0.25) +
   # xlab("Number of reviews") +

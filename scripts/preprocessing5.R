@@ -161,18 +161,18 @@ plot(hclust_ward)
 # plot(hclust_avg)
 # Create the desired number of clusters
 # Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
-cut_ward <- cutree(hclust_ward, k = 2)
+cut_ward <- cutree(hclust_ward, k = 4)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
-rect.hclust(hclust_ward, k = 2, border = 2:20)
-abline(h = 19, col = 'red')
+rect.hclust(hclust_ward, k = 4, border = 2:20)
+abline(h = 14, col = 'red')
 # Visualize tree with different colored branches
 # Install dendextend
 # install.packages("dendextend")
 library(dendextend)
 
 ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 19)
+ward_col_dend <- color_branches(ward_dend_obj, h = 14)
 plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao

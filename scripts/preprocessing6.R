@@ -8,14 +8,14 @@ alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/parti
 
 # Subset of alldata that contains only the important variables
 subset <- alldata %>%
-  select(participant_id, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_total_score, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time, tmt_b_time)
+  select(participant_id,nr, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_total_score, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time, tmt_b_time)
 
 # important_columns <- c("participant_id","age","sex","group","graduation","years_of_education","neurological_diseases_1","facit_f_total_score","hads_a_total_score","hads_d_total_score","psqi_total_score","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
 # subset <- alldata[,important_columns]
 
 # Subset with all relevant cognitive data
 cog_subset <- alldata %>%
-  select(participant_id, age, group, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
+  select(participant_id,nr, age, group, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
 
 # Convert 'moca' variable to a binary variable based on a cutoff score of 25 
 # 0 represents scores less than 26 (may) indicating cognitive impairment 
@@ -161,18 +161,18 @@ plot(hclust_ward)
 # plot(hclust_avg)
 # Create the desired number of clusters
 # Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
-cut_ward <- cutree(hclust_ward, k = 3)
+cut_ward <- cutree(hclust_ward, k = 2)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
-rect.hclust(hclust_ward, k = 3, border = 2:25)
-abline(h = 20, col = 'red')
+rect.hclust(hclust_ward, k = 2, border = 2:25)
+abline(h = 25, col = 'red')
 # Visualize tree with different colored branches
 # Install dendextend
 # install.packages("dendextend")
 library(dendextend)
 
 ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 20)
+ward_col_dend <- color_branches(ward_dend_obj, h = 25)
 plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao

@@ -52,7 +52,7 @@ cog_subset_clean %>%
    summary()
 
 # variables for which outliers are to be identified and removed
-variables <- c("pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
+variables <- c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")
 
 clean_data <- cog_subset_clean
 # Loop over all variables
@@ -126,7 +126,7 @@ clean_data_cog <- clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nbac
 
 # Extract relevant columns from cog_subset_clean
 # cog_df <- cog_subset_clean[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
-cog_df <- clean_data[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]
+cog_df <- clean_data[, c("group","pvt_reaction_time","nback_miss_2","tmt_b_time")]
 # Check structure and summarize contents of cog_df
 # Check for missing values (I alredy removed them earlier in script)
 str(cog_df)
@@ -161,18 +161,18 @@ plot(hclust_ward)
 # plot(hclust_avg)
 # Create the desired number of clusters
 # Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
-cut_ward <- cutree(hclust_ward, k = 2)
+cut_ward <- cutree(hclust_ward, k = 3)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
-rect.hclust(hclust_ward, k = 2, border = 2:20)
-abline(h = 19, col = 'red')
+rect.hclust(hclust_ward, k = 3, border = 2:25)
+abline(h = 15, col = 'red')
 # Visualize tree with different colored branches
 # Install dendextend
 # install.packages("dendextend")
 library(dendextend)
 
 ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 19)
+ward_col_dend <- color_branches(ward_dend_obj, h = 15)
 plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao

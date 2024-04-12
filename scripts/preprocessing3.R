@@ -54,6 +54,7 @@ cog_subset_clean %>%
 # variables for which outliers are to be identified and removed
 variables <- c("pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
 
+clean_data <- cog_subset_clean
 # Loop over all variables
 for (variable in variables) {
   # Detect outliers
@@ -68,15 +69,17 @@ for (variable in variables) {
   # out_ind
   # cog_subset_clean[out_ind,]
   # Remove outliers
-  outliers <- boxplot(cog_subset_clean[[variable]] , plot = F)$out
+  clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
+  # outliers <- boxplot(cog_subset_clean[[variable]] , plot = F)$out
+  
   # cog_subset_clean_clean <- (cog_subset_clean[-which(cog_subset_clean[[variable]] %in% outliers),]) 
-  cog_subset_clean_clean <- (cog_subset_clean[-which(cog_subset_clean$pvt_reaction_time %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_miss_1 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_false_alarm_1 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_miss_2 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_false_alarm_2 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$tmt_a_time %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$tmt_b_time %in% outliers),])
+  # cog_subset_clean_pvt <- (cog_subset_clean[-which(cog_subset_clean$pvt_reaction_time %in% outliers),])
+  # cog_subset_clean_nm1 <- (cog_subset_clean[-which(cog_subset_clean$nback_miss_1 %in% outliers),])
+  # cog_subset_clean_nf1 <- (cog_subset_clean[-which(cog_subset_clean$nback_false_alarm_1 %in% outliers),])
+  # cog_subset_clean_nm2 <- (cog_subset_clean[-which(cog_subset_clean$nback_miss_2 %in% outliers),])
+  # cog_subset_clean_nf2 <- (cog_subset_clean[-which(cog_subset_clean$nback_false_alarm_2 %in% outliers),])
+  # cog_subset_clean_tmta <- (cog_subset_clean[-which(cog_subset_clean$tmt_a_time %in% outliers),])
+  # cog_subset_clean_tmtb <- (cog_subset_clean[-which(cog_subset_clean$tmt_b_time %in% outliers),])
 }
 
 

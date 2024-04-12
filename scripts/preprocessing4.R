@@ -52,8 +52,9 @@ cog_subset_clean %>%
    summary()
 
 # variables for which outliers are to be identified and removed
-variables <- c("pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
+variables <- c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")
 
+clean_data <- cog_subset_clean
 # Loop over all variables
 for (variable in variables) {
   # Detect outliers
@@ -65,33 +66,9 @@ for (variable in variables) {
   cat("Indices of outliers for", variable, ":", out_ind, "\n")
   cat("Rows with outliers for", variable, ":\n")
   print(cog_subset_clean[out_ind,])
-  # out_ind
-  # cog_subset_clean[out_ind,]
   # Remove outliers
-  outliers <- boxplot(cog_subset_clean[[variable]] , plot = F)$out
-  # cog_subset_clean_clean <- (cog_subset_clean[-which(cog_subset_clean[[variable]] %in% outliers),]) 
-  cog_subset_clean_clean <- (cog_subset_clean[-which(cog_subset_clean$pvt_reaction_time %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_miss_1 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_false_alarm_1 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_miss_2 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$nback_false_alarm_2 %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$tmt_a_time %in% outliers),])
-  cog_subset_clean_clean <- (cog_subset_clean_clean[-which(cog_subset_clean_clean$tmt_b_time %in% outliers),])
+  clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
 }
-
-
-# Detect outliers
-box_plot <- boxplot(cog_subset_clean$pvt_reaction_time)$out
-mtext(paste("Outliers :", paste(box_plot,
-                                collapse = ",")))
-# Identify rows containing outliers
-out_ind <- which(cog_subset_clean$pvt_reaction_time %in% c(box_plot))
-out_ind
-cog_subset_clean[out_ind,]
-
-# Remove outliers
-outliers <- boxplot(cog_subset_clean$pvt_reaction_time , plot = F)$out
-cog_subset_clean_clean <- cog_subset_clean[-which(cog_subset_clean$pvt_reaction_time %in% outliers),]  
 
 # Imputation of missing values
 # Funktioniert nicht, da z.B. beim n-back Werte nicht zwischen 0 und 1 annehmen kann. Auch mit round hat er Probleme
@@ -125,24 +102,10 @@ cog_subset_clean |>
   round(2)
 
 # Standardization
-cog_subset_clean_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
-cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
+clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")] = scale(clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")])
+# clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
 # Get columns of interest
-cog_subset_clean_cog <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
-
-# Detect outliers
-box_plot <- boxplot(cog_subset_clean_cog$pvt_reaction_time)$out
-mtext(paste("Outliers :", paste(box_plot,
-                                collapse = ",")))
-# Identify rows containing outliers
-out_ind <- which(cog_subset_clean_cog$pvt_reaction_time %in% c(box_plot))
-out_ind
-cog_subset_clean_cog[out_ind,]
-
-# Remove outliers
-outliers <- boxplot(cog_subset_clean_cog$pvt_reaction_time , plot = F)$out
-cog_subset_clean_cog_clean <- cog_subset_clean_cog[-which(cog_subset_clean_cog$pvt_reaction_time %in% outliers),]  
-
+clean_data_cog <- clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]
 
 # Detect outliers
 # box_plot <- boxplot(cog_subset_clean_cog)$out
@@ -162,8 +125,8 @@ cog_subset_clean_cog_clean <- cog_subset_clean_cog[-which(cog_subset_clean_cog$p
 # Hierarchical clustering/Preprocessing
 
 # Extract relevant columns from cog_subset_clean
-cog_df <- cog_subset_clean[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
-
+# cog_df <- cog_subset_clean[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
+cog_df <- clean_data[, c("group","moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]
 # Check structure and summarize contents of cog_df
 # Check for missing values (I alredy removed them earlier in script)
 str(cog_df)
@@ -234,7 +197,7 @@ count(cog_df_cl,cluster)
 # boxplot(cog_subset_clean_cog, main = "Boxplot of cog_subset_clean_cog")
 
 set.seed(123)
-km.out <- kmeans(cog_subset_clean_cog, centers = 2, nstart = 20)
+km.out <- kmeans(clean_data_cog, centers = 2, nstart = 20)
 km.out
 
 # Decide how many clusters to look at
@@ -248,7 +211,7 @@ set.seed(123)
 # Look over 1 to n possible clusters
 for (i in 1:n_clusters) {
   # Fit the model: km.out
-  km.out <- kmeans(cog_subset_clean_cog, centers = i, nstart = 20)
+  km.out <- kmeans(clean_data_cog, centers = i, nstart = 20)
   # Save the within cluster sum of squares
   wss[i] <- km.out$tot.withinss
 }
@@ -274,7 +237,7 @@ scree_plot +
 k <- 4
 set.seed(123)
 # Build model with k clusters: km.out
-km.out <- kmeans(cog_subset_clean_cog, centers = k, nstart = 20)
+km.out <- kmeans(clean_data_cog, centers = k, nstart = 20)
 
 # Only possible with two variables, but I have more
 # cog_subset_clean_cog$cluster_id <- factor(km.out$cluster)

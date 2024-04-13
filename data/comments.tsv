@@ -1,5 +1,5 @@
 participant_id  nr  age  sex  group  tmt_a_time  tmt_b_time  comments  moca  pvt_reaction_time  nback_miss_1  nback_false_alarm_1  nback_miss_2  nback_false_alarm_2
-sub-IL11GR	3	36	F  withPCS	16.91  35.97	Versuchsperson hat den zweiten Teil der n-back Aufgabe falsch verstanden.	30	0.35363071	17	0	19	0
+sub-IL11GR	3  36  F  withPCS  16.91  35.97  Versuchsperson hat den zweiten Teil der n-back Aufgabe falsch verstanden.  30  0.35363071  17  0  19  0
 sub-BI19KI	7	30	F  withPCS	17.06  47.12	Versuchsperson hat den zweiten Teil der n-back Aufgabe falsch verstanden.	27	0.300497585	13	0	19	0
 sub-GE23IZ	20	54	M  withPCS	26.4	61.44  Versuchsperson hat am Anfang des zweiten Teils vom nback die Aufgabe noch nicht ganz verstanden gehabt	26	0.297097035	3	0	17	0
 sub-MO18NE	24	47	F  withPCS	23.44  41.21	Post-Covid wurde von der Berufsgenossenschaft als Erkrankung anerkannt. TMT musste sie sehr viel ueben als kognitives Training	27	0.454476686	12	0  13	0

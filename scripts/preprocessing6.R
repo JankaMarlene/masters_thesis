@@ -6,6 +6,9 @@ library(tidyverse)
 # Import data
 alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", na.strings = "n/a", header = TRUE)
 
+# subset comments
+subset_com <- alldata %>%
+  select(participant_id,nr,age,group,comments, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
 # Subset of alldata that contains only the important variables
 subset <- alldata %>%
   select(participant_id,nr, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_total_score, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time, tmt_b_time)

@@ -16,7 +16,7 @@ subset <- subset %>%
 
 # Subset with all relevant cognitive data
 cog_subset <- subset %>%
-  select(participant_id,nr, age, group, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
+  select(participant_id,nr, age, group, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
 
 # Summarize cog_subset
 cog_subset %>%
@@ -101,7 +101,7 @@ print(clean_data)
 
 # Test correlation
 clean_data |>
-  select(moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time) |>
+  select(pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time) |>
   cor(use = "pairwise.complete.obs") |>
   round(2)
 # Scatter plot of tmt_a_time vs. tmt_b_time faceted by age
@@ -112,4 +112,7 @@ ggplot(clean_data, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
   geom_point()
 
 # Standardization
-clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")] = scale(clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")])
+clean_data[, c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")] = scale(clean_data[, c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")])
+
+save(clean_data, file = "clean_data.RData")
+

@@ -97,6 +97,22 @@ for (variable in variables) {
 grid.arrange(grobs = plot_list, ncol = 2)
 
 
+# Initialize an empty list to store the test results (Signifikanztest)
+test_results <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform Wilcoxon rank sum test for the current variable
+  test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
+  
+  # Store the test result in the list
+  test_results[[variable]] <- test_result
+}
+
+# Display the test results
+test_results
+
+
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
 

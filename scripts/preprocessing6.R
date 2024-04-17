@@ -6,25 +6,19 @@ library(tidyverse)
 # Import data
 alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", na.strings = "n/a", header = TRUE)
 
-# subset comments
-subset_com <- alldata %>%
-  select(participant_id,nr,age,group,comments, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
 # Subset of alldata that contains only the important variables
 subset <- alldata %>%
   select(participant_id,nr, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_total_score, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time, tmt_b_time)
 
-# important_columns <- c("participant_id","age","sex","group","graduation","years_of_education","neurological_diseases_1","facit_f_total_score","hads_a_total_score","hads_d_total_score","psqi_total_score","moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")
-# subset <- alldata[,important_columns]
-
-# Subset with all relevant cognitive data
-cog_subset <- alldata %>%
-  select(participant_id,nr, age, group, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
-
 # Convert 'moca' variable to a binary variable based on a cutoff score of 25 
 # 0 represents scores less than 26 (may) indicating cognitive impairment 
 # 1 represents scores more than 25 (may) indicating no cognitive impairment 
-cog_subset <- cog_subset %>%
+subset <- subset %>%
   mutate(moca = ifelse(moca > 25, 1, 0))
+
+# Subset with all relevant cognitive data
+cog_subset <- subset %>%
+  select(participant_id,nr, age, group, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time)
 
 # Summarize cog_subset
 cog_subset %>%
@@ -85,9 +79,6 @@ for (variable in variables) {
 # Compute correlation matrix
 ## cor(cog_subset)
 
-# Scatter plot of tmt_a_time vs. tmt_b_time
-ggplot(cog_subset, aes(x = tmt_a_time, y = tmt_b_time)) +
-  geom_point()
 # Scatter plot of tmt_a_time vs. tmt_b_time faceted by age
 ggplot(cog_subset, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
   geom_point()

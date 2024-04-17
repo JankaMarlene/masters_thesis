@@ -136,7 +136,7 @@ grid.arrange(grobs = plot_list, ncol = 2)
 
 ## Questionairs
 # Vector of variables for which to create boxplots
-new_variables <- c("facit_f_total_score", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
 
 # Initialize an empty list to store the plots
 plot_list <- list()
@@ -156,8 +156,24 @@ for (variable in new_variables) {
 grid.arrange(grobs = plot_list, ncol = 2)
 
 
+# Initialize an empty list to store the test results (Signifikanztest)
+test_results <- list()
+
+# Loop over each variable
+for (variable in new_variables) {
+  # Perform Wilcoxon rank sum test for the current variable
+  test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
+  
+  # Store the test result in the list
+  test_results[[variable]] <- test_result
+}
+
+# Display the test results
+test_results
+
+
 # Vector of variables for which to create boxplots
-new_variables <- c("facit_f_total_score", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
 
 # Initialize an empty list to store the plots
 plot_list <- list()

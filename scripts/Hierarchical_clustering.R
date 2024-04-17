@@ -33,10 +33,10 @@ cut_ward <- cutree(hclust_ward, k = 2)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
 rect.hclust(hclust_ward, k = 2, border = 2:40)
-abline(h = 33, col = 'red')
+abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
 ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 30)
+ward_col_dend <- color_branches(ward_dend_obj, h = 28)
 plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao
@@ -56,5 +56,5 @@ count(cog_df_cl,cluster)
 # Cross-checking clustering results using table funcion
 table(cog_df_cl$cluster,cog_label)
 
-suppressPackageStartupMessages(library(ggplot2))
-ggplot(cog_df_cl, aes(x= nback_miss_1, y = nback_miss_2, color = factor(cluster))) + geom_point()
+# suppressPackageStartupMessages(library(ggplot2))
+# ggplot(cog_df_cl, aes(x= nback_miss_1, y = nback_miss_2, color = factor(cluster))) + geom_point()

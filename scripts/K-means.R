@@ -2,6 +2,8 @@
 library(tidyverse)
 library(dplyr)
 library(dendextend)
+library(ggplot2)
+library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -88,6 +90,62 @@ axis(side = 2, at = seq(0, 20, by = 5), labels = seq(0, 20, by = 5), tcl = -1)
 # Add legend
 legend("topleft", legend = c("withoutPCS", "withPCS"), fill = c("blue", "red"))
 
+
+# Plotting age distribution between clusters with mean as text
+ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
+  geom_boxplot() +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "red") + # Add mean point
+  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), vjust = -0.5) + # Add mean as text
+  labs(x = "Cluster", y = "age", title = "Age Distribution between Clusters")
+
+# Plotting age distribution within clusters based on withPCS and withoutPCS labels with mean as text
+ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) + # Adjust position of boxplots
+  stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.75), # Adjust position of points
+               shape = 18, size = 4, color = "red") + # Add mean point
+  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
+               position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
+  labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters based on withPCS and withoutPCS Labels")
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster and fill by group
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster and fill by group
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
 
 # Cluster solution for 2 clusters
 # Select number of clusters

@@ -1,6 +1,3 @@
-# Installing tidyverse package
-# install.packages("tidyverse")
-# Import the tidyverse
 library(tidyverse)
 library(dplyr)
 
@@ -49,38 +46,70 @@ cog_subset_clean <- cog_subset %>%
 cog_subset_clean %>%
   summary()
 
-# variables for which outliers are to be identified and removed
+# Variables for which outliers are to be identified and winsorized
 variables <- c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")
 
 clean_data <- cog_subset_clean
+# Function to winsorize a variable
+winsorize_variable <- function(x) {
+  q1 <- quantile(x, 0.25)
+  q3 <- quantile(x, 0.75)
+  iqr <- IQR(x)
+  
+  # Winsorization
+  x <- ifelse(x > q3 + 1.5 * iqr, q3 + 1.5 * iqr, x)
+  x <- ifelse(x < q1 - 1.5 * iqr, q1 - 1.5 * iqr, x)
+  
+  x
+}
+
 # Loop over all variables
 for (variable in variables) {
   # Detect outliers
   box_plot <- boxplot(cog_subset_clean[[variable]])$out
-  mtext(paste("Outliers for", variable, ":", paste(box_plot,
-                                                   collapse = ",")))
+  mtext(paste("Outliers for", variable, ":", paste(box_plot, collapse = ",")))
+  
   # Identify rows containing outliers
   out_ind <- which(cog_subset_clean[[variable]] %in% c(box_plot))
   cat("Indices of outliers for", variable, ":", out_ind, "\n")
   cat("Rows with outliers for", variable, ":\n")
   print(cog_subset_clean[out_ind,])
-  # Remove outliers
-  clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
+  
+  # Winsorize the variable
+  clean_data <- clean_data %>%
+    mutate({{variable}} := winsorize_variable(!!sym(variable)))
 }
 
+# Check the clean dataset
+print(clean_data)
+
+# Loop over all variables
+# for (variable in variables) {
+  # Detect outliers
+  # box_plot <- boxplot(cog_subset_clean[[variable]])$out
+  # mtext(paste("Outliers for", variable, ":", paste(box_plot,
+                                                   # collapse = ",")))
+  # Identify rows containing outliers
+  # out_ind <- which(cog_subset_clean[[variable]] %in% c(box_plot))
+  # cat("Indices of outliers for", variable, ":", out_ind, "\n")
+  # cat("Rows with outliers for", variable, ":\n")
+  # print(cog_subset_clean[out_ind,])
+  # Winsorize outliers
+  # Remove outliers
+  # clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
+# }
+
 # Test correlation
-cog_subset_clean |>
+clean_data |>
   select(moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time) |>
   cor(use = "pairwise.complete.obs") |>
   round(2)
 # Scatter plot of tmt_a_time vs. tmt_b_time faceted by age
-ggplot(cog_subset_clean, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
+ggplot(clean_data, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
   geom_point()
 # Scatter plot of nback_miss_1 vs. nback_miss_2 faceted by age
-ggplot(cog_subset_clean, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
+ggplot(clean_data, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
   geom_point()
 
 # Standardization
 clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")] = scale(clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")])
-# Get columns of interest
-clean_data_cog <- clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]

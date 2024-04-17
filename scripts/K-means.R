@@ -127,6 +127,28 @@ for (variable in variables) {
 # Arrange plots in a grid
 grid.arrange(grobs = plot_list, ncol = 2)
 
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
 

@@ -2,6 +2,7 @@
 # install.packages("tidyverse")
 # Import the tidyverse
 library(tidyverse)
+library(dplyr)
 
 # Import data
 alldata <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", na.strings = "n/a", header = TRUE)
@@ -67,36 +68,19 @@ for (variable in variables) {
   clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
 }
 
-# Imputation of missing values
-# Funktioniert nicht, da z.B. beim n-back Werte nicht zwischen 0 und 1 annehmen kann. Auch mit round hat er Probleme
-# cog_subset_impute <- cog_subset %>%
-#  mutate_all(~ replace_na(., mean(.,na.rm = TRUE)))
-
-# Detect outliers
-# selected_variables <- cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")]
-# boxplot(selected_variables, main = "Boxplot of cog_subset_clean")
-
-# Compute correlation matrix
-## cor(cog_subset)
-
-# Scatter plot of tmt_a_time vs. tmt_b_time faceted by age
-ggplot(cog_subset, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
-  geom_point()
-# Scatter plot of nback_miss_1 vs. nback_miss_2 faceted by age
-ggplot(cog_subset, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
-  geom_point()
-
-# Clustering
-
 # Test correlation
-library(dplyr)
 cog_subset_clean |>
   select(moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1, nback_miss_2, nback_false_alarm_2, tmt_a_time, tmt_b_time) |>
   cor(use = "pairwise.complete.obs") |>
   round(2)
+# Scatter plot of tmt_a_time vs. tmt_b_time faceted by age
+ggplot(cog_subset_clean, aes(x = tmt_a_time, y = tmt_b_time, color = age)) +
+  geom_point()
+# Scatter plot of nback_miss_1 vs. nback_miss_2 faceted by age
+ggplot(cog_subset_clean, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
+  geom_point()
 
 # Standardization
 clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")] = scale(clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")])
-# clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")] = scale(cog_subset_clean[, c("moca","pvt_reaction_time","nback_miss_1","nback_false_alarm_1","nback_miss_2","nback_false_alarm_2","tmt_a_time","tmt_b_time")])
 # Get columns of interest
 clean_data_cog <- clean_data[, c("moca","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]

@@ -54,6 +54,7 @@ scree_plot +
     col = c(rep('#000000',3),'#FF0000', rep('#000000', 6))
   )
 
+# Cluster solution for 4 clusters
 # Select number of clusters
 k <- 4
 set.seed(123)
@@ -80,15 +81,44 @@ barplot(cluster_label_counts, beside = TRUE, col = c("blue", "red"),
         ylim = c(0, 20),
         axes = FALSE)
 
-# Add y-axis with custom ticks
-axis(side = 2, at = seq(0, 20, by = 1))  # Add ticks at every count from 0 to 20
+# Add y-axis with custom ticks and intermediate tick marks
+axis(side = 2, at = seq(0, 20, by = 1), labels = FALSE)  
+axis(side = 2, at = seq(0, 20, by = 5), labels = seq(0, 20, by = 5), tcl = -1)  
 
 # Add legend
-legend("topright", legend = c("withoutPCS", "withPCS"), fill = c("blue", "red"))
+legend("topleft", legend = c("withoutPCS", "withPCS"), fill = c("blue", "red"))
 
-# Only possible with two variables, but I have more
-# cog_subset_clean_cog$cluster_id <- factor(km.out$cluster)
-# ggplot(cog_subset_clean_cog, aes(number_of_reviews, price, color = cluster_id)) +
-# geom_point(alpha = 0.25) +
-# xlab("Number of reviews") +
-# ylab("Price")
+
+# Cluster solution for 2 clusters
+# Select number of clusters
+k <- 2
+set.seed(123)
+
+# Build model with k clusters: km.out
+km.out <- kmeans(cog_df, centers = k, nstart = 20)
+
+# Append cluster results obtained back in the original dataframe
+cog_df_cl <- mutate(cog_df, cluster = km.out$cluster)
+
+# Count how many observations were assigned to each cluster with the count function
+count(cog_df_cl, cluster)
+
+# Cross-checking clustering results using table function
+table(cog_df_cl$cluster, cog_label)
+
+# Prepare data (count of observations in each cluster for each label category)
+cluster_label_counts <- table(cog_label, cog_df_cl$cluster)
+
+# Create bar plot with custom y-axis range and ticks
+barplot(cluster_label_counts, beside = TRUE, col = c("blue", "red"), 
+        main = "Cluster Assignments by Label Category", xlab = "Cluster", ylab = "Count",
+        ylim = c(0, 25),
+        axes = FALSE)
+
+# Add y-axis with custom ticks and intermediate tick marks
+axis(side = 2, at = seq(0, 25, by = 1), labels = FALSE)  
+axis(side = 2, at = seq(0, 25, by = 5), labels = seq(0, 25, by = 5), tcl = -1)  
+
+# Add legend
+legend("top", legend = c("withoutPCS", "withPCS"), fill = c("blue", "red"),
+       bty = "n", xpd = TRUE, inset = c(0, 1.05))

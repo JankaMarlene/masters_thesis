@@ -35,21 +35,21 @@ cog_subset %>%
   summary(group == "withoutPCS")
 
 # Checking for missing values
-any(is.na(cog_subset))
+any(is.na(subset))
 # Missing values = TRUE
 # Removing rows with missing values
 # cog_subset_clean <- cog_subset[complete.cases(cog_subset), ]
-cog_subset_clean <- cog_subset %>%
-  drop_na()
+subset<- subset %>%
+  drop_na(pvt_reaction_time, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
 
 # Summarize cleaned dataframe
-cog_subset_clean %>%
+subset %>%
   summary()
 
 # Variables for which outliers are to be identified and winsorized
 variables <- c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")
 
-clean_data <- cog_subset_clean
+clean_data <- subset
 # Function to winsorize a variable
 winsorize_variable <- function(x) {
   q1 <- quantile(x, 0.25)
@@ -66,14 +66,14 @@ winsorize_variable <- function(x) {
 # Loop over all variables
 for (variable in variables) {
   # Detect outliers
-  box_plot <- boxplot(cog_subset_clean[[variable]])$out
+  box_plot <- boxplot(subset[[variable]])$out
   mtext(paste("Outliers for", variable, ":", paste(box_plot, collapse = ",")))
   
   # Identify rows containing outliers
-  out_ind <- which(cog_subset_clean[[variable]] %in% c(box_plot))
+  out_ind <- which(subset[[variable]] %in% c(box_plot))
   cat("Indices of outliers for", variable, ":", out_ind, "\n")
   cat("Rows with outliers for", variable, ":\n")
-  print(cog_subset_clean[out_ind,])
+  print(subset[out_ind,])
   
   # Winsorize the variable
   clean_data <- clean_data %>%
@@ -94,7 +94,6 @@ print(clean_data)
   # cat("Indices of outliers for", variable, ":", out_ind, "\n")
   # cat("Rows with outliers for", variable, ":\n")
   # print(cog_subset_clean[out_ind,])
-  # Winsorize outliers
   # Remove outliers
   # clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
 # }

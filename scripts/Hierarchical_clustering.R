@@ -37,9 +37,9 @@ plot(hclust_ward)
 rect.hclust(hclust_ward, k = 2, border = 2:40)
 abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
-ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 28)
-plot(ward_col_dend)
+# ward_dend_obj <- as.dendrogram(hclust_ward)
+# ward_col_dend <- color_branches(ward_dend_obj, h = 28)
+# plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao
 # install.packages("factoextra")
@@ -105,6 +105,49 @@ plot_list <- list()
 
 # Loop over each variable
 for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster and fill by group
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+## Questionairs
+# Vector of variables for which to create boxplots
+new_variables <- c("facit_f_total_score", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each new variable
+for (variable in new_variables) {
+  # Create boxplot for the current variable grouped by cluster
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Vector of variables for which to create boxplots
+new_variables <- c("facit_f_total_score", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each new variable
+for (variable in new_variables) {
   # Create boxplot for the current variable grouped by cluster and fill by group
   plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
     geom_boxplot(position = position_dodge(width = 0.75)) +

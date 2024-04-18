@@ -100,6 +100,15 @@ t_test_withPCS
 # Display t-test results for "withoutPCS" group
 t_test_withoutPCS
 
+# Filter the data for Cluster 2
+cluster_2_data <- subset(clean_data, cluster == 2)
+
+# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
+t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
+
+# Display t-test results
+t_test_cluster_2
+
 
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
@@ -256,3 +265,23 @@ t_test_withPCS
 
 # Display t-test results for "withoutPCS" group
 t_test_withoutPCS
+
+
+# Filter the data for Cluster 1
+cluster_1_data <- subset(clean_data, cluster == 1)
+
+# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 1
+t_test_cluster_1 <- t.test(facit_f_FS ~ group, data = cluster_1_data)
+
+# Display t-test results
+t_test_cluster_1
+
+
+# Filter the data for Cluster 2
+cluster_2_data <- subset(clean_data, cluster == 2)
+
+# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
+t_test_cluster_2 <- t.test(facit_f_FS ~ group, data = cluster_2_data)
+
+# Display t-test results
+t_test_cluster_2

@@ -58,6 +58,12 @@ count(cog_df_cl,cluster)
 # Cross-checking clustering results using table funcion
 table(cog_df_cl$cluster,cog_label)
 
+# Add the cluster information from cog_df_cl to clean_data
+clean_data$cluster <- cog_df_cl$cluster
+
+# Check the updated structure of clean_data
+str(clean_data)
+
 
 # Plotting age distribution between clusters with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
@@ -65,6 +71,13 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
   stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), vjust = -0.5) + # Add mean as text
   labs(x = "Cluster", y = "age", title = "Age Distribution between Clusters")
+
+# Perform t-test for age between clusters
+t_test_age <- t.test(age ~ as.factor(cog_df_cl$cluster), data = clean_data)
+
+# Display t-test results
+t_test_age
+
 
 # Plotting age distribution within clusters based on withPCS and withoutPCS labels with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group)) +
@@ -74,6 +87,18 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group))
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
   labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters based on withPCS and withoutPCS Labels")
+
+# Perform t-test for age within "withPCS" group between clusters
+t_test_withPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+
+# Perform t-test for age within "withoutPCS" group between clusters
+t_test_withoutPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+
+# Display t-test results for "withPCS" group
+t_test_withPCS
+
+# Display t-test results for "withoutPCS" group
+t_test_withoutPCS
 
 
 # Vector of variables for which to create boxplots
@@ -132,6 +157,34 @@ for (variable in variables) {
 
 # Arrange plots in a grid
 grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Initialize an empty list to store the test results for withPCS group
+test_results_withPCS <- list()
+
+# Initialize an empty list to store the test results for withoutPCS group
+test_results_withoutPCS <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform t-test for the current variable within "withPCS" group
+  t_test_result_withPCS <- t.test(clean_data$age[clean_data$group == "withPCS"], clean_data[[variable]][clean_data$group == "withPCS"])
+  
+  # Perform t-test for the current variable within "withoutPCS" group
+  t_test_result_withoutPCS <- t.test(clean_data$age[clean_data$group == "withoutPCS"], clean_data[[variable]][clean_data$group == "withoutPCS"])
+  
+  # Store the test results for withPCS group in the list
+  test_results_withPCS[[variable]] <- t_test_result_withPCS
+  
+  # Store the test results for withoutPCS group in the list
+  test_results_withoutPCS[[variable]] <- t_test_result_withoutPCS
+}
+
+# Display the test results for withPCS group
+test_results_withPCS
+
+# Display the test results for withoutPCS group
+test_results_withoutPCS
 
 
 ## Questionairs
@@ -191,3 +244,15 @@ for (variable in new_variables) {
 
 # Arrange plots in a grid
 grid.arrange(grobs = plot_list, ncol = 2)
+
+# Perform t-test for facit_f_FS within "withPCS" group between clusters
+t_test_withPCS <- t.test(facit_f_FS ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+
+# Perform t-test for facit_f_FS within "withoutPCS" group between clusters
+t_test_withoutPCS <- t.test(facit_f_FS ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+
+# Display t-test results for "withPCS" group
+t_test_withPCS
+
+# Display t-test results for "withoutPCS" group
+t_test_withoutPCS

@@ -34,9 +34,12 @@ gantt
 
 ## 📃 scripts
 - preprocessing
+- Hierarchical_clustering
+- K-means
 
 ## 💾 data
 - raw data
+- comments
 
 ## 🧩🔍 clustering
 - summary: Everitt et al., 2011

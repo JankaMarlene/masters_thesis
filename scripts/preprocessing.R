@@ -115,3 +115,21 @@ clean_data[, c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","t
 
 save(clean_data, file = "clean_data.RData")
 
+# Filter to get all "withPCS" rows
+# Summary of "withPCS" group
+clean_data %>%
+  filter(group == "withPCS") %>%
+  summary(group == "withPCS")
+
+# Filter to get all "withoutPCS" rows
+# Summary of "withoutPCS" group
+clean_data %>%
+  filter(group == "withoutPCS") %>%
+  summary(group == "withoutPCS")
+
+# Perform t-test for age between "withPCS" and "withoutPCS" groups
+t_test_age <- t.test(age ~ group, data = clean_data)
+
+# Display t-test results
+t_test_age
+

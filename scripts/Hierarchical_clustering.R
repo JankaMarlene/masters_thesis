@@ -37,9 +37,9 @@ plot(hclust_ward)
 rect.hclust(hclust_ward, k = 2, border = 2:40)
 abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
-# ward_dend_obj <- as.dendrogram(hclust_ward)
-# ward_col_dend <- color_branches(ward_dend_obj, h = 28)
-# plot(ward_col_dend)
+ward_dend_obj <- as.dendrogram(hclust_ward)
+ward_col_dend <- color_branches(ward_dend_obj, h = 28)
+plot(ward_col_dend)
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao
 # install.packages("factoextra")

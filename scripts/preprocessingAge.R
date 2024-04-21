@@ -132,6 +132,21 @@ create_age_groups <- function(age) {
   }
 }
 
+# Create age groups
+clean_data <- clean_data %>%
+  mutate(age_group = sapply(age, create_age_groups))
+
+# Calculate mean and standard deviation for each age group and variable
+age_group_summary <- clean_data %>%
+  group_by(age_group) %>%
+  summarize(across(c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time"), 
+                   list(mean = mean, sd = sd)))
+
+# Function to calculate z-scores
+calculate_z_scores <- function(x, mean, sd) {
+  (x - mean) / sd
+}
+
 # Function to calculate z-scores for each individual based on age
 calculate_z_scores_individual <- function(x, age, age_group_summary) {
   # Find the corresponding age group for each individual
@@ -161,9 +176,8 @@ calculate_z_scores_individual <- function(x, age, age_group_summary) {
 # Calculate z-scores for each individual based on age
 clean_data <- calculate_z_scores_individual(clean_data, clean_data$age, age_group_summary)
 
-# Create age groups
-# clean_data <- clean_data %>%
-  # mutate(age_group = sapply(age, create_age_groups))
+save(clean_data, file = "clean_data.RData")
+
 
 
 

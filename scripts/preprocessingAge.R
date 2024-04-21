@@ -162,4 +162,31 @@ clean_data <- clean_data %>%
 # Check the result
 head(clean_data)
 
+# Function to calculate z-scores for each individual based on age
+calculate_z_scores_individual <- function(x, age, age_group_summary) {
+  # Find the corresponding age group for each individual
+  age_group <- sapply(age, create_age_groups)
+  
+  # Join the age group summary data to the individual data based on age group
+  individual_data <- data.frame(x, age, age_group) %>%
+    left_join(age_group_summary, by = "age_group")
+  
+  # Calculate z-scores for each variable using individual mean and standard deviation
+  z_scores <- data.frame(
+    z_pvt_reaction_time = calculate_z_scores(x$pvt_reaction_time, individual_data$pvt_reaction_time_mean, individual_data$pvt_reaction_time_sd),
+    z_nback_miss_1 = calculate_z_scores(x$nback_miss_1, individual_data$nback_miss_1_mean, individual_data$nback_miss_1_sd),
+    z_nback_miss_2 = calculate_z_scores(x$nback_miss_2, individual_data$nback_miss_2_mean, individual_data$nback_miss_2_sd),
+    z_tmt_a_time = calculate_z_scores(x$tmt_a_time, individual_data$tmt_a_time_mean, individual_data$tmt_a_time_sd),
+    z_tmt_b_time = calculate_z_scores(x$tmt_b_time, individual_data$tmt_b_time_mean, individual_data$tmt_b_time_sd)
+  )
+  
+  return(z_scores)
+}
+
+# Calculate z-scores for each individual based on age
+individual_z_scores <- calculate_z_scores_individual(clean_data, clean_data$age, age_group_summary)
+
+# Check the result
+head(individual_z_scores)
+
 

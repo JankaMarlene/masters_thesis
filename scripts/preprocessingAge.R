@@ -132,6 +132,14 @@ create_age_groups <- function(age) {
   }
 }
 
+# Function to create age groups
+#create_age_groups <- function(age) {
+#  if (age >= 18 & age <= 49) {
+#    return("18-49 Years")
+#  } else if (age >= 50 & age <= 80) {
+#    return("50-80 Years")
+#  }
+#}
 # Create age groups
 clean_data <- clean_data %>%
   mutate(age_group = sapply(age, create_age_groups))

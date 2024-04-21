@@ -58,7 +58,7 @@ scree_plot +
 
 # Cluster solution for 4 clusters
 # Select number of clusters
-k <- 4
+k <- 2
 set.seed(123)
 
 # Build model with k clusters: km.out

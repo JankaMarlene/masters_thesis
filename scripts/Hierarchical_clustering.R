@@ -7,7 +7,7 @@ library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
-cog_df <- clean_data[, c("group","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]
+cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_nback_miss_1","z_nback_miss_2","z_tmt_a_time","z_tmt_b_time")]
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -285,3 +285,4 @@ t_test_cluster_2 <- t.test(facit_f_FS ~ group, data = cluster_2_data)
 
 # Display t-test results
 t_test_cluster_2
+

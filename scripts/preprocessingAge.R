@@ -188,6 +188,8 @@ calculate_z_scores_individual_all <- function(x, age, age_group_summary, age_gro
 # Calculate z-scores for each individual based on age for all variables
 clean_data <- calculate_z_scores_individual_all(clean_data, clean_data$age, age_group_summary, age_group_summary_nback)
 
+# clean_data[, c("nback_miss_1","nback_miss_2")] = scale(clean_data[, c("nback_miss_1","nback_miss_2")])
+
 save(clean_data, file = "clean_data.RData")
 
 

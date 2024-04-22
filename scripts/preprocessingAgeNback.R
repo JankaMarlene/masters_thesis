@@ -128,20 +128,12 @@ create_age_groups <- function(age) {
 # Create age groups
 clean_data <- clean_data %>%
   mutate(
-    age_group = sapply(age, create_age_groups),
-    age_group_nback = sapply(age, create_age_groups_nback)
-    )
+    age_group = sapply(age, create_age_groups))
 
 # Calculate mean and standard deviation for each age group and variable
 age_group_summary <- clean_data %>%
   group_by(age_group) %>%
   summarize(across(c("pvt_reaction_time", "tmt_a_time", "tmt_b_time"), 
-                   list(mean = mean, sd = sd)))
-
-# Calculate mean and standard deviation for each age group and variable for nback_miss_1 and nback_miss_2
-age_group_summary_nback <- clean_data %>%
-  group_by(age_group_nback) %>%
-  summarize(across(c("nback_miss_1", "nback_miss_2"), 
                    list(mean = mean, sd = sd)))
 
 # Function to calculate z-scores
@@ -150,35 +142,39 @@ calculate_z_scores <- function(x, mean, sd) {
 }
 
 # Function to calculate z-scores for each individual based on age for all variables
-calculate_z_scores_individual_all <- function(x, age, age_group_summary, age_group_summary_nback) {
+calculate_z_scores_individual <- function(x, age, age_group_summary) {
   # Find the corresponding age group for each individual
   age_group <- sapply(age, create_age_groups)
-  age_group_nback <- sapply(age, create_age_groups_nback)
   
   # Join the age group summary data to the individual data based on age group
   individual_data <- data.frame(x, age, age_group) %>%
-    left_join(age_group_summary, by = "age_group") %>%
-    left_join(age_group_summary_nback, by = "age_group_nback")
+    left_join(age_group_summary, by = "age_group")
   
   # Calculate z-scores for all variables
-  z_scores_all <- individual_data %>%
+  z_scores <- individual_data %>%
     mutate(
       z_pvt_reaction_time = calculate_z_scores(pvt_reaction_time, pvt_reaction_time_mean, pvt_reaction_time_sd),
-      z_nback_miss_1 = calculate_z_scores(nback_miss_1, nback_miss_1_mean, nback_miss_1_sd),
-      z_nback_miss_2 = calculate_z_scores(nback_miss_2, nback_miss_2_mean, nback_miss_2_sd),
       z_tmt_a_time = calculate_z_scores(tmt_a_time, tmt_a_time_mean, tmt_a_time_sd),
       z_tmt_b_time = calculate_z_scores(tmt_b_time, tmt_b_time_mean, tmt_b_time_sd)
     ) %>%
     select(starts_with("z_"))
   
   # Combine the Z-scores with the original data
-  x <- cbind(x, z_scores_all)
+  x <- cbind(x, z_scores)
   
   return(x)
 }
 
 # Calculate z-scores for each individual based on age for all variables
-clean_data <- calculate_z_scores_individual_all(clean_data, clean_data$age, age_group_summary, age_group_summary_nback)
+clean_data <- calculate_z_scores_individual(clean_data, clean_data$age, age_group_summary)
+
+# Scale the variables nback_miss_1 and nback_miss_2 and add them as new columns
+clean_data <- clean_data %>%
+  mutate(
+    s_nback_miss_1 = as.vector(scale(nback_miss_1)),
+    s_nback_miss_2 = as.vector(scale(nback_miss_2))
+  )
+
 
 # clean_data[, c("nback_miss_1","nback_miss_2")] = scale(clean_data[, c("nback_miss_1","nback_miss_2")])
 

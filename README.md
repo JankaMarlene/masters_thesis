@@ -65,3 +65,5 @@ contains all the literature
 ## 🖼️ presentations
 - planungsvortrag
 - EPOC1804
+
+## 📊 plots

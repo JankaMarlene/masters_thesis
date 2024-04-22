@@ -35,6 +35,7 @@ gantt
 ## 📃 scripts
 - preprocessing
 - preprocessingAge
+- preprocessingAgeNback
 - Hierarchical_clustering
 - K-means
 
@@ -65,6 +66,7 @@ contains all the literature
 ## 🖼️ presentations
 - planungsvortrag
 - EPOC1804
+- clustering
 
 ## 📊 plots
 - contains all the plots

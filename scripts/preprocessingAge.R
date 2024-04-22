@@ -113,33 +113,17 @@ ggplot(clean_data, aes(x = nback_miss_1, y = nback_miss_2, color = age)) +
 
 # Function to create age groups
 create_age_groups <- function(age) {
-  if (age >= 18 & age <= 24) {
-    return("18-24 Years")
-  } else if (age >= 25 & age <= 34) {
-    return("25-34 Years")
-  } else if (age >= 35 & age <= 44) {
-    return("35-44 Years")
-  } else if (age >= 45 & age <= 54) {
-    return("45-54 Years")
-  } else if (age >= 55 & age <= 59) {
-    return("55-59 Years")
-  } else if (age >= 60 & age <= 64) {
-    return("60-64 Years")
-  } else if (age >= 65 & age <= 69) {
-    return("65-69 Years")
-  } else {
-    return("70-80 Years")
+  if (age >= 18 & age <= 34) {
+    return("18-34 Years")
+  } else if (age >= 35 & age <= 49) {
+    return("35-49 Years")
+  } else if (age >= 50 & age <= 64) {
+    return("50-64 Years")
+  } else if (age >= 65 & age <= 80) {
+    return("65-80 Years")
   }
 }
 
-# Function to create age groups
-#create_age_groups <- function(age) {
-#  if (age >= 18 & age <= 49) {
-#    return("18-49 Years")
-#  } else if (age >= 50 & age <= 80) {
-#    return("50-80 Years")
-#  }
-#}
 # Create age groups
 clean_data <- clean_data %>%
   mutate(age_group = sapply(age, create_age_groups))
@@ -147,7 +131,7 @@ clean_data <- clean_data %>%
 # Calculate mean and standard deviation for each age group and variable
 age_group_summary <- clean_data %>%
   group_by(age_group) %>%
-  summarize(across(c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time"), 
+  summarize(across(c("pvt_reaction_time", "tmt_a_time", "tmt_b_time"), 
                    list(mean = mean, sd = sd)))
 
 # Function to calculate z-scores

@@ -34,6 +34,7 @@ gantt
 
 ## 📃 scripts
 - preprocessing
+- preprocessingAge
 - Hierarchical_clustering
 - K-means
 
@@ -63,3 +64,4 @@ contains all the literature
 
 ## 🖼️ presentations
 - planungsvortrag
+- EPOC1804

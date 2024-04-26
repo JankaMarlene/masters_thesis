@@ -1,11 +1,17 @@
 # To-Dos
 
-- [ ] Unterschiede zwischen den Clustern hinsichtlich der verwendeten Variablen angucken
-- [ ] Altersverteilung innerhalb Cluster 1 angucken
-- [ ] Für jeden Unterschied eine Abbildung machen -> Alles angucken innerhalb und zwischen Clustern
-- [ ] Ausreißer nochmal angucken
-  - [ ]Winsorizing
-- [ ] NA bei denen, die nback2 nicht verstanden haben
+- [ ] EEG Auswertung beginnen
+- [ ] Einlesen in Fieldtrip
+- [ ] Expose schreiben
+- [ ] Für Clusterlösung entscheiden
+- [ ] Cluster Methodenteil schreiben
+- [ ] Cluster Ergebnisteil schreiben
+- [x] Unterschiede zwischen den Clustern hinsichtlich der verwendeten Variablen angucken
+- [x] Altersverteilung innerhalb Cluster 1 angucken
+- [x] Für jeden Unterschied eine Abbildung machen -> Alles angucken innerhalb und zwischen Clustern
+- [x] Ausreißer nochmal angucken
+  - [x]Winsorizing
+- [x] NA bei denen, die nback2 nicht verstanden haben
 - [x] In Daten sowohl withoutPCs, als auch withoutPCS -> bereinigen 
 - [x] Begrifflichkeiten bezüglich Skalierungen definieren (pinker Zettel) (eventuell doch auf GitHub)
 - [x] Backhaus et al., 2011 lesen

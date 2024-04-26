@@ -10,7 +10,7 @@
 - [x] Altersverteilung innerhalb Cluster 1 angucken
 - [x] Für jeden Unterschied eine Abbildung machen -> Alles angucken innerhalb und zwischen Clustern
 - [x] Ausreißer nochmal angucken
-  - [x]Winsorizing
+- [x]Winsorizing
 - [x] NA bei denen, die nback2 nicht verstanden haben
 - [x] In Daten sowohl withoutPCs, als auch withoutPCS -> bereinigen 
 - [x] Begrifflichkeiten bezüglich Skalierungen definieren (pinker Zettel) (eventuell doch auf GitHub)

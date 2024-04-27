@@ -62,6 +62,9 @@ contains all the literature
 
 ## 📑documents
 - Richtlinien zur Erstellung von Abschlussarbeiten
+- Deckblatt Expose
+- Anmeldung Masterarbeit
+- Falschzugeordnet
 
 ## 🖼️ presentations
 - planungsvortrag

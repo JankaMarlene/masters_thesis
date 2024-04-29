@@ -62,7 +62,8 @@ contains all the literature
 
 ## 📑documents
 - Richtlinien zur Erstellung von Abschlussarbeiten
-- Deckblatt Expose
+- Deckblatt Exposé
+- Exposé
 - Anmeldung Masterarbeit
 - Falschzugeordnet
 

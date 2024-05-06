@@ -2,7 +2,7 @@
 GitHub Repository for my master's thesis
 
 ## 📋 protocols
-contains all the meeting transcripts
+contains all the meeting transcript
 
 ## 📆 timetable
 ```mermaid

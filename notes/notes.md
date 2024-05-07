@@ -1,0 +1,2 @@
+- Geschlecht zu berücksichtigen beim EEG wichtig
+- Gucken, wie Geschlechterverteilung in Clustern ist

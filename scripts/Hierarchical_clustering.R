@@ -64,6 +64,8 @@ clean_data$cluster <- cog_df_cl$cluster
 # Check the updated structure of clean_data
 str(clean_data)
 
+# Checking sex in cluster
+table(cog_df_cl$cluster,clean_data$sex)
 
 # Plotting age distribution between clusters with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
@@ -108,6 +110,8 @@ t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
 
 # Display t-test results
 t_test_cluster_2
+
+
 
 
 # Vector of variables for which to create boxplots

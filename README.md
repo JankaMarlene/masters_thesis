@@ -56,6 +56,7 @@ gantt
 - questions
 - sources
 - structure
+- notes
   
 ## 📚 literature
 contains all the literature 

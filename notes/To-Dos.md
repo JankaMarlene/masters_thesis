@@ -7,7 +7,7 @@
 - [ ] Für Clusterlösung entscheiden
 - [ ] Cluster Methodenteil schreiben
 - [ ] Cluster Ergebnisteil schreiben
-- [ ] Geschlechterverteilung in Clustern angucken
+- [x] Geschlechterverteilung in Clustern angucken
 - [x] Wie gehe ich mit dem Alter um?
 - [x] Z-Transformation
 - [x] Unterschiede zwischen den Clustern hinsichtlich der verwendeten Variablen angucken

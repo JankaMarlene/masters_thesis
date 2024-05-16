@@ -15,5 +15,9 @@
   - Entscheidung für Clusterlösung nicht von Fatique abhängig machen
   - Stabilität angucken
     - Load der Paramenter, Gewichtung der Parameter, die für die Clusteranalyse verwendet werden
+    - z.B. TMT a mit so und so viel
+- Paper: "EEG ist better left alone", Delorme 2023
 ## To-Dos
+- Stabilitätsprüfung der Cluterlösung(en)
+- Lara fragen, wofür sie TMT a und b verwendet
 ## Nächstes Treffen: *19.06.24 13Uhr*

@@ -53,3 +53,6 @@
 - Sehr guter Fusionierungsalgorithmus, wenn (*vgl. Milligan 1980, S 332 ff.; Punj & Stewart 1983, S. 141 ff.*)
 - *Spät, 1977; Steinhausen&Langer, 1977*
 - *Pospeschill, 2012*
+
+## EEG
+- *EEG is better left alone, Delorme 2023*

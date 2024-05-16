@@ -7,6 +7,8 @@
 - [ ] Für Clusterlösung entscheiden
 - [ ] Cluster Methodenteil schreiben
 - [ ] Cluster Ergebnisteil schreiben
+- [ ] Stabilitätsprüfung der Cluterlösung(en)
+- [ ] Lara fragen, wofür sie TMT a und b verwendet
 - [x] Geschlechterverteilung in Clustern angucken
 - [x] Wie gehe ich mit dem Alter um?
 - [x] Z-Transformation

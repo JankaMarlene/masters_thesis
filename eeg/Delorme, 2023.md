@@ -10,3 +10,7 @@
  - High-pass filtering
    - Linear filter length increases as the cutoff frequency decreases, making it impractical to filter EEG at frequencies velow 0.5 Hz
    - Used 4th-order Butterworth filter to assess the optimal high-pass filter cutoff frequency *(ERPLAP package; see "Methods" section)*
+- FieldTrip
+  - One-step preprocessing  (filters raw data epochs)
+    - Decreased the percentage of significant electrodes up to 25% compared to the reference filter and should be avoided (Oddball)
+  - Multi-step preprocessing (filters raw data before extracting data epochs)

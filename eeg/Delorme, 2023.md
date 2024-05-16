@@ -14,3 +14,6 @@
   - One-step preprocessing  (filters raw data epochs)
     - Decreased the percentage of significant electrodes up to 25% compared to the reference filter and should be avoided (Oddball)
   - Multi-step preprocessing (filters raw data before extracting data epochs)
+## Line noise removal
+- Most common: Filtering out line noise frequency using a band-stop filter (notch filter)
+## Referencing 

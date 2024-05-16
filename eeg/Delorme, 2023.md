@@ -5,4 +5,8 @@
 - Eye movements and face, jaw & neck muscle contractions create scalp electrical potentials about 10 times the amplitude of brain signals and need to be removed
   - One strategy to remove noise: repeated presentation of stimuli in event-related potential paradigms
   - Other strategy: Use digital signal processing to remove artifacts
-  - Inter-rater agreement gold standard for EEG data rejection (difficult and time-consuming and imprecise
+  - Inter-rater agreement gold standard for EEG data rejection (difficult and time-consuming and imprecise)
+ ## Preprocessing methods
+ - High-pass filtering
+   - Linear filter length increases as the cutoff frequency decreases, making it impractical to filter EEG at frequencies velow 0.5 Hz
+   - Used 4th-order Butterworth filter to assess the optimal high-pass filter cutoff frequency *(ERPLAP package; see "Methods" section)*

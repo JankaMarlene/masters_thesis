@@ -16,4 +16,4 @@
   - Multi-step preprocessing (filters raw data before extracting data epochs)
 ## Line noise removal
 - Most common: Filtering out line noise frequency using a band-stop filter (notch filter)
-## Referencing 
+

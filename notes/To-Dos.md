@@ -1,6 +1,5 @@
 # To-Dos
 
-- [ ] EEG Auswertung beginnen
 - [ ] Einlesen in Fieldtrip
 - [ ] Korrekte Antworten im n-back angucken
 - [ ] Expose schreiben
@@ -8,7 +7,9 @@
 - [ ] Cluster Methodenteil schreiben
 - [ ] Cluster Ergebnisteil schreiben
 - [ ] Stabilitätsprüfung der Cluterlösung(en)
-- [ ] Lara fragen, wofür sie TMT a und b verwendet
+- [ ] Cut-off Wert beim Facit angucken innerhalb der beiden Cluster
+- [x] Lara fragen, wofür sie TMT a und b verwendet
+- [x] EEG Auswertung beginnen
 - [x] Geschlechterverteilung in Clustern angucken
 - [x] Wie gehe ich mit dem Alter um?
 - [x] Z-Transformation

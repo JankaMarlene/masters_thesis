@@ -9,6 +9,8 @@
 - [ ] Stabilitätsprüfung der Cluterlösung(en)
 - [ ] Cut-off Wert beim Facit angucken innerhalb der beiden Cluster
 - [ ] Informationen zum Facit vom Block auf Github übertragen
+- [ ] Übersicht Literatur erstellen
+- [ ] Literatur in Zotero übertragen
 - [x] Lara fragen, wofür sie TMT a und b verwendet
 - [x] EEG Auswertung beginnen
 - [x] Geschlechterverteilung in Clustern angucken

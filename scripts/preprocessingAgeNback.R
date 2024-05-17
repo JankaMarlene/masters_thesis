@@ -84,19 +84,19 @@ for (variable in variables) {
 print(clean_data)
 
 # Loop over all variables
-# for (variable in variables) {
+for (variable in variables) {
   # Detect outliers
-  # box_plot <- boxplot(cog_subset_clean[[variable]])$out
-  # mtext(paste("Outliers for", variable, ":", paste(box_plot,
-                                                   # collapse = ",")))
+  box_plot <- boxplot(subset[[variable]])$out
+  mtext(paste("Outliers for", variable, ":", paste(box_plot,
+                                                   collapse = ",")))
   # Identify rows containing outliers
-  # out_ind <- which(cog_subset_clean[[variable]] %in% c(box_plot))
-  # cat("Indices of outliers for", variable, ":", out_ind, "\n")
-  # cat("Rows with outliers for", variable, ":\n")
-  # print(cog_subset_clean[out_ind,])
+  out_ind <- which(subset[[variable]] %in% c(box_plot))
+  cat("Indices of outliers for", variable, ":", out_ind, "\n")
+  cat("Rows with outliers for", variable, ":\n")
+  print(subset[out_ind,])
   # Remove outliers
-  # clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
-# }
+  clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
+}
 
 # Test correlation
 clean_data |>

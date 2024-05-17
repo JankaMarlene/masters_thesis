@@ -135,7 +135,7 @@ for (variable in variables) {
 grid.arrange(grobs = plot_list, ncol = 2)
 
 
-# Initialize an empty list to store the test results (Signifikanztest)
+# Initialize an empty list to store the test results
 test_results <- list()
 
 # Loop over each variable
@@ -300,7 +300,7 @@ dist_mat <- dist(cog_df, method = 'euclidean')
 # Try different kinds of linkage methods after decide which performed better
 # Build dendrogram by plotting hierarchical cluster object with hclust
 # Specify linkage method via 'method' argument
-hclust_median <- hclust(dist_mat, method = 'median')
+hclust_median <- hclust(dist_mat, method = 'complete')
 plot(hclust_median)
 
 # Create the desired number of clusters
@@ -343,7 +343,8 @@ str(clean_data)
 library(fossil)
 
 # Calculate the Adjusted Rand Index
-ari_median_ward <- adj.rand.index(cut_median, cut_ward)
+ari_median_ward <- rand.index(cut_median, cut_ward)
 
 # Print the ARI
 print(ari_median_ward)
+

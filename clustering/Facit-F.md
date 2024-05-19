@@ -24,3 +24,22 @@
 
 - Signifikanter Unterschied im Facit zwischen Cluster 1 und Clutser 2
 - Signifikanter Unterschied im Facit innerhalb Cluster 1 und Cluster 2
+
+# Facit-F
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Cluster 1</th>
+      <th>Cluster 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Facit mean</td>
+      <td>32.92</td>
+      <td>39.24</td>
+    </tr>
+  </tbody>
+</table>

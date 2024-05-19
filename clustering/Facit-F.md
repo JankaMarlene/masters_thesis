@@ -54,14 +54,14 @@
 <table>
   <thead>
     <tr>
-      <th>Facit mean</th>
-      <th>Cluster 1/th>
+      <th></th>
+      <th>Cluster 1</th>
       <th>Cluster 2</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td></td>
+      <td>mean</td>
       <td>32.92</td>
       <td>39.24</td>
     </tr>

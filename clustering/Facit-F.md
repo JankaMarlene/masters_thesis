@@ -3,9 +3,9 @@
 <table>
   <thead>
     <tr>
-      <th>Spalte 1</th>
-      <th>Spalte 2</th>
-      <th>Spalte 3</th>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
     </tr>
   </thead>
   <tbody>

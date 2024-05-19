@@ -51,7 +51,7 @@
 
 ### Vergleich 2-Clusterlösung 'ward' mit anderen
 - Verwendung von RAND-Index
-- Wie viel Übereinstimmung haben die Verfahren mit 'ward' Methode? Angabe in %
+- Wie viel Übereinstimmung haben die Verfahren mit 'ward' Methode?
 
 <table>
   <thead>
@@ -81,5 +81,85 @@
       <td>median</td>
       <td>55%</td>
     </tr>
+  </tbody>
+</table>
+
+- Leider also keine stabile Clusterlösung
+
+### Was passiert, wenn ich statt Winzorising die Ausreißer einfach entferne?
+- Winsorizing:
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>11</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>16</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+- Ausreißer entfernt:
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>8</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>18</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+
+Vergleich:
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>2 Cluster</th>
+      <th>3 Cluster</th>
+      <th>4 Cluster</th>
+      <th>6 Cluster</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>complete.ward</td>
+      <td>63%</td>
+      <td>71%</td>
+      <td>89%</td>
+      <td>88%</td>
+    </tr>
+    <tr>
+      <td>average.ward</td>
+      <td></td>
+      <td></td>
+      <td>73%</td>
+      <td></td>
+    </tr>
+    <tr>
   </tbody>
 </table>

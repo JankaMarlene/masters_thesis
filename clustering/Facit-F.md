@@ -46,4 +46,4 @@
 
 - Facit cut-off Wert liegt bei 30
   - < 30 = Fatique
-  - > 30 = keine Fatique
+  - >30 = keine Fatique

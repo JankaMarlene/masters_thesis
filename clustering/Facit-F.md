@@ -66,12 +66,12 @@
       <td>39.24</td>
     </tr>
     <tr>
-      <td>with PCS</td>
+      <td>with PCS mean</td>
       <td>28.2</td>
       <td>30.86</td>
     </tr>
     <tr>
-      <td>without PCS</td>
+      <td>without PCS mean</td>
       <td>39.82</td>
       <td>42.68</td>
     </tr>

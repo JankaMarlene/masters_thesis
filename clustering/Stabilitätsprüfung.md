@@ -196,3 +196,5 @@ Vergleich:
     <tr>
   </tbody>
 </table>
+
+-> Nochmal die anderen Verfahren in die Tabelle mit aufnehmen

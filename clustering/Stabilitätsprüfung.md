@@ -147,7 +147,7 @@ Vergleich:
   </thead>
   <tbody>
     <tr>
-      <td>complete.ward</td>
+      <td>complete/ward</td>
       <td>63%</td>
       <td>71%</td>
       <td>89%</td>

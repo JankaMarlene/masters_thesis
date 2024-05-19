@@ -23,5 +23,28 @@
   2. Welches Verfahren?
   3. Ist z.B. 14- o. 6-Clusterlösung stabiler?
 
-## Meine Clusterlösung
-  
+## (In)stabilität in meiner Clusterlösung
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>11</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>16</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+- Für Clusterlösung wurde 'ward' Verfahren verwendet

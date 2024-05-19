@@ -11,13 +11,13 @@
   <tbody>
     <tr>
       <td>Cluster 1</td>
-      <td>Inhalt</td>
-      <td>Inhalt</td>
+      <td>11</td>
+      <td>38</td>
     </tr>
     <tr>
       <td>Cluster 2</td>
-      <td>Inhalt</td>
-      <td>Inhalt</td>
+      <td>16</td>
+      <td>5</td>
     </tr>
   </tbody>
 </table>

@@ -77,3 +77,22 @@
     </tr>
   </tbody>
 </table>
+
+## Facit-F mean in subjektiv berichteten Gruppen
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>with PCS</th>
+      <th>without PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Facit mean</td>
+      <td>30.26</td>
+      <td>41.67</td>
+    </tr>
+  </tbody>
+</table>

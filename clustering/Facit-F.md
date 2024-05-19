@@ -10,12 +10,12 @@
   </thead>
   <tbody>
     <tr>
-      <td>Inhalt</td>
+      <td>Cluster 1</td>
       <td>Inhalt</td>
       <td>Inhalt</td>
     </tr>
     <tr>
-      <td>Inhalt</td>
+      <td>Cluster 2</td>
       <td>Inhalt</td>
       <td>Inhalt</td>
     </tr>

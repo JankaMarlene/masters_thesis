@@ -48,3 +48,32 @@
   - < 30 = Fatique
 - Beide Gruppen also im Durchschnitt keine Fatique aber:
   - Je höher der Wert, desto besser die Lebensqualität
+ 
+## Facit mean innerhalb der Cluster
+
+<table>
+  <thead>
+    <tr>
+      <th>Facit mean</th>
+      <th>Cluster 1/th>
+      <th>Cluster 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td>32.92</td>
+      <td>39.24</td>
+    </tr>
+    <tr>
+      <td>with PCS</td>
+      <td>28.2</td>
+      <td>30.86</td>
+    </tr>
+    <tr>
+      <td>without PCS</td>
+      <td>39.82</td>
+      <td>42.68</td>
+    </tr>
+  </tbody>
+</table>

@@ -86,7 +86,7 @@
 
 - Leider also keine stabile Clusterlösung
 
-### Was passiert, wenn ich statt Winzorising die Ausreißer einfach entferne?
+### Was passiert, wenn ich statt Winsorizing die Ausreißer einfach entferne?
 - Winsorizing:
 <table>
   <thead>
@@ -165,6 +165,34 @@ Vergleich:
 </table>
 
 - Bei mehr Clustern (bis zur bestimmten Anzahl) wird Lösung stabiler
-- 2 Clusterlösung ist sowohl bei Verwendung von Winzorising als auch Entfernung von Ausreißern instabil
+- 2 Clusterlösung ist sowohl bei Verwendung von Winsorizing als auch Entfernung von Ausreißern instabil
 
-### 
+### Bei welcher Clusteranzahl liegt Stabilität vor?
+- Unter Verwendung von Winsorizing 
+- Vergleich:
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>2 Cluster</th>
+      <th>3 Cluster</th>
+      <th>4 Cluster</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>complete/ward</td>
+      <td>49%</td>
+      <td>72%</td>
+      <td>69%</td>
+    </tr>
+    <tr>
+      <td>average/ward</td>
+      <td>50%</td>
+      <td>48%</td>
+      <td>77%</td>
+    </tr>
+    <tr>
+  </tbody>
+</table>

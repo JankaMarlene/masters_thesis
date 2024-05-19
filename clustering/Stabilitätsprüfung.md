@@ -48,3 +48,38 @@
 </table>
 
 - Für Clusterlösung wurde 'ward' Verfahren verwendet
+
+### Vergleich 2-Clusterlösung 'ward' mit anderen
+- Verwendung von RAND-Index
+- Wie viel Übereinstimmung haben die Verfahren mit 'ward' Methode? Angabe in %
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>ward</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>average</td>
+      <td>50%</td>
+    </tr>
+    <tr>
+      <td>single</td>
+      <td>55%</td>
+    </tr>
+    <tr>
+      <td>complete</td>
+      <td>49%</td>
+    </tr>
+    <tr>
+      <td>centroid</td>
+      <td>56%</td>
+    </tr>
+    <tr>
+      <td>median</td>
+      <td>55%</td>
+    </tr>
+  </tbody>
+</table>

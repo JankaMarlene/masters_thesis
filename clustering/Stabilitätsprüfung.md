@@ -154,7 +154,7 @@ Vergleich:
       <td>88%</td>
     </tr>
     <tr>
-      <td>average.ward</td>
+      <td>average/ward</td>
       <td></td>
       <td></td>
       <td>73%</td>
@@ -163,3 +163,8 @@ Vergleich:
     <tr>
   </tbody>
 </table>
+
+- Bei mehr Clustern (bis zur bestimmten Anzahl) wird Lösung stabiler
+- 2 Clusterlösung ist sowohl bei Verwendung von Winzorising als auch Entfernung von Ausreißern instabil
+
+### 

@@ -44,6 +44,10 @@ gantt
 - comments
 
 ## 🧩🔍 clustering
+- stabilitätsprüfung
+- validitätsprüfung
+- load
+- fehleranalyse
 - summary: Everitt et al., 2011
   - overview of data types and applicable clustering methods
 - summary: Bacher & Wenzig, 2010

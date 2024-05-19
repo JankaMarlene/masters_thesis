@@ -25,7 +25,7 @@
 - Signifikanter Unterschied im Facit zwischen Cluster 1 und Clutser 2
 - Signifikanter Unterschied im Facit innerhalb Cluster 1 und Cluster 2
 
-# Facit-F
+## Facit-F mean in Cluster
 
 <table>
   <thead>
@@ -43,3 +43,7 @@
     </tr>
   </tbody>
 </table>
+
+- Facit cut-off Wert liegt bei 30
+  - < 30 = Fatique
+  - > 30 = keine Fatique

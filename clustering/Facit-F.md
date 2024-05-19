@@ -46,4 +46,5 @@
 
 - Facit cut-off Wert liegt bei 30
   - < 30 = Fatique
-  - größer 30 = keine Fatique
+- Beide Gruppen also im Durchschnitt keine Fatique aber:
+  - Je höher der Wert, desto besser die Lebensqualität

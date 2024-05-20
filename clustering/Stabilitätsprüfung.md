@@ -320,7 +320,7 @@ Vergleich:
 
 ### Vergleich der Variablen
 
-- Alle Variablen verwendet (PVT, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
+#### Alle Variablen verwendet (PVT, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
 <table>
   <thead>
     <tr>
@@ -342,9 +342,10 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
 - 54/70 Personen "richtig" zugeordnet
 
-- Ohne PVT
+#### Ohne PVT
 <table>
   <thead>
     <tr>
@@ -366,9 +367,10 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
 - 46/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
 
-- Ohne TMT-A
+#### Ohne TMT-A
 <table>
   <thead>
     <tr>
@@ -390,9 +392,10 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
 - 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
---
-- Ohne TMT-B
+
+#### Ohne TMT-B
 <table>
   <thead>
     <tr>
@@ -414,4 +417,5 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
 - 53/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)

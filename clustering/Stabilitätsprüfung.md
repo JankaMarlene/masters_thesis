@@ -618,4 +618,104 @@ Vergleich:
   </tbody>
 </table>
 
-- 47/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+- 51/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur nback_miss1
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>26</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>29</td>
+      <td>14</td>
+    </tr>
+  </tbody>
+</table>
+
+- 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>19</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>8</td>
+      <td>25</td>
+    </tr>
+  </tbody>
+</table>
+
+- 44/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+  
+#### Nur TMT-A & TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>4</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>17</td>
+      <td>26</td>
+    </tr>
+  </tbody>
+</table>
+
+- 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur TMT-A
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>2</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>25</td>
+      <td>30</td>
+    </tr>
+  </tbody>
+</table>
+
+- 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!

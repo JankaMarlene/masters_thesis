@@ -300,7 +300,7 @@ dist_mat <- dist(cog_df, method = 'euclidean')
 # Try different kinds of linkage methods after decide which performed better
 # Build dendrogram by plotting hierarchical cluster object with hclust
 # Specify linkage method via 'method' argument
-hclust_median <- hclust(dist_mat, method = 'complete')
+hclust_median <- hclust(dist_mat, method = 'median')
 plot(hclust_median)
 
 # Create the desired number of clusters
@@ -348,3 +348,30 @@ ari_median_ward <- rand.index(cut_median, cut_ward)
 # Print the ARI
 print(ari_median_ward)
 
+
+#-------
+
+# Build distance matrix
+# Since all values are continuous numerical values I use euclidean distance method
+dist_mat_cityblock <- dist(cog_df, method = 'pearson')
+
+# Now decide which linkage method to use
+# Try different kinds of linkage methods after decide which performed better
+# Build dendrogram by plotting hierarchical cluster object with hclust
+# Specify linkage method via 'method' argument
+hclust_city <- hclust(dist_mat_cityblock, method = 'ward')
+plot(hclust_city)
+
+# Create the desired number of clusters
+# Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
+cut_city <- cutree(hclust_city, k = 2)
+
+#------------
+
+library(fossil)
+
+# Calculate the Adjusted Rand Index
+ari_city_ward <- rand.index(cut_city, cut_ward)
+
+# Print the ARI
+print(ari_city_ward)

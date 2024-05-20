@@ -317,3 +317,28 @@ Vergleich:
 </table>
 
 - Das sieht doch ganz gut aus!
+
+### Vergleich der Variablen
+
+- Alle Variablen verwendet (PVT, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>11</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>16</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>

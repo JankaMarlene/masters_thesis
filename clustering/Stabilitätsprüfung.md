@@ -719,3 +719,30 @@ Vergleich:
 </table>
 
 - 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>22</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>5</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+
+- 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+-> Einmal MoCa mitreinnehmen, um zu begründen, warum ich MoCa nicht im Clustering berücksichtigt habe

@@ -389,15 +389,88 @@ cog_df <- cog_df[order(cog_df$cluster), ]
 
 # Create a data frame for annotations to add cluster information to the heatmap
 annotation <- data.frame(cluster = cog_df$cluster)
-rownames(annotation) <- rownames(cog_df)
+row.names(annotation) <- row.names(cog_df)
+
+# Reorder the rows to have all Cluster 1 first followed by Cluster 2
+cog_df <- cog_df[order(cog_df$cluster), ]
+annotation <- annotation[order(annotation$cluster), , drop = FALSE]
 
 # Remove the cluster column for the heatmap plot
 cog_df$cluster <- NULL
 
-# Plot the heatmap
+# Plot the heatmap without clustering the columns
 pheatmap(cog_df, 
          annotation_row = annotation,
          main = "Heatmap of Cognitive Measures by Cluster",
-         clustering_method = "ward.D2",
-         scale = "row",  # Scale each row (feature) for better visualization
+         cluster_cols = FALSE,   # Disable clustering of columns
+         scale = "row",          # Scale each row (feature) for better visualization
          color = colorRampPalette(c("navy", "white", "firebrick3"))(50))
+
+#-------------
+
+# Add cluster information to the data and order by clusters
+cog_df$cluster <- as.factor(cut_ward)
+cog_df <- cog_df[order(cog_df$cluster), ]
+
+# Create a data frame for annotations to add cluster information to the heatmap
+annotation <- data.frame(cluster = cog_df$cluster)
+row.names(annotation) <- row.names(cog_df)
+
+# Remove the cluster column for the heatmap plot
+cog_df$cluster <- NULL
+
+# Define custom color palette
+custom_palette <- colorRampPalette(c("blue", "white", "red"))(50)
+
+# Plot the heatmap with custom color palette and sorted by clusters
+pheatmap(cog_df, 
+         annotation_row = annotation,
+         main = "Heatmap of Cognitive Measures by Cluster",
+         cluster_rows = FALSE,  # Disable clustering of rows
+         cluster_cols = FALSE,  # Disable clustering of columns
+         scale = "row",         # Scale each row (feature) for better visualization
+         color = custom_palette)  # Use custom color palette
+
+#-----------
+
+# Sort data matrix by the color gradient
+sorted_cog_df <- cog_df[order(rowMeans(cog_df)), ]
+
+# Add cluster information to the sorted data
+sorted_cog_df$cluster <- as.factor(cut_ward)
+sorted_cog_df <- sorted_cog_df[order(sorted_cog_df$cluster), ]
+
+# Create a data frame for annotations to add cluster information to the heatmap
+annotation <- data.frame(cluster = sorted_cog_df$cluster)
+rownames(annotation) <- rownames(sorted_cog_df)
+
+# Remove the cluster column for the heatmap plot
+sorted_cog_df$cluster <- NULL
+
+# Plot the heatmap with custom color palette and sorted by color gradient
+pheatmap(sorted_cog_df, 
+         annotation_row = annotation,
+         main = "Heatmap of Cognitive Measures by Cluster",
+         cluster_rows = FALSE,  # Disable clustering of rows
+         cluster_cols = FALSE,  # Disable clustering of columns
+         scale = "row",         # Scale each row (feature) for better visualization
+         color = custom_palette)  # Use custom color palette
+
+#----------------
+
+# Select the variable of interest
+variable <- cog_df$z_pvt_reaction_time
+
+# Create a data frame for annotations to add cluster information to the heatmap
+annotation <- data.frame(cluster = as.factor(cut_ward))
+row.names(annotation) <- row.names(cog_df)
+
+# Define custom color palette
+custom_palette <- colorRampPalette(c("blue", "white", "red"))(50)
+
+# Plot the heatmap with minimal parameters
+pheatmap(t(matrix(variable)), 
+         annotation_row = annotation,
+         main = "Heatmap of z_pvt_reaction_time by Cluster")
+
+

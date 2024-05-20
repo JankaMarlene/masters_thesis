@@ -202,26 +202,26 @@ Vergleich:
     <tr>
       <td>median/ward</td>
       <td>51%</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>53%</td>
+      <td>55%</td>
+      <td>57%</td>
+      <td>54%</td>
     </tr>
     <tr>
       <td>centroid/ward</td>
       <td>56%</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>50%</td>
+      <td>42%</td>
+      <td>44%</td>
+      <td>45%</td>
     </tr>
     <tr>
       <td>single/ward</td>
       <td>55%</td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>39%</td>
+      <td>33%</td>
+      <td>33%</td>
+      <td>30%</td>
     </tr>
     <tr>
   </tbody>

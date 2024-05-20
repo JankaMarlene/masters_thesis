@@ -186,7 +186,7 @@ Vergleich:
     <tr>
       <td>complete/ward</td>
       <td>49%</td>
-      <td>**72%**</td>
+      <td>__72%__</td>
       <td>69%</td>
       <td>70%</td>
       <td>69%</td>

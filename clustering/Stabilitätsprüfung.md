@@ -178,6 +178,8 @@ Vergleich:
       <th>2 Cluster</th>
       <th>3 Cluster</th>
       <th>4 Cluster</th>
+      <th>5 Cluster</th>
+      <th>6 Cluster</th>
     </tr>
   </thead>
   <tbody>
@@ -186,15 +188,103 @@ Vergleich:
       <td>49%</td>
       <td>72%</td>
       <td>69%</td>
+      <td>70%</td>
+      <td>69%</td>
     </tr>
     <tr>
       <td>average/ward</td>
-      <td>50%</td>
+      <td>51%</td>
       <td>48%</td>
       <td>77%</td>
+      <td>80%</td>
+      <td>78%</td>
+    </tr>
+    <tr>
+      <td>median/ward</td>
+      <td>51%</td>
+      <td>53%</td>
+      <td>55%</td>
+      <td>57%</td>
+      <td>54%</td>
+    </tr>
+    <tr>
+      <td>centroid/ward</td>
+      <td>56%</td>
+      <td>50%</td>
+      <td>42%</td>
+      <td>44%</td>
+      <td>45%</td>
+    </tr>
+    <tr>
+      <td>single/ward</td>
+      <td>55%</td>
+      <td>39%</td>
+      <td>33%</td>
+      <td>33%</td>
+      <td>30%</td>
     </tr>
     <tr>
   </tbody>
 </table>
 
 -> Nochmal die anderen Verfahren in die Tabelle mit aufnehmen
+
+### Bei welcher Clusteranzahl liegt Stabilität vor?
+- Ohne Winsorizing 
+- Vergleich:
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>2 Cluster</th>
+      <th>3 Cluster</th>
+      <th>4 Cluster</th>
+      <th>5 Cluster</th>
+      <th>6 Cluster</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>complete/ward</td>
+      <td>63%</td>
+      <td>71%</td>
+      <td>89%</td>
+      <td>82%</td>
+      <td>88%</td>
+    </tr>
+    <tr>
+      <td>average/ward</td>
+      <td>51%</td>
+      <td>74%</td>
+      <td>74%</td>
+      <td>73%</td>
+      <td>73%</td>
+    </tr>
+    <tr>
+      <td>median/ward</td>
+      <td>53%</td>
+      <td>35%</td>
+      <td>35%</td>
+      <td>39%</td>
+      <td>34%</td>
+    </tr>
+    <tr>
+      <td>centroid/ward</td>
+      <td>49%</td>
+      <td>43%</td>
+      <td>43%</td>
+      <td>35%</td>
+      <td>30%</td>
+    </tr>
+    <tr>
+      <td>single/ward</td>
+      <td>51%</td>
+      <td>37%</td>
+      <td>38%</td>
+      <td>31%</td>
+      <td>29%</td>
+    </tr>
+    <tr>
+  </tbody>
+</table>

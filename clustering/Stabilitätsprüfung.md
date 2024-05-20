@@ -288,3 +288,30 @@ Vergleich:
     <tr>
   </tbody>
 </table>
+
+### Vergleich verschiedenen Distanzmaße
+- Euklidische Distanz ('euclidean') -> Verwendet in Clusterlösung
+- City-Block-Metrik ('manhattan')
+- Minkowski-Metrik ('minkowski')
+- Pearson Korrelationskoeffizient ('pearson')
+- RAND-Index zur Berechnung der prozentualen Übereinstimmung der Lösungen:
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>manhattan</th>
+      <th>minkowski</th>
+      <th>pearson</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>euclidean</td>
+      <td>51%</td>
+      <td>100%</td>
+      <td>100%</td>
+    </tr>
+    </tr>
+  </tbody>
+</table>

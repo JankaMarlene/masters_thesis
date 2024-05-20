@@ -746,3 +746,4 @@ Vergleich:
 - 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
 
 -> Einmal MoCa mitreinnehmen, um zu begründen, warum ich MoCa nicht im Clustering berücksichtigt habe
+-> Gruppen auch im Hinblick auf MoCa miteinander vergleichen (Wie aussagekräfigt ist er?)

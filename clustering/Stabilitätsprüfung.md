@@ -290,7 +290,7 @@ Vergleich:
 </table>
 
 ### Vergleich verschiedenen Distanzmaße
-- Euklidische Distanz ('euclidean') -> Verwendet in Clusterlösung
+- Einfache & quadrierte Euklidische Distanz ('euclidean') -> Verwendet in Clusterlösung (einfache oder quadrierte?)
 - City-Block-Metrik ('manhattan')
 - Minkowski-Metrik ('minkowski')
 - Pearson Korrelationskoeffizient ('pearson')
@@ -315,3 +315,5 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
+- Das sieht doch ganz gut aus!

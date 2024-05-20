@@ -178,6 +178,8 @@ Vergleich:
       <th>2 Cluster</th>
       <th>3 Cluster</th>
       <th>4 Cluster</th>
+      <th>5 Cluster</th>
+      <th>6 Cluster</th>
     </tr>
   </thead>
   <tbody>
@@ -186,12 +188,16 @@ Vergleich:
       <td>49%</td>
       <td>72%</td>
       <td>69%</td>
+      <td>70%</td>
+      <td>69%</td>
     </tr>
     <tr>
       <td>average/ward</td>
       <td>50%</td>
       <td>48%</td>
       <td>77%</td>
+      <td>80%</td>
+      <td>78%</td>
     </tr>
     <tr>
   </tbody>

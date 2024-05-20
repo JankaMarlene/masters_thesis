@@ -391,7 +391,7 @@ Vergleich:
   </tbody>
 </table>
 - 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
-
+--
 - Ohne TMT-B
 <table>
   <thead>

@@ -519,3 +519,103 @@ Vergleich:
 </table>
 
 - 52/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-B & nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>9</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>18</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+
+- 50/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-A & nback_miss1
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>13</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>31</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+
+- 45/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur PVT
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>7</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>20</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+
+- 47/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur nback_miss1 & nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>12</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>36</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+
+- 47/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)

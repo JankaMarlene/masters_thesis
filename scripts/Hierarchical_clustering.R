@@ -461,16 +461,26 @@ pheatmap(sorted_cog_df,
 # Select the variable of interest
 variable <- cog_df$z_pvt_reaction_time
 
+# Add cluster information to the data and order by clusters
+variable_cluster <- data.frame(variable, cluster = as.factor(cut_ward))
+variable_cluster <- variable_cluster[order(variable_cluster$cluster), ]
+
 # Create a data frame for annotations to add cluster information to the heatmap
-annotation <- data.frame(cluster = as.factor(cut_ward))
-row.names(annotation) <- row.names(cog_df)
+annotation <- data.frame(cluster = variable_cluster$cluster)
+row.names(annotation) <- row.names(variable_cluster)
+
+# Remove the cluster column for the heatmap plot
+variable_cluster$cluster <- NULL
 
 # Define custom color palette
 custom_palette <- colorRampPalette(c("blue", "white", "red"))(50)
 
-# Plot the heatmap with minimal parameters
-pheatmap(t(matrix(variable)), 
+# Plot the heatmap with custom color palette and sorted by clusters
+pheatmap(t(variable_cluster), 
          annotation_row = annotation,
-         main = "Heatmap of z_pvt_reaction_time by Cluster")
-
+         main = "Heatmap of z_pvt_reaction_time by Cluster",
+         cluster_rows = FALSE,  # Disable clustering of rows
+         cluster_cols = FALSE,  # Disable clustering of columns
+         scale = "row",         # Scale each row (feature) for better visualization
+         color = custom_palette)  # Use custom color palette
 

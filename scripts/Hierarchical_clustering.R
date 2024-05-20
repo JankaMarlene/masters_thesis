@@ -353,7 +353,7 @@ print(ari_median_ward)
 
 # Build distance matrix
 # Since all values are continuous numerical values I use euclidean distance method
-dist_mat_cityblock <- dist(cog_df, method = 'pearson')
+dist_mat_cityblock <- dist(cog_df, method = 'euclidean')
 
 # Now decide which linkage method to use
 # Try different kinds of linkage methods after decide which performed better
@@ -375,3 +375,29 @@ ari_city_ward <- rand.index(cut_city, cut_ward)
 
 # Print the ARI
 print(ari_city_ward)
+
+#-----------
+
+# Load necessary libraries
+library(tidyverse)
+library(dendextend)
+library(pheatmap)
+
+# Add cluster information to the data and order by clusters
+cog_df$cluster <- as.factor(cut_ward)
+cog_df <- cog_df[order(cog_df$cluster), ]
+
+# Create a data frame for annotations to add cluster information to the heatmap
+annotation <- data.frame(cluster = cog_df$cluster)
+rownames(annotation) <- rownames(cog_df)
+
+# Remove the cluster column for the heatmap plot
+cog_df$cluster <- NULL
+
+# Plot the heatmap
+pheatmap(cog_df, 
+         annotation_row = annotation,
+         main = "Heatmap of Cognitive Measures by Cluster",
+         clustering_method = "ward.D2",
+         scale = "row",  # Scale each row (feature) for better visualization
+         color = colorRampPalette(c("navy", "white", "firebrick3"))(50))

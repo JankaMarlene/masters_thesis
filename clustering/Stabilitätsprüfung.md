@@ -290,7 +290,7 @@ Vergleich:
 </table>
 
 ### Vergleich verschiedenen Distanzmaße
-- Euklidische Distanz ('euclidean') -> Verwendet in Clusterlösung
+- Einfache & quadrierte Euklidische Distanz ('euclidean') -> Verwendet in Clusterlösung (einfache oder quadrierte?)
 - City-Block-Metrik ('manhattan')
 - Minkowski-Metrik ('minkowski')
 - Pearson Korrelationskoeffizient ('pearson')
@@ -315,3 +315,435 @@ Vergleich:
     </tr>
   </tbody>
 </table>
+
+- Das sieht doch ganz gut aus!
+
+### Vergleich der Variablen
+
+#### Alle Variablen verwendet (PVT, nback_miss_1, nback_miss_2, tmt_a_time, tmt_b_time)
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>11</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>16</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+- 54/70 Personen "richtig" zugeordnet
+
+#### Ohne PVT
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>22</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>5</td>
+      <td>24</td>
+    </tr>
+  </tbody>
+</table>
+
+- 46/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-A
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>24</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>3</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+
+- 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Ohne TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>11</td>
+      <td>37</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>16</td>
+      <td>6</td>
+    </tr>
+  </tbody>
+</table>
+
+- 53/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-A & TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>13</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>14</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+
+- 50/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne nback_miss1
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>8</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>19</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+- 52/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>7</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>20</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+
+- 52/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne nback_miss1 & nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>8</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>19</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+- 52/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-B & nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>9</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>18</td>
+      <td>11</td>
+    </tr>
+  </tbody>
+</table>
+
+- 50/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Ohne TMT-A & nback_miss1
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>13</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>31</td>
+      <td>12</td>
+    </tr>
+  </tbody>
+</table>
+
+- 45/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur PVT
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>7</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>20</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+
+- 47/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur nback_miss1 & nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>12</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>36</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+
+- 51/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+
+#### Nur nback_miss1
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>26</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>29</td>
+      <td>14</td>
+    </tr>
+  </tbody>
+</table>
+
+- 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur nback_miss2
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>19</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>8</td>
+      <td>25</td>
+    </tr>
+  </tbody>
+</table>
+
+- 44/70 Personen "richtig" zugeordnet (unter vorbehalt, da ich mir die Cluster nicht im Hinblick auf ihre Ausprägungen in den kognitiven Variablen angeguckt habe)
+  
+#### Nur TMT-A & TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>4</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>17</td>
+      <td>26</td>
+    </tr>
+  </tbody>
+</table>
+
+- 30/70 o. 40/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur TMT-A
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>2</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>25</td>
+      <td>30</td>
+    </tr>
+  </tbody>
+</table>
+
+- 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+#### Nur TMT-B
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>22</td>
+      <td>27</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>5</td>
+      <td>16</td>
+    </tr>
+  </tbody>
+</table>
+
+- 32/70 o. 38/70 Personen "richtig" zugeordnet, Keine Aussage möglich!!
+
+-> Einmal MoCa mitreinnehmen, um zu begründen, warum ich MoCa nicht im Clustering berücksichtigt habe
+-> Gruppen auch im Hinblick auf MoCa miteinander vergleichen (Wie aussagekräfigt ist er?)

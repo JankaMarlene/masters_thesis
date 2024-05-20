@@ -193,11 +193,35 @@ Vergleich:
     </tr>
     <tr>
       <td>average/ward</td>
-      <td>50%</td>
+      <td>51%</td>
       <td>48%</td>
       <td>77%</td>
       <td>80%</td>
       <td>78%</td>
+    </tr>
+    <tr>
+      <td>median/ward</td>
+      <td>51%</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>centroid/ward</td>
+      <td>56%</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>single/ward</td>
+      <td>55%</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
   </tbody>

@@ -21,7 +21,7 @@
 - ganz grob: PVT, Ermüdung bzw. Schlafqualität & dazu gehörende Marker im EEG
 #### Ich
 - alpha, beta, theta & delta Bänder im EEG angucken
-  - Interessant, da Lara sich delta & beta anguckt und Katharina alpha & beta.
+  - Interessant, da Lara sich delta & beta anguckt und Katharina alpha & theta.
     Daher guter Vergleich möglich, wenn ich mir die vier Frequenzbänder auch angucke
 ## To-Dos
 ## Nächstes Treffen: *25.01.24 9Uhr*

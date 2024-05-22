@@ -93,3 +93,49 @@
     </tr>
   </tbody>
 </table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>z_pvt</th>
+      <th>z_nback1</th>
+      <th>z_nback2</th>
+      <th>z_tmta</th>
+      <th>z_tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cohen's d</td>
+      <td>1.03</td>
+      <td>1.4</td>
+      <td>2.31</td>
+      <td>1.49</td>
+      <td>1.22</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>pvt</th>
+      <th>nback1</th>
+      <th>nback2</th>
+      <th>tmta</th>
+      <th>tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cohen's d</td>
+      <td>0.99</td>
+      <td>1.35</td>
+      <td>2.17</td>
+      <td>1.11</td>
+      <td>0.9</td>
+    </tr>
+  </tbody>
+</table>

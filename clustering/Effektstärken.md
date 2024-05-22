@@ -1,0 +1,1 @@
+# Effektstärken (Cohen's d)

@@ -1,6 +1,6 @@
 # Effektstärken (Cohen's d)
 
-## Clusterlösung n-back als standardisierte Variable
+## 1. Clusterlösung n-back als standardisierte Variable
 
 <table>
   <thead>
@@ -43,6 +43,29 @@
       <td>2.31</td>
       <td>1.53</td>
       <td>1.00</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>pvt</th>
+      <th>nback1</th>
+      <th>nback2</th>
+      <th>tmta</th>
+      <th>tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cohen's d</td>
+      <td>1.09</td>
+      <td>1.64</td>
+      <td>2.31</td>
+      <td>1.25</td>
+      <td>0.84</td>
     </tr>
   </tbody>
 </table>

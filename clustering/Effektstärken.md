@@ -139,3 +139,77 @@
     </tr>
   </tbody>
 </table>
+
+## 3. Clusterlösung ohne nback
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>8</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>19</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>z_pvt</th>
+      <th>z_nback1</th>
+      <th>z_nback2</th>
+      <th>s_nback1</th>
+      <th>s_nback2</th>
+      <th>z_tmta</th>
+      <th>z_tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cohen's d</td>
+      <td>1.41</td>
+      <td>1.21</td>
+      <td>1.58</td>
+      <td>1.16</td>
+      <td>1.52</td>
+      <td>2.18</td>
+      <td>1.41</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>pvt</th>
+      <th>nback1</th>
+      <th>nback2</th>
+      <th>tmta</th>
+      <th>tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cohen's d</td>
+      <td>1.42</td>
+      <td>1.16</td>
+      <td>1.52</td>
+      <td>1.61</td>
+      <td>1.14</td>
+    </tr>
+  </tbody>
+</table>

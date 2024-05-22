@@ -45,3 +45,25 @@
     </tr>
   </tbody>
 </table>
+
+<table>
+  <thead>
+    <tr>
+      <th>mean</th>
+      <th>age</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>50.6</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>47.9</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

@@ -9,10 +9,10 @@ subset <- alldata %>%
   select(participant_id,nr, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_FS, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time, tmt_b_time)
 
 # Convert 'moca' variable to a binary variable based on a cutoff score of 25 
-# 0 represents scores less than 26 (may) indicating cognitive impairment 
-# 1 represents scores more than 25 (may) indicating no cognitive impairment 
+# 1 represents scores less than 26 (may) indicating cognitive impairment 
+# 0 represents scores more than 25 (may) indicating no cognitive impairment 
 subset <- subset %>%
-  mutate(moca = ifelse(moca > 25, 1, 0))
+  mutate(moca = ifelse(moca > 25, 0, 1))
 
 # Subset with all relevant cognitive data
 cog_subset <- subset %>%

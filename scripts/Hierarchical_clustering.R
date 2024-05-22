@@ -7,7 +7,7 @@ library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
-cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time")]
+cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time","z_tmt_b_time")]
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)

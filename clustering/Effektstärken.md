@@ -262,3 +262,42 @@
     </tr>
   </tbody>
 </table>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>pvt</th>
+      <th>nback1</th>
+      <th>nback2</th>
+      <th>tmta</th>
+      <th>tmtb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1. Clusterlösung</td>
+      <td>1.09</td>
+      <td>1.64</td>
+      <td>2.31</td>
+      <td>1.25</td>
+      <td>0.84</td>
+    </tr>
+    <tr>
+      <td>2. Clusterlösung</td>
+      <td>0.99</td>
+      <td>1.35</td>
+      <td>2.17</td>
+      <td>1.11</td>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <td>3. Clusterlösung</td>
+      <td>1.42</td>
+      <td>1.16</td>
+      <td>1.52</td>
+      <td>1.61</td>
+      <td>1.14</td>
+    </tr>
+  </tbody>
+</table>

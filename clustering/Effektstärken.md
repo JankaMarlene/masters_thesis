@@ -71,3 +71,25 @@
 </table>
 
 ## 2. Clusterlösung n-back z-transformiert
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>without PCS</th>
+      <th>with PCS</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cluster 1</td>
+      <td>14</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>Cluster 2</td>
+      <td>13</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>

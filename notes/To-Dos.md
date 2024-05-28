@@ -1,5 +1,13 @@
 # To-Dos
 
+- [ ] Als erstes die Fragestellung klar formulieren!!!!
+- [ ] MoCA cut-off Wert angucken -> Paper von Christian
+- [ ] MoCA z-Werte für ü 65 berechnen und vergleichen mit Aufteilung in Gruppen
+- [ ] Gruppen vergleichen (Bildung, etc.)
+- [ ] Warum sind die Leute da, wo sie sind? Bei denen, wo keine Übereinstimmung mit subjektiver Übereinstimmung vorliegen?
+- [ ] Clustering-statistik abschließen
+- [ ] Clustering Teil schreiben
+- [ ] Lara nach Code fragen
 - [ ] Einlesen in Fieldtrip
 - [ ] Korrekte Antworten im n-back angucken
 - [ ] Expose schreiben

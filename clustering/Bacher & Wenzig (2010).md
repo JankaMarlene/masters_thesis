@@ -1,7 +1,7 @@
 # Clusteranalyse: Anwendungsorientierte Einführung in Klassifikationsverfahren. Bacher & Wenzig, 2010
 
 ## Einleitung
-moin
+
 ### Zielsetzung clusteranalytischer Verfahren
 - Primäres Ziel: Menge von Klassifikationsobjekten in homogene Gruppen zusammenzufassen
   - Auffinden einer empirischen Klassifikation

@@ -18,7 +18,7 @@ clc
 ft_defaults; % Set the defualts of the FieldTrip Toolbox
 
 % Where are the data?
-inpath = ('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\02_Data');
+inpath = ('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\02_Data\');
 % What are the data called?
 indat = dir([inpath,'*.xdf']);
 

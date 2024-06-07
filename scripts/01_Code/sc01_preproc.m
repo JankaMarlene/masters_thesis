@@ -18,7 +18,7 @@ clc
 ft_defaults; % Set the defualts of the FieldTrip Toolbox
 
 % Where are the data?
-inpath = ('/Users/juliankeil/Documents/Arbeit/Kiel/Lehre/WS2022/SpringSchool2023/SpringSchool2023/Track2/02_Data/');
+inpath = ('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\02_Data\');
 % What are the data called?
 indat = dir([inpath,'*.xdf']);
 
@@ -35,7 +35,7 @@ for v = 1:length(indat)
     % 1.1. First, read in the header to define the trials
     cfg = []; % Always clear the configuration
     cfg.dataset = [inpath,indat(v).name]; % Set the dataset
-    %cfg.trialfun = 'ft_trialfun_show'; % If we don't know what events have happened
+    cfg.trialfun = 'ft_trialfun_show'; % If we don't know what events have happened
 %     cfg.trialdef.eventtype = 'Markers'; % We now know that the trigger channel is called 'Stimulus'
 %     cfg.trialdef.eventvalue = {20,30}; % Define the relevant triggers
 %     cfg.trialdef.prestim = 1; % Seconds before the stimulus
@@ -94,8 +94,9 @@ for v = 1:length(indat)
         % Compare the data_p and data_t
         cfg = []; % empty the cfg-structure
         cfg.viewmode = 'vertical'; % or butterfly
+        cfg.allowoverlap = 'yes';
 
-        ft_databrowser(cfg,data_t); % we call the databrowser with the cfg-settings and the dat-structure defined above
+        ft_databrowser(cfg,data_cif); % we call the databrowser with the cfg-settings and the dat-structure defined above
    
     %% 3. Visual Artifact Rejection
     cfg = [];
@@ -110,7 +111,7 @@ for v = 1:length(indat)
     cfg.preproc.bpfiltord = 4;
     cfg.preproc.rectify = 'yes';
     
-    data_ci = ft_rejectvisual(cfg,data_ci);
+    data_ci = ft_rejectvisual(cfg,data_cif);
     
     % You have different options to identify artifacts.
     % The most useful are:
@@ -222,13 +223,13 @@ for v = 1:length(indat)
         cfg = [];
         %cfg.channel = {'e*'}; % Super important to only use the EEG-Channels, otherwise the ICA won't work
         cfg.method = 'runica'; % Whcih method should be used? 
-        cfg.runica.pca = size(data_c.trial{1},1)-1; % Reduce the data dimensions to the number of channels-1
+        cfg.runica.pca = size(data_cif.trial{1},1)-1; % Reduce the data dimensions to the number of channels-1
         %cfg.runica.extended = 1; % If there is lot of line-nois (50Hz)
         %include subgaussian noise
         %cfg.numcomponents = 20; % if the ICA does not converge, limit the number of components to compute
         cfg.demean = 'yes'; % remove trial-wise offset
 
-        comp = ft_componentanalysis(cfg,data_c);
+        comp = ft_componentanalysis(cfg,data_cif);
 
         %% 4.2. Take a look at the components
         cfg = [];

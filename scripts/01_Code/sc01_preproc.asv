@@ -35,7 +35,7 @@ for v = 1:length(indat)
     % 1.1. First, read in the header to define the trials
     cfg = []; % Always clear the configuration
     cfg.dataset = [inpath,indat(v).name]; % Set the dataset
-    %cfg.trialfun = 'ft_trialfun_show'; % If we don't know what events have happened
+    cfg.trialfun = 'ft_trialfun_show'; % If we don't know what events have happened
 %     cfg.trialdef.eventtype = 'Markers'; % We now know that the trigger channel is called 'Stimulus'
 %     cfg.trialdef.eventvalue = {20,30}; % Define the relevant triggers
 %     cfg.trialdef.prestim = 1; % Seconds before the stimulus
@@ -94,8 +94,9 @@ for v = 1:length(indat)
         % Compare the data_p and data_t
         cfg = []; % empty the cfg-structure
         cfg.viewmode = 'vertical'; % or butterfly
-
-        ft_databrowser(cfg,data_t); % we call the databrowser with the cfg-settings and the dat-structure defined above
+        cfg.allowoverlap = 'yes';
+        
+        ft_databrowser(cfg,data_cif); % we call the databrowser with the cfg-settings and the dat-structure defined above
    
     %% 3. Visual Artifact Rejection
     cfg = [];

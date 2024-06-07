@@ -16,7 +16,7 @@ clc
 ft_defaults; % Set the defualts of the FieldTrip Toolbox
 
 % Where are the data?
-inpath = ('/Users/juliankeil/Documents/Arbeit/Kiel/Lehre/WS2022/SpringSchool2023/SpringSchool2023/Track2/02_Data/');% What are the data called?
+inpath = ('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\02_Data\');% What are the data called?
 
 indat = dir([inpath,'*_preproc.mat']);
 
@@ -81,11 +81,13 @@ GA_tar = ft_timelockgrandaverage(cfg,ERP_tar_bl{:});
     
     % 5.3. Or you can look at one channel in the FieldTrip viewer
     cfg = [];
-    cfg.channel = 'Cz';
+    cfg.channel = {'P3','P4'};
     cfg.xlim = [-.5 1]; % Set the interval to display
     cfg.layout = 'EEG1020.lay'; % Set the channel layout
+    cfg.ylim = [-5 5];
 
-    ft_singleplotER(cfg,GA_all);
+    ft_singleplotER(cfg,GA_sta,GA_tar);
+
 %% 6. Extract Peaks for R
 % Find index of window of interest, e.g. between 320 and 600 ms (Comerchero
 % et al., 1999)
@@ -157,8 +159,8 @@ end
         % 7.2.1. Define Neighbours
         cfg = []; 
         cfg.method = 'distance'; % how should the neighbors be selected?
-        cfg.neighbourdist = 50; % I have no Idea what range this has, just make sure, that you get meaningful neighbors
-        cfg.elec = 'standard_1020.elc'; % Here we need the 3d-positions!
+        cfg.neighbourdist = 25; % I have no Idea what range this has, just make sure, that you get meaningful neighbors
+        cfg.elec = 'standard_1005.elc'; % Here we need the 3d-positions!
         
         neigh = ft_prepare_neighbours(cfg); % between 5 and 10 neighbors is a good value, always good to check!
         

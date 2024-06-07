@@ -191,7 +191,7 @@ end
 
         % 7.2.3. Plot Unrestricted Stats
         cfg = [];
-        cfg.layout = 'EEG1020.lay';
+        cfg.layout = 'EEG1005.lay';
         cfg.parameter = 'stat';
         cfg.maskparameter = 'mask';
 

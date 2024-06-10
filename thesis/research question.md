@@ -7,4 +7,5 @@
 7. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment in individuals following a COVID-19 infection, while also highlighting the similarities and differences both within and between the clusters?
 
 - Wie detailliert sollte die Fragestellung sein?
-- self-reported oder subjective assessment of 
+- Self-reported oder subjective assessment of 
+- Soll da irgendwie genauer mit rein, dass es zwei subjektive Gruppen gibt? Oder wird da so eh schon deutlich?

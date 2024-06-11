@@ -1,11 +1,6 @@
-1. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment in individuals following a COVID-19 infection?
-2. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment in individuals following a COVID-19 infection?
-3. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and highlight the differences between these groups in individuals following a COVID-19 infection?
-4. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment, and highlight the differences between these groups in individuals following a COVID-19 infection?
-5. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment in individuals following a COVID-19 infection, and highlight the similarities and differences in the formed clusters?
-6. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment in individuals following a COVID-19 infection, while also highlighting the similarities and differences between the clusters?
-7. Can two groups, formed using cluster analysis based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment and non-impairment in individuals following a COVID-19 infection, while also highlighting the similarities and differences both within and between the clusters?
+1. Can two groups, based on cognitive measures and differing maximally in these measures, explain the self-reported cognitive impairment in individuals following a COVID-19 infection?
 
-- Wie detailliert sollte die Fragestellung sein?
-- Self-reported oder subjective assessment of 
-- Soll da irgendwie genauer mit rein, dass es zwei subjektive Gruppen gibt? Oder wird da so eh schon deutlich?
+9. How do self-reported cognitive impairments relate to actual cognitive performance in individuals following a COVID-19 infection, when comparing two groups that differ maximally in cognitive measures?
+10. How do two groups, differing maximally in cognitive performance, compare in terms of self-reported cognitive impairments in individuals following a COVID-19 infection?
+11. How do two groups, formed based on maximal differences in cognitive performance, compare to self-reported cognitive impairments in individuals following a COVID-19 infection?
+12. How do two groups, formed based on maximal differences in cognitive performance, relate to self-reported cognitive impairments in individuals following a COVID-19 infection?

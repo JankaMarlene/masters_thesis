@@ -31,10 +31,10 @@ plot(hclust_ward)
 
 # Create the desired number of clusters
 # Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
-cut_ward <- cutree(hclust_ward, k = 2)
+cut_ward <- cutree(hclust_ward, k = 4)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
-rect.hclust(hclust_ward, k = 2, border = 2:40)
+rect.hclust(hclust_ward, k = 4, border = 2:30)
 abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
 ward_dend_obj <- as.dendrogram(hclust_ward)
@@ -103,13 +103,13 @@ t_test_withPCS
 t_test_withoutPCS
 
 # Filter the data for Cluster 2
-cluster_2_data <- subset(clean_data, cluster == 2)
+cluster_4_data <- subset(clean_data, cluster == 4)
 
 # Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
-t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
+t_test_cluster_4 <- t.test(age ~ group, data = cluster_4_data)
 
 # Display t-test results
-t_test_cluster_2
+t_test_cluster_4
 
 
 
@@ -314,6 +314,17 @@ t_test_cluster_2 <- t.test(facit_f_FS ~ group, data = cluster_2_data)
 
 # Display t-test results
 t_test_cluster_2
+
+
+# Filter the data for Cluster 2
+cluster_4_data <- subset(clean_data, cluster == 4)
+
+# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
+t_test_cluster_4 <- t.test(facit_f_FS ~ group, data = cluster_4_data)
+
+# Display t-test results
+t_test_cluster_4
+
 
 #-------
   

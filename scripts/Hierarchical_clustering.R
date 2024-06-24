@@ -7,7 +7,7 @@ library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
-cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time","z_tmt_b_time","z_tmt_diff")]
+cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time","z_tmt_b_time",)]
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -115,7 +115,7 @@ t_test_cluster_4
 
 
 # Vector of variables for which to create boxplots
-variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time","tmt_diff")
+variables <- c("z_pvt_reaction_time", "s_nback_miss_1", "s_nback_miss_2", "z_tmt_a_time", "z_tmt_b_time","z_tmt_diff")
 
 # Initialize an empty list to store the plots
 plot_list <- list()

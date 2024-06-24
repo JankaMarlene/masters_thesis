@@ -1,4 +1,4 @@
-# EPOC Protokoll vom 18.04.24
+# EPOC Protokoll 18.04.24
 ## Allgemein
 - Wenn man einzelne Punkte/Werte im Plott sehen kann ist das immer ganz gut für Interpretation
 ## Inhaltlich

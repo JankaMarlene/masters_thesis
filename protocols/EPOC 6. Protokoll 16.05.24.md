@@ -1,4 +1,4 @@
-# EPOC Protokoll vom 16.05.24
+# EPOC Protokoll 16.05.24
 ## Allgemein
 - Ein gemeinsames großes Paper schreiben
   - Treffen nutzen, um zu brainstormen, wie wir das strukturieren können

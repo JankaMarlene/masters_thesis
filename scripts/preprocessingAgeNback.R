@@ -98,7 +98,7 @@ print(clean_data)
   #cat("Rows with outliers for", variable, ":\n")
   #print(subset[out_ind,])
   # Remove outliers
-  #clean_data <- clean_data[!clean_data[[variable]] %in% box_plot, ]
+  #clean_data <- subset[!subset[[variable]] %in% box_plot, ]
 #}
 
 # Test correlation

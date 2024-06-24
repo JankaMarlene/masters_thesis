@@ -7,7 +7,7 @@ library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
-cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time","z_tmt_b_time")]
+cog_df <- clean_data[, c("group","z_pvt_reaction_time","z_tmt_a_time","z_tmt_b_time","z_tmt_diff")]
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -31,10 +31,10 @@ plot(hclust_ward)
 
 # Create the desired number of clusters
 # Since I want two groups 'withPCS' and 'withoutPCS' number of clusters = 2
-cut_ward <- cutree(hclust_ward, k = 4)
+cut_ward <- cutree(hclust_ward, k = 2)
 # To visualize clusters on dendrogram use abline function to draw the cut line
 plot(hclust_ward)
-rect.hclust(hclust_ward, k = 4, border = 2:30)
+rect.hclust(hclust_ward, k = 2, border = 2:30)
 abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
 ward_dend_obj <- as.dendrogram(hclust_ward)
@@ -55,7 +55,7 @@ plot(ward_col_dend)
 cog_df_cl <- mutate(cog_df, cluster = cut_ward)
 count(cog_df_cl,cluster)
 
-# Cross-checking clustering results using table funcion
+# Cross-checking clustering results using table function
 table(cog_df_cl$cluster,cog_label)
 
 # Add the cluster information from cog_df_cl to clean_data
@@ -103,7 +103,7 @@ t_test_withPCS
 t_test_withoutPCS
 
 # Filter the data for Cluster 2
-cluster_4_data <- subset(clean_data, cluster == 4)
+cluster_4_data <- subset(clean_data, cluster == 2)
 
 # Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
 t_test_cluster_4 <- t.test(age ~ group, data = cluster_4_data)
@@ -115,7 +115,7 @@ t_test_cluster_4
 
 
 # Vector of variables for which to create boxplots
-variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time","tmt_diff")
 
 # Initialize an empty list to store the plots
 plot_list <- list()
@@ -177,7 +177,7 @@ effect_sizes
 
 
 # Vector of variables for which to create boxplots
-variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time")
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
 
 # Initialize an empty list to store the plots
 plot_list <- list()

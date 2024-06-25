@@ -52,7 +52,9 @@ subset %>%
 # Variables for which outliers are to be identified and winsorized
 variables <- c("pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")
 
+# Initialize clean_data as a copy of subset
 clean_data <- subset
+
 # Function to winsorize a variable
 winsorize_variable <- function(x) {
   q1 <- quantile(x, 0.25)
@@ -78,9 +80,9 @@ for (variable in variables) {
   cat("Rows with outliers for", variable, ":\n")
   print(subset[out_ind,])
   
-  # Winsorize the variable
-  clean_data <- clean_data %>%
-    mutate({{variable}} := winsorize_variable(!!sym(variable)))
+  # Winsorize the variable and create a new column
+  winsorized_variable <- paste(variable, "w", sep = "_")
+  clean_data[[winsorized_variable]] <- winsorize_variable(subset[[variable]])
 }
 
 # Check the clean dataset
@@ -150,7 +152,7 @@ clean_data <- clean_data %>%
 # Calculate mean and standard deviation for each age group and variable
 age_group_summary <- clean_data %>%
   group_by(age_group) %>%
-  summarize(across(c("pvt_reaction_time", "tmt_a_time", "tmt_b_time"), 
+  summarize(across(c("pvt_reaction_time_w", "tmt_a_time_w", "tmt_b_time_w"), 
                    list(mean = mean, sd = sd)))
 
 age_group_summary_tmt_diff <- clean_data %>%
@@ -177,9 +179,9 @@ calculate_z_scores_individual <- function(x, age, age_group_summary, age_group_s
   # Calculate z-scores for all variables
   z_scores <- individual_data %>%
     mutate(
-      z_pvt_reaction_time = calculate_z_scores(pvt_reaction_time, pvt_reaction_time_mean, pvt_reaction_time_sd),
-      z_tmt_a_time = calculate_z_scores(tmt_a_time, tmt_a_time_mean, tmt_a_time_sd),
-      z_tmt_b_time = calculate_z_scores(tmt_b_time, tmt_b_time_mean, tmt_b_time_sd),
+      z_pvt_reaction_time_w = calculate_z_scores(pvt_reaction_time_w, pvt_reaction_time_w_mean, pvt_reaction_time_w_sd),
+      z_tmt_a_time_w = calculate_z_scores(tmt_a_time_w, tmt_a_time_w_mean, tmt_a_time_w_sd),
+      z_tmt_b_time_w = calculate_z_scores(tmt_b_time_w, tmt_b_time_w_mean, tmt_b_time_w_sd),
       z_tmt_diff = calculate_z_scores(tmt_diff, tmt_diff_mean, tmt_diff_sd)
     ) %>%
     select(starts_with("z_"))

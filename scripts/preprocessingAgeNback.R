@@ -165,7 +165,7 @@ age_group_summary <- clean_data %>%
 
 age_group_summary_tmt_diff <- clean_data %>%
   group_by(age_group_tmt_diff) %>%
-  summarize(across(c("tmt_diff"), 
+  summarize(across(c("tmt_diff_w"), 
                    list(mean = mean, sd = sd)))
 
 # Function to calculate z-scores
@@ -190,7 +190,7 @@ calculate_z_scores_individual <- function(x, age, age_group_summary, age_group_s
       z_pvt_reaction_time_w = calculate_z_scores(pvt_reaction_time_w, pvt_reaction_time_w_mean, pvt_reaction_time_w_sd),
       z_tmt_a_time_w = calculate_z_scores(tmt_a_time_w, tmt_a_time_w_mean, tmt_a_time_w_sd),
       z_tmt_b_time_w = calculate_z_scores(tmt_b_time_w, tmt_b_time_w_mean, tmt_b_time_w_sd),
-      z_tmt_diff = calculate_z_scores(tmt_diff, tmt_diff_mean, tmt_diff_sd)
+      z_tmt_diff_w = calculate_z_scores(tmt_diff_w, tmt_diff_w_mean, tmt_diff_w_sd)
     ) %>%
     select(starts_with("z_"))
   

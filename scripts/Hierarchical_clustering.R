@@ -297,8 +297,6 @@ for (variable in variables) {
 effect_sizes
 
 
-
-
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
 
@@ -430,7 +428,6 @@ for (variable in new_variables) {
 # Arrange plots in a grid
 grid.arrange(grobs = plot_list, ncol = 2)
 
-
 # Initialize an empty list to store the test results (Signifikanztest)
 test_results <- list()
 
@@ -439,21 +436,55 @@ for (variable in new_variables) {
   # Perform Wilcoxon rank sum test for the current variable
   test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
   
-  # Store the test result in the list
-  test_results[[variable]] <- test_result
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cog_df_cl$cluster) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  
+  # Combine test results and descriptive statistics
+  test_results[[variable]] <- list(
+    test = test_result,
+    descriptives = descriptive_stats
+  )
 }
 
 # Display the test results
 test_results
 
-
 # Vector of variables for which to create boxplots
 new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Function to calculate mean and sd for a single variable
+calculate_stats <- function(variable_name) {
+  clean_data %>%
+    group_by(cluster = as.factor(cog_df_cl$cluster), group) %>%
+    summarise(
+      mean = round(mean(!!sym(variable_name), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable_name), na.rm = TRUE), 4)
+    ) %>%
+    mutate(variable = variable_name)  # Add variable name as a column
+}
+
+# Map function over each variable to calculate mean and sd
+stats_list <- map(new_variables, calculate_stats)
+
+# Extract and name each table by variable
+named_stats_tables <- map(setNames(stats_list, new_variables), bind_rows)
+
+# Display each table
+named_stats_tables
 
 # Initialize an empty list to store the plots
 plot_list <- list()
 
-# Loop over each new variable
+# Loop over each variable
 for (variable in new_variables) {
   # Create boxplot for the current variable grouped by cluster and fill by group
   plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
@@ -467,48 +498,73 @@ for (variable in new_variables) {
 # Arrange plots in a grid
 grid.arrange(grobs = plot_list, ncol = 2)
 
-# Perform t-test for facit_f_FS within "withPCS" group between clusters
-t_test_withPCS <- t.test(facit_f_FS ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
 
-# Perform t-test for facit_f_FS within "withoutPCS" group between clusters
-t_test_withoutPCS <- t.test(facit_f_FS ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+# Initialize an empty list to store the test results for withPCS group
+test_results_withPCS <- list()
 
-# Display t-test results for "withPCS" group
-t_test_withPCS
+# Initialize an empty list to store the test results for withoutPCS group
+test_results_withoutPCS <- list()
 
-# Display t-test results for "withoutPCS" group
-t_test_withoutPCS
+# Loop over each variable
+for (variable in new_variables) {
+  # Perform t-test for the current variable within "withPCS" group
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  
+  # Perform t-test for the current variable within "withoutPCS" group
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  
+  # Store the test results for withPCS group in the list
+  test_results_withPCS[[variable]] <- t_test_result_withPCS
+  
+  # Store the test results for withoutPCS group in the list
+  test_results_withoutPCS[[variable]] <- t_test_result_withoutPCS
+}
 
+# Display the test results for withPCS group
+test_results_withPCS
 
-# Filter the data for Cluster 1
-cluster_1_data <- subset(clean_data, cluster == 1)
-
-# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 1
-t_test_cluster_1 <- t.test(facit_f_FS ~ group, data = cluster_1_data)
-
-# Display t-test results
-t_test_cluster_1
-
-
-# Filter the data for Cluster 2
-cluster_2_data <- subset(clean_data, cluster == 2)
-
-# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
-t_test_cluster_2 <- t.test(facit_f_FS ~ group, data = cluster_2_data)
-
-# Display t-test results
-t_test_cluster_2
+# Display the test results for withoutPCS group
+test_results_withoutPCS
 
 
-# Filter the data for Cluster 2
-#cluster_4_data <- subset(clean_data, cluster == 4)
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(new_variable_name) {
+  # Filter data for Cluster 1
+  cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 1
+  t_test_cluster_1 <- t.test(cluster_1_data[[new_variable_name]] ~ cluster_1_data$group)
+  
+  # Filter data for Cluster 2
+  cluster_2_data <- subset(clean_data, cog_df_cl$cluster == 2)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 2
+  t_test_cluster_2 <- t.test(cluster_2_data[[new_variable_name]] ~ cluster_2_data$group)
+  
+  # Return t-test results as a list
+  list(cluster_1 = t_test_cluster_1, cluster_2 = t_test_cluster_2)
+}
 
-# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
-#t_test_cluster_4 <- t.test(facit_f_FS ~ group, data = cluster_4_data)
+# Map function over each variable to perform t-test
+stats_t_test <- map(new_variables, perform_t_test)
 
-# Display t-test results
-#t_test_cluster_4
-
+# Display t-test results for each variable within each cluster
+# Print results with variable names
+for (i in seq_along(new_variables)) {
+  cat("Variable:", new_variables[i], "\n")
+  
+  cat("Cluster 1:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
+  
+  cat("Cluster 2:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
+}
 
 #-------
   

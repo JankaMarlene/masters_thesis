@@ -221,7 +221,7 @@ t_test_cluster_2 <- t.test(years_of_education ~ group, data = cluster_2_data)
 t_test_cluster_2
 
 #--------
-# Cognitive variables
+# Cognitive variables actual values
 
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time","tmt_diff")
@@ -353,6 +353,376 @@ for (variable in variables) {
   # Perform t-test for the current variable within "withoutPCS" group
   t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
                               clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  
+  # Store the test results for withPCS group in the list
+  test_results_withPCS[[variable]] <- t_test_result_withPCS
+  
+  # Store the test results for withoutPCS group in the list
+  test_results_withoutPCS[[variable]] <- t_test_result_withoutPCS
+}
+
+# Display the test results for withPCS group
+test_results_withPCS
+
+# Display the test results for withoutPCS group
+test_results_withoutPCS
+
+
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(variable_name) {
+  # Filter data for Cluster 1
+  cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 1
+  t_test_cluster_1 <- t.test(cluster_1_data[[variable_name]] ~ cluster_1_data$group)
+  
+  # Filter data for Cluster 2
+  cluster_2_data <- subset(clean_data, cog_df_cl$cluster == 2)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 2
+  t_test_cluster_2 <- t.test(cluster_2_data[[variable_name]] ~ cluster_2_data$group)
+  
+  # Return t-test results as a list
+  list(cluster_1 = t_test_cluster_1, cluster_2 = t_test_cluster_2)
+}
+
+# Map function over each variable to perform t-test
+stats_t_test <- map(variables, perform_t_test)
+
+# Display t-test results for each variable within each cluster
+# Print results with variable names
+for (i in seq_along(variables)) {
+  cat("Variable:", variables[i], "\n")
+  
+  cat("Cluster 1:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
+  
+  cat("Cluster 2:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
+}
+
+#--------
+# Cognitive variables winsorized Data
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time_w", "nback_miss_1_w", "nback_miss_2_w", "tmt_a_time_w", "tmt_b_time_w","tmt_diff_w")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Initialize an empty list to store the test results
+test_results <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform Wilcoxon rank sum test for the current variable
+  test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
+  
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cog_df_cl$cluster) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  
+  # Combine test results and descriptive statistics
+  test_results[[variable]] <- list(
+    test = test_result,
+    descriptives = descriptive_stats
+  )
+}
+
+# Display the test results
+test_results
+
+
+# Install and load the effsize package if not already installed
+if (!requireNamespace("effsize", quietly = TRUE)) {
+  install.packages("effsize")
+}
+library(effsize)
+
+# Initialize an empty list to store the effect sizes
+effect_sizes <- list()
+
+# Loop over each variable to calculate effect sizes
+for (variable in variables) {
+  # Calculate Cohen's d for the current variable
+  cohens_d <- cohen.d(clean_data[[variable]], as.factor(cog_df_cl$cluster))
+  
+  # Store the effect size in the list
+  effect_sizes[[variable]] <- cohens_d$estimate
+}
+
+# Display the effect sizes
+effect_sizes
+
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time_w", "nback_miss_1_w", "nback_miss_2_w", "tmt_a_time_w", "tmt_b_time_w","tmt_diff_w")
+
+# Function to calculate mean and sd for a single variable
+calculate_stats <- function(variable_name) {
+  clean_data %>%
+    group_by(cluster = as.factor(cog_df_cl$cluster), group) %>%
+    summarise(
+      mean = round(mean(!!sym(variable_name), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable_name), na.rm = TRUE), 4)
+    ) %>%
+    mutate(variable = variable_name)  # Add variable name as a column
+}
+
+# Map function over each variable to calculate mean and sd
+stats_list <- map(variables, calculate_stats)
+
+# Extract and name each table by variable
+named_stats_tables <- map(setNames(stats_list, variables), bind_rows)
+
+# Display each table
+named_stats_tables
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster and fill by group
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Initialize an empty list to store the test results for withPCS group
+test_results_withPCS <- list()
+
+# Initialize an empty list to store the test results for withoutPCS group
+test_results_withoutPCS <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform t-test for the current variable within "withPCS" group
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  
+  # Perform t-test for the current variable within "withoutPCS" group
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  
+  # Store the test results for withPCS group in the list
+  test_results_withPCS[[variable]] <- t_test_result_withPCS
+  
+  # Store the test results for withoutPCS group in the list
+  test_results_withoutPCS[[variable]] <- t_test_result_withoutPCS
+}
+
+# Display the test results for withPCS group
+test_results_withPCS
+
+# Display the test results for withoutPCS group
+test_results_withoutPCS
+
+
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(variable_name) {
+  # Filter data for Cluster 1
+  cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 1
+  t_test_cluster_1 <- t.test(cluster_1_data[[variable_name]] ~ cluster_1_data$group)
+  
+  # Filter data for Cluster 2
+  cluster_2_data <- subset(clean_data, cog_df_cl$cluster == 2)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 2
+  t_test_cluster_2 <- t.test(cluster_2_data[[variable_name]] ~ cluster_2_data$group)
+  
+  # Return t-test results as a list
+  list(cluster_1 = t_test_cluster_1, cluster_2 = t_test_cluster_2)
+}
+
+# Map function over each variable to perform t-test
+stats_t_test <- map(variables, perform_t_test)
+
+# Display t-test results for each variable within each cluster
+# Print results with variable names
+for (i in seq_along(variables)) {
+  cat("Variable:", variables[i], "\n")
+  
+  cat("Cluster 1:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
+  
+  cat("Cluster 2:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
+}
+
+#--------
+# Cognitive variables standardized data
+
+# Vector of variables for which to create boxplots
+variables <- c("z_pvt_reaction_time_w", "s_nback_miss_1_w", "s_nback_miss_2_w", "z_tmt_a_time_w", "z_tmt_b_time_w","z_tmt_diff_w")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Initialize an empty list to store the test results
+test_results <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform Wilcoxon rank sum test for the current variable
+  test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
+  
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cog_df_cl$cluster) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  
+  # Combine test results and descriptive statistics
+  test_results[[variable]] <- list(
+    test = test_result,
+    descriptives = descriptive_stats
+  )
+}
+
+# Display the test results
+test_results
+
+
+# Install and load the effsize package if not already installed
+if (!requireNamespace("effsize", quietly = TRUE)) {
+  install.packages("effsize")
+}
+library(effsize)
+
+# Initialize an empty list to store the effect sizes
+effect_sizes <- list()
+
+# Loop over each variable to calculate effect sizes
+for (variable in variables) {
+  # Calculate Cohen's d for the current variable
+  cohens_d <- cohen.d(clean_data[[variable]], as.factor(cog_df_cl$cluster))
+  
+  # Store the effect size in the list
+  effect_sizes[[variable]] <- cohens_d$estimate
+}
+
+# Display the effect sizes
+effect_sizes
+
+
+# Vector of variables for which to create boxplots
+variables <- c("pvt_reaction_time_w", "nback_miss_1_w", "nback_miss_2_w", "tmt_a_time_w", "tmt_b_time_w","tmt_diff_w")
+
+# Function to calculate mean and sd for a single variable
+calculate_stats <- function(variable_name) {
+  clean_data %>%
+    group_by(cluster = as.factor(cog_df_cl$cluster), group) %>%
+    summarise(
+      mean = round(mean(!!sym(variable_name), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable_name), na.rm = TRUE), 4)
+    ) %>%
+    mutate(variable = variable_name)  # Add variable name as a column
+}
+
+# Map function over each variable to calculate mean and sd
+stats_list <- map(variables, calculate_stats)
+
+# Extract and name each table by variable
+named_stats_tables <- map(setNames(stats_list, variables), bind_rows)
+
+# Display each table
+named_stats_tables
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Create boxplot for the current variable grouped by cluster and fill by group
+  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  # Append the plot to the list
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+# Initialize an empty list to store the test results for withPCS group
+test_results_withPCS <- list()
+
+# Initialize an empty list to store the test results for withoutPCS group
+test_results_withoutPCS <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  # Perform t-test for the current variable within "withPCS" group
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  
+  # Perform t-test for the current variable within "withoutPCS" group
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
   
   # Store the test results for withPCS group in the list
   test_results_withPCS[[variable]] <- t_test_result_withPCS

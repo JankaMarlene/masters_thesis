@@ -88,6 +88,14 @@ for (variable in variables) {
 # Check the clean dataset
 print(clean_data)
 
+# Calculate tmt_diff_w
+clean_data <- clean_data %>%
+  mutate(tmt_diff_w = tmt_b_time_w - tmt_a_time_w)
+
+# Print clean_data to verify
+print(clean_data)
+
+
 # Loop over all variables
 #for (variable in variables) {
   # Detect outliers

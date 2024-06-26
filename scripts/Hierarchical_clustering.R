@@ -668,7 +668,7 @@ effect_sizes
 
 
 # Vector of variables for which to create boxplots
-variables <- c("pvt_reaction_time_w", "nback_miss_1_w", "nback_miss_2_w", "tmt_a_time_w", "tmt_b_time_w","tmt_diff_w")
+variables <- c("z_pvt_reaction_time_w", "s_nback_miss_1_w", "s_nback_miss_2_w", "z_tmt_a_time_w", "z_tmt_b_time_w","z_tmt_diff_w")
 
 # Function to calculate mean and sd for a single variable
 calculate_stats <- function(variable_name) {

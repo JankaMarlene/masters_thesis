@@ -206,8 +206,8 @@ clean_data <- calculate_z_scores_individual(clean_data, clean_data$age, age_grou
 # Scale the variables nback_miss_1 and nback_miss_2 and add them as new columns
 clean_data <- clean_data %>%
   mutate(
-    s_nback_miss_1 = as.vector(scale(nback_miss_1)),
-    s_nback_miss_2 = as.vector(scale(nback_miss_2))
+    s_nback_miss_1_w = as.vector(scale(nback_miss_1_w)),
+    s_nback_miss_2_w = as.vector(scale(nback_miss_2_w))
   )
 
 

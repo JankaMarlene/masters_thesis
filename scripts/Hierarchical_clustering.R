@@ -4,6 +4,7 @@ library(dplyr)
 library(dendextend)
 library(ggplot2)
 library(gridExtra)
+library(purrr)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -67,37 +68,16 @@ str(clean_data)
 # Checking sex in cluster
 table(cog_df_cl$cluster,clean_data$sex)
 
-# Checking education in cluster
-cluster_means <- tapply(clean_data$years_of_education, cog_df_cl$cluster, FUN = mean)
-cluster_means
-table(cog_df_cl$cluster,clean_data$years_of_education)
+#--------
+# Age
 
-# T-Test for years of education between clusters overall
-t_test_education <- t.test(years_of_education ~ as.factor(cog_df_cl$cluster), data = clean_data)
-
-# Display t-Test results
-t_test_education
-
-# T-Test for years of education within the "withPCS" group between clusters
-t_test_withPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
-
-# Display t-Test results for the "withPCS" group
-t_test_withPCS_education
-
-# T-Test for years of education within the "withoutPCS" group between clusters
-t_test_withoutPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
-
-# Display t-Test results for the "withoutPCS" group
-t_test_withoutPCS_education
-
-# Plotting years of education distribution within clusters based on withPCS and withoutPCS labels with mean as text
-ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = years_of_education, fill = group)) +
-  geom_boxplot(position = position_dodge(width = 0.75)) + # Adjust position of boxplots
-  stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.75), # Adjust position of points
-               shape = 18, size = 4, color = "red") + # Add mean point
-  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
-               position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "years_of_education", title = "years_of_education Distribution within Clusters based on withPCS and withoutPCS Labels")
+# Calculate means and standard deviations for age by cluster
+age_stats <- clean_data %>%
+  group_by(cog_df_cl$cluster) %>%
+  summarise(
+    mean = round(mean(age, na.rm = TRUE), 2),
+    sd = round(sd(age, na.rm = TRUE), 2)
+  )
 
 # Plotting age distribution between clusters with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
@@ -111,7 +91,18 @@ t_test_age <- t.test(age ~ as.factor(cog_df_cl$cluster), data = clean_data)
 
 # Display t-test results
 t_test_age
+age_stats
 
+# Calculate mean and sd for each group within each cluster
+mean_sd_stats <- clean_data %>%
+  group_by(cog_df_cl$cluster, group) %>%
+  summarise(
+    mean = round(mean(age, na.rm = TRUE), 2),
+    sd = round(sd(age, na.rm = TRUE), 2)
+  )
+
+# Display mean and sd for each group within each cluster
+print(mean_sd_stats)
 
 # Plotting age distribution within clusters based on withPCS and withoutPCS labels with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group)) +
@@ -134,17 +125,103 @@ t_test_withPCS
 # Display t-test results for "withoutPCS" group
 t_test_withoutPCS
 
-# Filter the data for Cluster 2
-#cluster_2_data <- subset(clean_data, cluster == 2)
+# Filter the data for Cluster 1
+cluster_1_data <- subset(clean_data, cluster == 1)
 
-# Perform t-test for facit_f_FS between "withPCS" and "withoutPCS" groups within Cluster 2
-#t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
+# Perform t-test for age between "withPCS" and "withoutPCS" groups within Cluster 1
+t_test_cluster_1 <- t.test(age ~ group, data = cluster_1_data)
 
 # Display t-test results
-#t_test_cluster_2
+t_test_cluster_1
 
+# Filter the data for Cluster 2
+cluster_2_data <- subset(clean_data, cluster == 2)
 
+# Perform t-test for age between "withPCS" and "withoutPCS" groups within Cluster 2
+t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
 
+# Display t-test results
+t_test_cluster_2
+
+#--------
+# Education
+
+# Calculate means of years_of_education by cluster
+cluster_means <- tapply(clean_data$years_of_education, cog_df_cl$cluster, FUN = mean)
+cluster_means
+
+# Calculate standard deviations of years_of_education by cluster
+cluster_sds <- tapply(clean_data$years_of_education, cog_df_cl$cluster, FUN = sd)
+cluster_sds
+
+# Combine means and standard deviations into a data frame
+cluster_stats <- data.frame(
+  cluster = names(cluster_means),
+  mean = round(cluster_means, 2),
+  sd = round(cluster_sds, 2)
+)
+
+# Print the cluster statistics
+cluster_stats
+
+# T-Test for years of education between clusters overall
+t_test_education <- t.test(years_of_education ~ as.factor(cog_df_cl$cluster), data = clean_data)
+
+# Display t-Test results
+t_test_education
+
+# Calculate mean and sd for each group within each cluster
+mean_sd_stats <- clean_data %>%
+  group_by(cog_df_cl$cluster, group) %>%
+  summarise(
+    mean = round(mean(years_of_education, na.rm = TRUE), 2),
+    sd = round(sd(years_of_education, na.rm = TRUE), 2)
+  )
+
+# Display mean and sd for each group within each cluster
+print(mean_sd_stats)
+
+# T-Test for years of education within the "withPCS" group between clusters
+t_test_withPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+
+# Display t-Test results for the "withPCS" group
+t_test_withPCS_education
+
+# T-Test for years of education within the "withoutPCS" group between clusters
+t_test_withoutPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+
+# Display t-Test results for the "withoutPCS" group
+t_test_withoutPCS_education
+
+# Plotting years of education distribution within clusters based on withPCS and withoutPCS labels with mean as text
+ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = years_of_education, fill = group)) +
+  geom_boxplot(position = position_dodge(width = 0.75)) + # Adjust position of boxplots
+  stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.75), # Adjust position of points
+               shape = 18, size = 4, color = "red") + # Add mean point
+  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
+               position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
+  labs(x = "Cluster", y = "years_of_education", title = "years_of_education Distribution within Clusters based on withPCS and withoutPCS Labels")
+
+# Filter the data for Cluster 1
+cluster_1_data <- subset(clean_data, cluster == 1)
+
+# Perform t-test for years_of_education between "withPCS" and "withoutPCS" groups within Cluster 1
+t_test_cluster_1 <- t.test(years_of_education ~ group, data = cluster_1_data)
+
+# Display t-test results
+t_test_cluster_1
+
+# Filter the data for Cluster 2
+cluster_2_data <- subset(clean_data, cluster == 2)
+
+# Perform t-test for years_of_education between "withPCS" and "withoutPCS" groups within Cluster 2
+t_test_cluster_2 <- t.test(years_of_education ~ group, data = cluster_2_data)
+
+# Display t-test results
+t_test_cluster_2
+
+#--------
+# Cognitive variables
 
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time","tmt_diff")
@@ -175,13 +252,27 @@ for (variable in variables) {
   # Perform Wilcoxon rank sum test for the current variable
   test_result <- t.test(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster), exact = FALSE)
   
-  # Store the test result in the list
-  test_results[[variable]] <- test_result
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cog_df_cl$cluster) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  
+  # Combine test results and descriptive statistics
+  test_results[[variable]] <- list(
+    test = test_result,
+    descriptives = descriptive_stats
+  )
 }
 
 # Display the test results
 test_results
-
 
 
 # Install and load the effsize package if not already installed
@@ -210,6 +301,26 @@ effect_sizes
 
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
+
+# Function to calculate mean and sd for a single variable
+calculate_stats <- function(variable_name) {
+  clean_data %>%
+    group_by(cluster = as.factor(cog_df_cl$cluster), group) %>%
+    summarise(
+      mean = round(mean(!!sym(variable_name), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable_name), na.rm = TRUE), 4)
+    ) %>%
+    mutate(variable = variable_name)  # Add variable name as a column
+}
+
+# Map function over each variable to calculate mean and sd
+stats_list <- map(variables, calculate_stats)
+
+# Extract and name each table by variable
+named_stats_tables <- map(setNames(stats_list, variables), bind_rows)
+
+# Display each table
+named_stats_tables
 
 # Initialize an empty list to store the plots
 plot_list <- list()
@@ -259,7 +370,46 @@ test_results_withPCS
 test_results_withoutPCS
 
 
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(variable_name) {
+  # Filter data for Cluster 1
+  cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 1
+  t_test_cluster_1 <- t.test(cluster_1_data[[variable_name]] ~ cluster_1_data$group)
+  
+  # Filter data for Cluster 2
+  cluster_2_data <- subset(clean_data, cog_df_cl$cluster == 2)
+  
+  # Perform t-test for the variable between "withPCS" and "withoutPCS" groups within Cluster 2
+  t_test_cluster_2 <- t.test(cluster_2_data[[variable_name]] ~ cluster_2_data$group)
+  
+  # Return t-test results as a list
+  list(cluster_1 = t_test_cluster_1, cluster_2 = t_test_cluster_2)
+}
+
+# Map function over each variable to perform t-test
+stats_t_test <- map(variables, perform_t_test)
+
+# Display t-test results for each variable within each cluster
+# Print results with variable names
+for (i in seq_along(variables)) {
+  cat("Variable:", variables[i], "\n")
+  
+  cat("Cluster 1:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
+  
+  cat("Cluster 2:\n")
+  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
+}
+
+#--------
 ## Questionairs
+
 # Vector of variables for which to create boxplots
 new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
 

@@ -5,6 +5,7 @@ library(dendextend)
 library(ggplot2)
 library(gridExtra)
 library(purrr)
+library(car)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -229,7 +230,7 @@ ggplot(clean_data, aes(x = as.factor(cluster), y = years_of_education, fill = gr
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
   labs(x = "Cluster", y = "Years of Education", title = "Years of Education Distribution within Clusters based on withPCS and withoutPCS Labels")
 
-# Perform ANOVA for years of education between "withPCS" and "withoutPCS" groups within each cluster
+# Perform t-test for years of education between "withPCS" and "withoutPCS" groups within each cluster
 
 # Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)
@@ -250,4 +251,125 @@ t_test_cluster_3
 cluster_4_data <- subset(clean_data, cluster == 4)
 t_test_cluster_4 <- t.test(years_of_education ~ group, data = cluster_4_data)
 t_test_cluster_4
+
+#--------
+# Cognitive variables actual values
+
+# Vector of cognitive variables
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable to create boxplots
+for (variable in variables) {
+  plot <- ggplot(clean_data, aes(x = as.factor(cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+# Initialize lists to store results
+anova_results <- list()
+descriptive_stats_list <- list()
+normality_results <- list()
+homogeneity_results <- list()
+effect_sizes <- list()
+
+# Perform ANOVA, calculate descriptive statistics, check assumptions, and calculate effect sizes
+for (variable in variables) {
+  # Perform ANOVA
+  anova_result <- aov(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  anova_results[[variable]] <- summary(anova_result)
+  
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cluster = as.factor(cluster)) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  descriptive_stats_list[[variable]] <- descriptive_stats
+  
+  # Check normality of residuals
+  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  normality_results[[variable]] <- shapiro_test
+  
+  # Check homogeneity of variances
+  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  homogeneity_results[[variable]] <- levene_test
+  
+  # Calculate effect size (Eta Squared)
+  eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
+  effect_sizes[[variable]] <- eta_squared
+}
+
+# Display results
+anova_results
+descriptive_stats_list
+normality_results
+homogeneity_results
+effect_sizes
+
+# Initialize lists to store ANOVA results for withPCS and withoutPCS groups
+anova_results_withPCS <- list()
+anova_results_withoutPCS <- list()
+
+# Perform ANOVA for each variable within the "withPCS" and "withoutPCS" groups between clusters
+for (variable in variables) {
+  anova_withPCS <- aov(clean_data[[variable]] ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+  anova_withoutPCS <- aov(clean_data[[variable]] ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+  
+  anova_results_withPCS[[variable]] <- summary(anova_withPCS)
+  anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
+}
+
+# Display ANOVA results for "withPCS" and "withoutPCS" groups
+anova_results_withPCS
+anova_results_withoutPCS
+
+# Plot cognitive variables within clusters based on withPCS and withoutPCS labels
+plot_list_group <- list()
+
+for (variable in variables) {
+  plot <- ggplot(clean_data, aes(x = as.factor(cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster and Group"))
+  
+  plot_list_group[[variable]] <- plot
+}
+
+grid.arrange(grobs = plot_list_group, ncol = 2)
+
+# Initialize list to store t-test results
+t_test_results <- list()
+
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(variable_name) {
+  t_test_list <- list()
+  
+  for (i in 1:4) {
+    cluster_data <- subset(clean_data, cluster == i)
+    t_test <- t.test(cluster_data[[variable_name]] ~ cluster_data$group)
+    t_test_list[[paste("Cluster", i)]] <- t_test
+  }
+  
+  t_test_list
+}
+
+# Perform t-tests for each variable within each cluster
+for (variable in variables) {
+  t_test_results[[variable]] <- perform_t_test(variable)
+}
+
+# Display t-test results
+t_test_results
 

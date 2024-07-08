@@ -143,33 +143,29 @@ summary(anova_withoutPCS)
 # Perform ANOVA for age between "withPCS" and "withoutPCS" groups within each cluster
 
 # Cluster 1
-cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
-anova_cluster_1 <- aov(age ~ group, data = cluster_1_data)
-summary(anova_cluster_1)
+#cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
+#anova_cluster_1 <- aov(age ~ group, data = cluster_1_data)
+#summary(anova_cluster_1)
 
-# Filter the data for Cluster 1
+# Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)
-
-# Perform t-test for age between "withPCS" and "withoutPCS" groups within Cluster 1
 t_test_cluster_1 <- t.test(age ~ group, data = cluster_1_data)
-
-# Display t-test results
 t_test_cluster_1
 
 # Cluster 2
-cluster_2_data <- subset(clean_data, cog_df_cl$cluster == 2)
-anova_cluster_2 <- aov(age ~ group, data = cluster_2_data)
-summary(anova_cluster_2)
+cluster_2_data <- subset(clean_data, cluster == 2)
+t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
+t_test_cluster_2
 
 # Cluster 3
-cluster_3_data <- subset(clean_data, cog_df_cl$cluster == 3)
-anova_cluster_3 <- aov(age ~ group, data = cluster_3_data)
-summary(anova_cluster_3)
+cluster_3_data <- subset(clean_data, cluster == 3)
+t_test_cluster_3 <- t.test(age ~ group, data = cluster_3_data)
+t_test_cluster_3
 
 # Cluster 4
-cluster_4_data <- subset(clean_data, cog_df_cl$cluster == 4)
-anova_cluster_4 <- aov(age ~ group, data = cluster_4_data)
-summary(anova_cluster_4)
+cluster_4_data <- subset(clean_data, cluster == 4)
+t_test_cluster_4 <- t.test(age ~ group, data = cluster_4_data)
+t_test_cluster_4
 
 #--------
 # Education
@@ -237,21 +233,21 @@ ggplot(clean_data, aes(x = as.factor(cluster), y = years_of_education, fill = gr
 
 # Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)
-anova_cluster_1 <- aov(years_of_education ~ group, data = cluster_1_data)
-summary(anova_cluster_1)
+t_test_cluster_1 <- t.test(years_of_education ~ group, data = cluster_1_data)
+t_test_cluster_1
 
 # Cluster 2
 cluster_2_data <- subset(clean_data, cluster == 2)
-anova_cluster_2 <- aov(years_of_education ~ group, data = cluster_2_data)
-summary(anova_cluster_2)
+t_test_cluster_2 <- t.test(years_of_education ~ group, data = cluster_2_data)
+t_test_cluster_2
 
 # Cluster 3
 cluster_3_data <- subset(clean_data, cluster == 3)
-anova_cluster_3 <- aov(years_of_education ~ group, data = cluster_3_data)
-summary(anova_cluster_3)
+t_test_cluster_3 <- t.test(years_of_education ~ group, data = cluster_3_data)
+t_test_cluster_3
 
 # Cluster 4
 cluster_4_data <- subset(clean_data, cluster == 4)
-anova_cluster_4 <- aov(years_of_education ~ group, data = cluster_4_data)
-summary(anova_cluster_4)
+t_test_cluster_4 <- t.test(years_of_education ~ group, data = cluster_4_data)
+t_test_cluster_4
 

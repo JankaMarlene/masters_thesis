@@ -692,3 +692,150 @@ for (variable in variables) {
 
 # Display t-test results
 t_test_results
+
+#--------
+## Questionairs
+
+# Vector of variables for which to create boxplots
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable to create boxplots
+for (variable in new_variables) {
+  plot <- ggplot(clean_data, aes(x = as.factor(cluster), y = !!sym(variable))) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  
+  plot_list[[variable]] <- plot
+}
+
+# Arrange plots in a grid
+grid.arrange(grobs = plot_list, ncol = 2)
+
+# Initialize lists to store results
+anova_results <- list()
+descriptive_stats_list <- list()
+normality_results <- list()
+homogeneity_results <- list()
+effect_sizes <- list()
+
+# Perform ANOVA, calculate descriptive statistics, check assumptions, and calculate effect sizes
+for (variable in new_variables) {
+  # Perform ANOVA
+  anova_result <- aov(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  anova_results[[variable]] <- summary(anova_result)
+  
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cluster = as.factor(cluster)) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  descriptive_stats_list[[variable]] <- descriptive_stats
+  
+  # Check normality of residuals
+  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  normality_results[[variable]] <- shapiro_test
+  
+  # Check homogeneity of variances
+  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  homogeneity_results[[variable]] <- levene_test
+  
+  # Calculate effect size (Eta Squared)
+  eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
+  effect_sizes[[variable]] <- eta_squared
+}
+
+# Display results
+anova_results
+descriptive_stats_list
+normality_results
+homogeneity_results
+effect_sizes
+
+# Function to calculate mean and sd for a single variable
+calculate_stats <- function(variable_name) {
+  clean_data %>%
+    group_by(cluster = as.factor(cog_df_cl$cluster), group) %>%
+    summarise(
+      mean = round(mean(!!sym(variable_name), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable_name), na.rm = TRUE), 4)
+    ) %>%
+    mutate(variable = variable_name)  # Add variable name as a column
+}
+
+# Map function over each variable to calculate mean and sd
+stats_list <- map(new_variables, calculate_stats)
+
+# Extract and name each table by variable
+named_stats_tables <- map(setNames(stats_list, new_variables), bind_rows)
+
+# Display each table
+named_stats_tables
+
+# Initialize lists to store ANOVA results for withPCS and withoutPCS groups
+anova_results_withPCS <- list()
+anova_results_withoutPCS <- list()
+
+# Loop over each variable to perform ANOVA within the "withPCS" and "withoutPCS" groups
+for (variable in new_variables) {
+  # Perform ANOVA for the current variable within "withPCS" group
+  withPCS_data <- subset(clean_data, group == "withPCS")
+  anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
+  
+  # Perform ANOVA for the current variable within "withoutPCS" group
+  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
+  
+  # Store the ANOVA results
+  anova_results_withPCS[[variable]] <- summary(anova_withPCS)
+  anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
+}
+
+# Display ANOVA results for "withPCS" and "withoutPCS" groups
+anova_results_withPCS
+anova_results_withoutPCS
+
+# Plot cognitive variables within clusters based on withPCS and withoutPCS labels
+plot_list_group <- list()
+
+for (variable in new_variables) {
+  plot <- ggplot(clean_data, aes(x = as.factor(cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster and Group"))
+  
+  plot_list_group[[variable]] <- plot
+}
+
+grid.arrange(grobs = plot_list_group, ncol = 2)
+
+# Initialize list to store t-test results
+t_test_results <- list()
+
+# Function to perform t-test for a single variable within each cluster
+perform_t_test <- function(variable_name) {
+  t_test_list <- list()
+  
+  for (i in 1:3) {
+    cluster_data <- subset(clean_data, cluster == i)
+    t_test <- t.test(cluster_data[[variable_name]] ~ cluster_data$group)
+    t_test_list[[paste("Cluster", i)]] <- t_test
+  }
+  
+  t_test_list
+}
+
+# Perform t-tests for each variable within each cluster
+for (variable in new_variables) {
+  t_test_results[[variable]] <- perform_t_test(variable)
+}
+
+# Display t-test results
+t_test_results

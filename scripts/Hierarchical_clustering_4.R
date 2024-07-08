@@ -300,16 +300,16 @@ for (variable in variables) {
   descriptive_stats_list[[variable]] <- descriptive_stats
   
   # Check normality of residuals
-  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
-  normality_results[[variable]] <- shapiro_test
+  #shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  #normality_results[[variable]] <- shapiro_test
   
   # Check homogeneity of variances
-  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
-  homogeneity_results[[variable]] <- levene_test
+  #levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  #homogeneity_results[[variable]] <- levene_test
   
   # Calculate effect size (Eta Squared)
-  eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
-  effect_sizes[[variable]] <- eta_squared
+  #eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
+  #effect_sizes[[variable]] <- eta_squared
 }
 
 # Display results
@@ -398,6 +398,67 @@ for (variable in variables) {
 
 # Display t-test results
 t_test_results
+
+##
+# Initialize lists to store ANOVA results and models
+anova_models <- list()
+anova_models_withPCS <- list()
+anova_models_withoutPCS <- list()
+
+# Loop over each variable to perform ANOVA and store the models
+for (variable in variables) {
+  # Perform ANOVA
+  anova_result <- aov(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  anova_results[[variable]] <- summary(anova_result)
+  anova_models[[variable]] <- anova_result
+  
+  # Perform ANOVA for the current variable within "withPCS" group
+  withPCS_data <- subset(clean_data, group == "withPCS")
+  anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
+  anova_results_withPCS[[variable]] <- summary(anova_withPCS)
+  anova_models_withPCS[[variable]] <- anova_withPCS
+  
+  # Perform ANOVA for the current variable within "withoutPCS" group
+  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
+  anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
+  anova_models_withoutPCS[[variable]] <- anova_withoutPCS
+}
+
+# Display ANOVA results
+anova_results
+anova_results_withPCS
+anova_results_withoutPCS
+
+
+# Initialize lists to store Tukey HSD results
+tukey_results <- list()
+tukey_results_withPCS <- list()
+tukey_results_withoutPCS <- list()
+
+# Loop over each variable to perform Tukey HSD test if ANOVA is significant
+for (variable in variables) {
+  # Check if the overall ANOVA for the variable is significant
+  if (anova_results[[variable]][[1]]["as.factor(cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results[[variable]] <- TukeyHSD(anova_models[[variable]])
+  }
+  
+  # Check if the ANOVA for the variable within "withPCS" group is significant
+  if (anova_results_withPCS[[variable]][[1]]["as.factor(withPCS_data$cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results_withPCS[[variable]] <- TukeyHSD(anova_models_withPCS[[variable]])
+  }
+  
+  # Check if the ANOVA for the variable within "withoutPCS" group is significant
+  if (anova_results_withoutPCS[[variable]][[1]]["as.factor(withoutPCS_data$cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results_withoutPCS[[variable]] <- TukeyHSD(anova_models_withoutPCS[[variable]])
+  }
+}
+
+# Display Tukey HSD results for significant variables
+tukey_results
+tukey_results_withPCS
+tukey_results_withoutPCS
+
 
 #--------
 # Cognitive variables winsorized Data

@@ -61,20 +61,6 @@ str(clean_data)
 # Checking sex in cluster
 table(cog_df_cl$cluster,clean_data$sex)
 
-# Example: Checking ANOVA assumptions after hierarchical clustering
-
-# Check normality of residuals for z_pvt_reaction_time_w
-shapiro_test <- shapiro.test(residuals(lm(z_tmt_b_time_w ~ as.factor(cluster), data = clean_data)))
-print(shapiro_test)
-
-# Q-Q plot of residuals for z_pvt_reaction_time_w
-qqnorm(residuals(lm(z_pvt_reaction_time_w ~ as.factor(cluster), data = clean_data)))
-qqline(residuals(lm(z_pvt_reaction_time_w ~ as.factor(cluster), data = clean_data)))
-
-# Check homogeneity of variances for z_pvt_reaction_time_w
-levene_test <- leveneTest(residuals(lm(z_pvt_reaction_time_w ~ as.factor(cluster), data = clean_data)) ~ as.factor(cluster), data = clean_data)
-print(levene_test)
-
 #--------
 # Age
 
@@ -88,10 +74,14 @@ age_stats <- clean_data %>%
 
 # Plotting age distribution between clusters with mean as text
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age)) +
-  geom_boxplot() +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 4, color = "red") + # Add mean point
-  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "Age", title = "Age Distribution between Clusters")
+  # Custom boxplot without median line
+  stat_boxplot(geom = "errorbar", width = 0.25) +  # Add whiskers
+  geom_boxplot(aes(group = as.factor(cog_df_cl$cluster)), color = "black", fill = "gray80") +  
+  stat_summary(fun = mean, geom = "errorbar", aes(ymax = ..y.., ymin = ..y..), width = 0.75, size = 1, color = "black") +
+  stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), vjust = -0.5, color = "black") +
+  labs(x = "Cluster", y = "Age", title = "Age Distribution between Clusters") +
+  theme_bw()
+
 
 # Perform ANOVA for age between clusters
 anova_age <- aov(age ~ as.factor(cog_df_cl$cluster), data = clean_data)
@@ -99,15 +89,6 @@ anova_age <- aov(age ~ as.factor(cog_df_cl$cluster), data = clean_data)
 # Display ANOVA results
 #summary(anova_age)
 #age_stats
-
-# Subset the data for clusters 1 and 4
-#data_cluster_1_4 <- subset(clean_data, cog_df_cl$cluster %in% c(1, 4))
-
-# Perform t-test for age between Cluster 1 and Cluster 4
-#t_test_cluster_1_4 <- t.test(age ~ as.factor(cluster), data = data_cluster_1_4)
-
-# Display t-test results
-#t_test_cluster_1_4
 
 # Calculate mean and sd for each group within each cluster
 mean_sd_stats <- clean_data %>%
@@ -142,11 +123,6 @@ summary(anova_withPCS)
 summary(anova_withoutPCS)
 
 # Perform ANOVA for age between "withPCS" and "withoutPCS" groups within each cluster
-
-# Cluster 1
-#cluster_1_data <- subset(clean_data, cog_df_cl$cluster == 1)
-#anova_cluster_1 <- aov(age ~ group, data = cluster_1_data)
-#summary(anova_cluster_1)
 
 # Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)
@@ -458,6 +434,31 @@ for (variable in variables) {
 tukey_results
 tukey_results_withPCS
 tukey_results_withoutPCS
+
+
+
+# Initialize a list to store the results
+results <- list()
+
+# Loop through each variable and perform the Mann-Whitney U test
+for (variable in variables) {
+  # Extract the data for Cluster 4
+  withPCS_cluster4 <- withPCS_data[withPCS_data$cluster == 4, variable]
+  withoutPCS_cluster4 <- withoutPCS_data[withoutPCS_data$cluster == 4, variable]
+  
+  # Perform Mann-Whitney U test
+  result <- wilcox.test(withPCS_cluster4, withoutPCS_cluster4)
+  
+  # Store the result in the list
+  results[[variable]] <- result
+}
+
+# Print the results
+for (variable in variables) {
+  cat("Results for", variable, ":\n")
+  print(results[[variable]])
+  cat("\n")
+}
 
 
 #--------
@@ -924,6 +925,66 @@ for (variable in new_variables) {
 anova_results_withPCS
 anova_results_withoutPCS
 
+##
+# Initialize lists to store ANOVA results and models
+anova_models <- list()
+anova_models_withPCS <- list()
+anova_models_withoutPCS <- list()
+
+# Loop over each variable to perform ANOVA and store the models
+for (variable in new_variables) {
+  # Perform ANOVA
+  anova_result <- aov(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  anova_results[[variable]] <- summary(anova_result)
+  anova_models[[variable]] <- anova_result
+  
+  # Perform ANOVA for the current variable within "withPCS" group
+  withPCS_data <- subset(clean_data, group == "withPCS")
+  anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
+  anova_results_withPCS[[variable]] <- summary(anova_withPCS)
+  anova_models_withPCS[[variable]] <- anova_withPCS
+  
+  # Perform ANOVA for the current variable within "withoutPCS" group
+  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
+  anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
+  anova_models_withoutPCS[[variable]] <- anova_withoutPCS
+}
+
+# Display ANOVA results
+anova_results
+anova_results_withPCS
+anova_results_withoutPCS
+
+
+# Initialize lists to store Tukey HSD results
+tukey_results <- list()
+tukey_results_withPCS <- list()
+tukey_results_withoutPCS <- list()
+
+# Loop over each variable to perform Tukey HSD test if ANOVA is significant
+for (variable in new_variables) {
+  # Check if the overall ANOVA for the variable is significant
+  if (anova_results[[variable]][[1]]["as.factor(cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results[[variable]] <- TukeyHSD(anova_models[[variable]])
+  }
+  
+  # Check if the ANOVA for the variable within "withPCS" group is significant
+  if (anova_results_withPCS[[variable]][[1]]["as.factor(withPCS_data$cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results_withPCS[[variable]] <- TukeyHSD(anova_models_withPCS[[variable]])
+  }
+  
+  # Check if the ANOVA for the variable within "withoutPCS" group is significant
+  if (anova_results_withoutPCS[[variable]][[1]]["as.factor(withoutPCS_data$cluster)", "Pr(>F)"] < 0.05) {
+    tukey_results_withoutPCS[[variable]] <- TukeyHSD(anova_models_withoutPCS[[variable]])
+  }
+}
+
+# Display Tukey HSD results for significant variables
+tukey_results
+tukey_results_withPCS
+tukey_results_withoutPCS
+
 # Plot cognitive variables within clusters based on withPCS and withoutPCS labels
 plot_list_group <- list()
 
@@ -958,5 +1019,29 @@ for (variable in new_variables) {
   t_test_results[[variable]] <- perform_t_test(variable)
 }
 
+
 # Display t-test results
 t_test_results
+
+# Initialize a list to store the results
+results <- list()
+
+# Loop through each variable and perform the Mann-Whitney U test
+for (variable in new_variables) {
+  # Extract the data for Cluster 4
+  withPCS_cluster4 <- withPCS_data[withPCS_data$cluster == 4, variable]
+  withoutPCS_cluster4 <- withoutPCS_data[withoutPCS_data$cluster == 4, variable]
+  
+  # Perform Mann-Whitney U test
+  result <- wilcox.test(withPCS_cluster4, withoutPCS_cluster4)
+  
+  # Store the result in the list
+  results[[variable]] <- result
+}
+
+# Print the results
+for (variable in new_variables) {
+  cat("Results for", variable, ":\n")
+  print(results[[variable]])
+  cat("\n")
+}

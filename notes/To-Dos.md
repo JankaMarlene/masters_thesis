@@ -1,23 +1,23 @@
 # To-Dos
 
-- [ ] Als erstes die Fragestellung klar formulieren!!!!
-- [ ] MoCA cut-off Wert angucken -> Paper von Christian
+- [x] Als erstes die Fragestellung klar formulieren!!!!
+- [x] MoCA cut-off Wert angucken -> Paper von Christian
 - [ ] MoCA z-Werte für ü 65 berechnen und vergleichen mit Aufteilung in Gruppen
-- [ ] Gruppen vergleichen (Bildung, etc.)
+- [x] Gruppen vergleichen (Bildung, etc.)
 - [ ] Warum sind die Leute da, wo sie sind? Bei denen, wo keine Übereinstimmung mit subjektiver Übereinstimmung vorliegen?
-- [ ] Clustering-statistik abschließen
+- [x] Clustering-statistik abschließen
 - [ ] Clustering Teil schreiben
-- [ ] Lara nach Code fragen
-- [ ] Einlesen in Fieldtrip
-- [ ] Korrekte Antworten im n-back angucken
+- [x] Lara nach Code fragen
+- [x] Einlesen in Fieldtrip
+- [x] Korrekte Antworten im n-back angucken
 - [ ] Expose schreiben
-- [ ] Für Clusterlösung entscheiden
+- [x] Für Clusterlösung entscheiden
 - [ ] Cluster Methodenteil schreiben
 - [ ] Cluster Ergebnisteil schreiben
 - [ ] Stabilitätsprüfung der Cluterlösung(en)
 - [ ] Cut-off Wert beim Facit angucken innerhalb der beiden Cluster
 - [ ] Informationen zum Facit vom Block auf Github übertragen
-- [ ] Übersicht Literatur erstellen
+- [x] Übersicht Literatur erstellen
 - [ ] Literatur in Zotero übertragen
 - [x] Lara fragen, wofür sie TMT a und b verwendet
 - [x] EEG Auswertung beginnen

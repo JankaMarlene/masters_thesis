@@ -16,15 +16,13 @@ close all
 clc
 
 % initialize fieldtrip
-addpath('C:\Users\jankj\OneDrive\Desktop\masters_thesis\source\fieldtrip-20240504\'); %initialize FieldTrip
-%addpath('C:\Users\User\Documents\MATLAB\toolboxes\fieldtrip-20230503') % Julius FT
+addpath('C:\Users\jankj\OneDrive\Desktop\fieldtrip-20240504\'); %initialize FieldTrip
 ft_defaults;
 
 %% 1. Define the current dataset
 
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
 addpath(genpath(proj_dir)); % add dir to project to Matlab path
-% indir = fullfile(proj_dir,'data\raw');% path to folder with BIDS datasets
 indir = fullfile('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\participants\');% path to folder with BIDS datasets on Server
 outdir = fullfile(proj_dir,'data\prep'); % path to prep ft data
 indat = dir(indir); % content of that folder
@@ -73,7 +71,7 @@ for v = 1:length(indat) % begin to create a loop over data sets
     % which Filter to use
     cfg.demean      = 'yes';    % remove DC offset
     cfg.hpfilter    = 'yes';
-    cfg.hpfreq      = .5;       % high-pass filter, cutting everything under .5 Hz
+    cfg.hpfreq      = .1;       % high-pass filter, cutting everything under .1 Hz
     cfg.hpfilttype  = 'firws';
     cfg.pad         = 'nextpow2';
     

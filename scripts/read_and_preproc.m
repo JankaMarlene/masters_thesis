@@ -16,7 +16,7 @@ close all
 clc
 
 % initialize fieldtrip
-addpath('C:\Users\jankj\OneDrive\Desktop\masters_thesis\scripts\fieldtrip-20240504\fieldtrip-20240504'); %initialize FieldTrip
+addpath('C:\Users\jankj\OneDrive\Desktop\masters_thesis\source\fieldtrip-20240504\'); %initialize FieldTrip
 %addpath('C:\Users\User\Documents\MATLAB\toolboxes\fieldtrip-20230503') % Julius FT
 ft_defaults;
 
@@ -25,8 +25,87 @@ ft_defaults;
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
 addpath(genpath(proj_dir)); % add dir to project to Matlab path
 % indir = fullfile(proj_dir,'data\raw');% path to folder with BIDS datasets
-indir = fullfile('W:\bids_projects\epoc_cn');% path to folder with BIDS datasets on Server
+indir = fullfile('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\participants\');% path to folder with BIDS datasets on Server
 outdir = fullfile(proj_dir,'data\prep'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
 
+%% start loop
+
+for v = 1:length(indat) % begin to create a loop over data sets
+
+    eegdir = fullfile(indir,indat(v).name,'eeg'); % path to the eeg folder of the current subject
+    eegdat = dir(eegdir); % content of that folder
+    % find file with resting state eeg data
+    eegdat_eeg = eegdat(contains({eegdat.name}, 'task-restingstate_eeg.eeg')); % resting state eeg data 
+    % check if resting state exists
+    if isempty(eegdat_eeg);continue;end
+    
+    eegdat_mrk = eegdat(contains({eegdat.name}, 'restingstate_events.tsv')); % resting state eeg data events
+
+    tmp_id = extractBefore(eegdat_eeg.name,'_');
+    
+    % load the BIDS data with the preprocessing function
+    cfg = [];
+    cfg.dataset = fullfile(eegdat_eeg.folder,eegdat_eeg.name);
+    cfg.channel = 'all';
+    cfg.readbids = 'Yes';
+    data_p = ft_preprocessing(cfg);
+    
+    % read events from events.tsv
+    hdr   = ft_read_header(cfg.dataset); % get the header from the file
+    event = ft_read_event(fullfile(eegdat_mrk.folder,eegdat_mrk.name), 'header', hdr, 'eventformat', 'bids_tsv'); % read in BIDS events
+    
+    %1.1 Read in Markers and define trial (between Experiment start and
+    %Close eyes
+    cfg = [];
+    cfg.dataset             =  fullfile(eegdat_eeg.folder,eegdat_eeg.name);
+    cfg.trialdef.eventtype  = 'Markers';
+    cfg.trialfun             = 'mytrialfun';% I wrote my own trialfun -> you can find it in the Src file
+    cfg = ft_definetrial(cfg);
+    
+
+    % 1.2. Save the trial-definition
+    trl = cfg.trl;
+    
+    %% 2. Read in the continuous data and apply filters (Preprocessing)
+    % 2.1 Highpass Filter
+    % which Filter to use
+    cfg.demean      = 'yes';    % remove DC offset
+    cfg.hpfilter    = 'yes';
+    cfg.hpfreq      = .5;       % high-pass filter, cutting everything under .5 Hz
+    cfg.hpfilttype  = 'firws';
+    cfg.pad         = 'nextpow2';
+    
+    data_p = ft_preprocessing(cfg); % save processed data
+        
+    %% 2.2 Resampling 
+    cfg.resamplefs = 250;
+    cfg.method = 'resample';
+    data_p = ft_resampledata(cfg, data_p);
+    
+    %% 2.3 Lowpass Filter    
+    cfg = [];% I need to clear the configuration, otherwise it still has things like resamplefs in the cfg, which confuses ft_preprocessing
+    cfg.lpfilter = 'yes'; % The same for lowpass
+    cfg.lpfreq = 45; % 50Hz line noise destroys the data, only take data below
+    cfg.lpfilttype = 'firws'; % Again the type
+    data_clean = ft_preprocessing(cfg, data_p);
+
+    %% apply CAR
+
+    % After cleaning the data, it is best to re-reference the data to
+    % the average across channels to remove the influence of the
+    % reference
+    
+    cfg = [];
+    cfg.reref = 'yes';
+    cfg.refchannel = 1:length(data_clean.label)-1; % Take all channels
+    cfg.refmethod = 'avg'; % Take the average
+    
+    data_clean = ft_preprocessing(cfg,data_clean);
+
+    %% 3. Save output
+    save(fullfile(outdir,tmp_id + "_ft_clean.mat"),"data_clean");
+    
+
+end

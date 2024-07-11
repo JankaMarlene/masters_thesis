@@ -5,6 +5,7 @@ library(dendextend)
 library(ggplot2)
 library(gridExtra)
 library(purrr)
+library(vroom)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -67,6 +68,27 @@ str(clean_data)
 
 # Checking sex in cluster
 table(cog_df_cl$cluster,clean_data$sex)
+
+#--------
+
+cluster_info <- clean_data %>%
+  select(participant_id, cluster)
+
+# Load the participants.tsv file
+participants <- read.delim("C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/participants.tsv", na.strings = "n/a", header = TRUE)
+
+# Check the structure of participants to identify a common identifier
+str(participants)
+
+# Merge the clean_data with participants based on a common identifier
+merged_data <- participants %>%
+  left_join(cluster_info, by = "participant_id")
+
+# Check the structure of the merged data to ensure everything is correct
+str(merged_data)
+
+# Optionally, save the merged data to a new file
+write_tsv(merged_data, "C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/merged_data.tsv")
 
 #--------
 # Age

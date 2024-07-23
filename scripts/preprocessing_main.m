@@ -225,4 +225,4 @@ end
 % save
 
 csvFile = 'number_of_epochs_5.csv';
-%writetable(n_epochs, fullfile(pwd,'data','analysis_power',csvFile));
+writetable(n_epochs, fullfile(pwd,'data','analysis_power',csvFile));

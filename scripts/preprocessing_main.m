@@ -181,3 +181,48 @@ chanlocs(indices_to_remove) = [];
     save(fullfile(outdir,[tmp_id + "_prep_p_5.mat"]),"EEG_epoched_5");
     
 end
+
+clear
+close all
+clc
+
+%% 13. find out how many epochs survived
+% => use lenght(EEG_epoched_4.epoch)
+% set paths
+proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
+indir = fullfile(proj_dir,'data\prep_power_5');% 
+outdir = fullfile(proj_dir,'data\analysis_power'); % 
+indat = dir(indir); % content of that folder
+indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
+
+n_epochs = table();
+
+for m = 1:length(indat)
+load(fullfile(indir,indat(m).name));
+    
+    tmp_id = extractBefore(indat(m).name,'_');
+    cell_info = cell(1,3); 
+   for row = 1
+   for col = 1
+      cell_info{row,col} = tmp_id;% VPCode
+   end 
+   for col = 2
+       cell_info{row,col} = length(EEG_epoched_5.epoch);% number of epochs that survived
+   end
+   for col = 3
+       cell_info{row,col} = 60 - length(EEG_epoched_5.epoch); % number of 'missing' epochs
+   end
+   end
+   % create table names
+   VarNames = ["participant_id" "number_epochs" "missing_epochs"];
+
+   currTable = table(cell_info(:,1),cell_info(:,2),cell_info(:,3),'VariableNames',VarNames);
+    
+    n_epochs = vertcat(n_epochs, currTable);
+  
+end
+
+% save
+
+csvFile = 'number_of_epochs_5.csv';
+%writetable(n_epochs, fullfile(pwd,'data','analysis_power',csvFile));

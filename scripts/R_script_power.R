@@ -261,21 +261,184 @@ table_power_5%>%
 
 # just the frontal channels
 table_power_frontal%>%
-  group_by(participant_id, group)%>%
+  group_by(participant_id, cluster_2)%>%
   ggplot(aes(x = participant_id, y = rel_delta, color = group))+
   geom_boxplot()#+
 #geom_jitter(width = 0.2, height = 0, alpha = 0.5)
 
 # just per group
 df_corr_frontal%>%
-  group_by(group)%>%
+  group_by(cluster_2)%>%
   ggplot(aes(x = group, y = mean_delta_power, color = group))+
   geom_boxplot()
 
 
 # just per group (beta)
 df_corr_central%>%
-  group_by(group)%>%
+  group_by(cluster_2)%>%
   ggplot(aes(x = group, y = mean_beta_power, color = group))+
   geom_boxplot()
 
+# outliers delta relative
+# Group data by participant_id and filter outliers
+
+# power values under 0 are clearly wrong -> have to be excluded
+table_power_5 <- table_power_5%>%
+  filter(rel_delta > 0)
+
+
+table_delta_filtered <-table_power_5%>%
+  group_by(participant_id) %>%
+  mutate(mean_rel_delta = mean(rel_delta),
+         sd_rel_delta = sd(rel_delta),
+         lower_bound = mean_rel_delta - 3 * sd_rel_delta,
+         upper_bound = mean_rel_delta + 3 * sd_rel_delta) %>%
+  filter(rel_delta >= lower_bound & rel_delta <= upper_bound) %>%
+  ungroup()
+
+test_missing <- table_delta_filtered%>%
+  group_by(channel,cluster_2)%>%
+  count()
+# # excluding negative values
+#table_delta_filtered_clean <- table_delta_filtered%>%
+#  filter(rel_delta >= 0)
+
+table_delta_filtered%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = rel_delta))+
+  geom_boxplot()+
+  geom_jitter()
+
+
+table_delta_frontal_filtered <- table_delta_filtered%>%
+  filter(table_delta_filtered$channel %in% frontal_channels)
+
+
+test_missing <- table_delta_frontal_filtered%>%
+  group_by(channel,cluster_2)%>%
+  count()
+
+df_corr_frontal_filtered <- table_delta_frontal_filtered%>%
+  group_by(participant_id,group,tmt_a_time,facit_f_FS, tmt_b_minus_a,age,years_of_education,moca,cluster_2)%>%
+  summarise(mean_delta_power = mean(rel_delta),
+            mean_beta_power = mean(rel_beta),
+            mean_aperiodic_exponent = mean(aperiodic_exponent))
+
+df_corr_frontal_filtered%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
+  geom_boxplot()+
+  geom_jitter()
+
+# additional filtering (across group)
+table_delta_filtered_cluster_2 <- table_delta_filtered%>%
+  group_by(cluster_2)%>%
+  mutate(mean_rel_delta = mean(rel_delta),
+         sd_rel_delta = sd(rel_delta),
+         lower_bound = mean_rel_delta - 3 * sd_rel_delta,
+         upper_bound = mean_rel_delta + 3 * sd_rel_delta) %>%
+  filter(rel_delta >= lower_bound & rel_delta <= upper_bound) %>%
+  ungroup()
+
+table_frontal_filtered_cluster_2 <- table_delta_filtered_cluster_2%>%
+  filter(table_delta_filtered_cluster_2$channel %in% frontal_channels)
+
+df_corr_frontal_filtered_cluster_2 <- table_frontal_filtered_cluster_2%>%
+  group_by(participant_id,group,tmt_a_time,facit_f_FS, tmt_b_minus_a,age,moca,hads_d_total_score,cluster_2)%>%
+  summarise(mean_delta_power = mean(rel_delta),
+            mean_delta_power = mean(rel_delta),
+            mean_aperiodic_exponent = mean(aperiodic_exponent))
+
+df_corr_frontal_filtered_cluster_2%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
+  geom_boxplot()+
+  geom_jitter()
+
+df_corr_delta_filtered_cluster_2 <- table_delta_filtered_cluster_2%>%
+  group_by(participant_id,group,tmt_a_time,facit_f_FS, tmt_b_minus_a,age, cluster_2)%>%
+  summarise(mean_delta_power = mean(rel_delta),
+            mean_delta_power = mean(rel_delta),
+            mean_aperiodic_exponent = mean(aperiodic_exponent))
+
+df_corr_delta_filtered_cluster_2%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
+  geom_boxplot()+
+  geom_jitter()
+
+t.test(mean_delta_power~cluster_2, data = df_corr_delta_filtered_cluster_2, alternative = 'two.sided')
+
+# outliers delta absolute
+table_delta_filtered_abs <-table_power_5%>%
+  group_by(participant_id) %>%
+  mutate(mean_abs_delta = mean(abs_delta),
+         sd_abs_delta = sd(abs_delta),
+         lower_bound = mean_abs_delta - 3 * sd_abs_delta,
+         upper_bound = mean_abs_delta + 3 * sd_abs_delta) %>%
+  filter(abs_delta >= lower_bound & abs_delta <= upper_bound) %>%
+  ungroup()
+
+table_delta_filtered_abs%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = abs_delta))+
+  geom_boxplot()+
+  geom_jitter()
+
+table_delta_frontal_filtered_abs <- table_delta_filtered_abs%>%
+  filter(table_delta_filtered_abs$channel %in% frontal_channels)
+
+df_corr_frontal_filtered_abs <- table_delta_frontal_filtered_abs%>%
+  group_by(participant_id,group,tmt_a_time,facit_f_FS, tmt_b_minus_a,age,years_of_education, cluster_2)%>%
+  summarise(mean_delta_power_abs = mean(abs_delta))
+
+df_corr_frontal_filtered_abs%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_delta_power_abs, color = cluster_2))+
+  geom_boxplot()+
+  geom_jitter()
+
+t.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs, alternative = 'less')
+
+
+# sd +- 3 for beta
+table_beta_filtered <-table_power_5%>%
+  group_by(participant_id) %>%
+  mutate(mean_rel_beta = mean(rel_beta),
+         sd_rel_beta = sd(rel_beta),
+         lower_bound = mean_rel_beta - 3 * sd_rel_beta,
+         upper_bound = mean_rel_beta + 3 * sd_rel_beta) %>%
+  filter(rel_beta >= lower_bound & rel_beta <= upper_bound) %>%
+  ungroup()
+
+table_beta_filtered%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = rel_beta))+
+  geom_boxplot()+
+  geom_jitter()
+
+
+table_central_filtered <- table_beta_filtered%>%
+  filter(table_beta_filtered$channel %in% central_channels)
+
+df_corr_central_filtered <- table_central_filtered%>%
+  group_by(participant_id,group,tmt_a_time,facit_f_FS, tmt_b_minus_a,age, moca,hads_d_total_score,cluster_2)%>%
+  summarise(mean_delta_power = mean(rel_delta),
+            mean_beta_power = mean(rel_beta),
+            mean_aperiodic_exponent = mean(aperiodic_exponent))
+
+df_corr_central_filtered%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
+  geom_boxplot()+
+  geom_jitter()
+
+# additional filtering (across group)
+table_beta_filtered_cluster_2 <- table_beta_filtered%>%
+  group_by(cluster_2)%>%
+  mutate(mean_rel_beta = mean(rel_beta),
+         sd_rel_beta = sd(rel_beta),
+         lower_bound = mean_rel_beta - 3 * sd_rel_beta,
+         upper_bound = mean_rel_beta + 3 * sd_rel_beta) %>%
+  filter(rel_beta >= lower_bound & rel_beta <= upper_bound) %>%
+  ungroup()

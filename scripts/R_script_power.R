@@ -656,14 +656,14 @@ export_r_c2 <- table_power_5%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-write.table(export_r_pcs, file = "export_r_pcs.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_r_c, file = "export_r_c.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_r_c1, file = "export_r_c1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_r_c2, file = "export_r_c2.txt", row.names = FALSE, col.names = FALSE)
 
-export_r_pcs%>%
+export_r_c1%>%
   summarise(min = min(mean_r),
             max = max(mean_r))
 
-export_r_c%>%
+export_r_c2%>%
   summarise(min = min(mean_r),
             max = max(mean_r))
 
@@ -680,14 +680,14 @@ cor.test(table_power_5$aperiodic_offset, table_power_5$r_squared)
 
 #--------- 6. check requirements-----------------------------
 # I need data sets per group in order to check the normality requirement separately
-shapiro_df_withPCS <- df_corr_frontal_filtered_group%>%
-  filter(group == 'withPCS')
+shapiro_df_c1 <- df_corr_frontal_filtered_cluster_2%>%
+  filter(cluster_2 == '1')
 
-shapiro_df_withoutPCS <- df_corr_frontal_filtered_group%>%
-  filter(group == 'withoutPCS')
+shapiro_df_c2 <- df_corr_frontal_filtered_cluster_2%>%
+  filter(cluster_2 == '2')
 
 # normality
-df_corr_frontal_filtered_group%>%
+df_corr_frontal_filtered_cluster_2%>%
   ggplot(aes(x = mean_delta_power))+
   geom_histogram(color = "black",
                  fill = "white", bins = sqrt(100))+
@@ -695,29 +695,29 @@ df_corr_frontal_filtered_group%>%
   theme_classic()# looks a bit weird but a similar kind of weird
 
 
-shapiro.test(shapiro_df_withPCS$mean_delta_power)# 0.02
-shapiro.test(shapiro_df_withoutPCS$mean_delta_power)# 0.0388
+shapiro.test(shapiro_df_c1$mean_delta_power)# 0.02
+shapiro.test(shapiro_df_c2$mean_delta_power)# 0.0388
 
-shapiro_df_withPCS <- df_corr_central_filtered_group%>%
-  filter(group == 'withPCS')
+shapiro_df_c1 <- df_corr_central_filtered_cluster_2%>%
+  filter(cluster_2 == '1')
 
-shapiro_df_withoutPCS <- df_corr_central_filtered_group%>%
-  filter(group == 'withoutPCS')
+shapiro_df_c2 <- df_corr_central_filtered_cluster_2%>%
+  filter(cluster_2 == '2')
 
 df_corr_central_filtered%>%
   ggplot(aes(x = mean_beta_power))+
   geom_histogram(color = "black",
                  fill = "white", bins = sqrt(100))+
-  facet_wrap(~group,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in without PCS maybe) -> maybe use nonparametric stats
+  facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in without PCS maybe) -> maybe use nonparametric stats
 
-shapiro.test(shapiro_df_withPCS$mean_beta_power)#0.0001195
-shapiro.test(shapiro_df_withoutPCS$mean_beta_power)#0.00176
+shapiro.test(shapiro_df_c1$mean_beta_power)#0.0001195
+shapiro.test(shapiro_df_c2$mean_beta_power)#0.00176
 
-shapiro_df_withPCS <- df_corr_apo%>%
-  filter(group == 'withPCS')
+shapiro_df_c1 <- df_corr_apo%>%
+  filter(cluster_2 == '1')
 
-shapiro_df_withoutPCS <- df_corr_apo%>%
-  filter(group == 'withoutPCS')
+shapiro_df_c2 <- df_corr_apo%>%
+  filter(cluster_2 == '2')
 
 df_corr_apo%>%
   ggplot(aes(x = mean_aperiodic_offset))+

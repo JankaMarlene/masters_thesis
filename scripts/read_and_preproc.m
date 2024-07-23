@@ -23,7 +23,7 @@ ft_defaults;
 
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
 addpath(genpath(proj_dir)); % add dir to project to Matlab path
-indir = fullfile('C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\participants\BIDS\');% path to folder with BIDS datasets on Server
+indir = fullfile('D:\EPOC\02_data\00_bids\sourcedata\');% path to folder with BIDS datasets on Server
 outdir = fullfile(proj_dir,'data\prep'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)

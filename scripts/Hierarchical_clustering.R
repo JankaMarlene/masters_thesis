@@ -84,11 +84,15 @@ str(participants)
 merged_data <- participants %>%
   left_join(cluster_info, by = "participant_id")
 
+merged_data <- merged_data %>%
+  rename(cluster_2 = cluster)
+
 # Check the structure of the merged data to ensure everything is correct
 str(merged_data)
 
 # Optionally, save the merged data to a new file
 write_tsv(merged_data, "C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/merged_data.tsv")
+
 
 #--------
 # Age

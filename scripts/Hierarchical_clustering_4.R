@@ -75,6 +75,9 @@ str(participants)
 merged_data <- participants %>%
   left_join(cluster_info, by = "participant_id")
 
+merged_data <- merged_data %>%
+  rename(cluster_4 = cluster)
+
 # Check the structure of the merged data to ensure everything is correct
 str(merged_data)
 

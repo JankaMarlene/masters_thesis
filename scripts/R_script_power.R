@@ -691,7 +691,7 @@ df_corr_frontal_filtered_cluster_2%>%
   ggplot(aes(x = mean_delta_power))+
   geom_histogram(color = "black",
                  fill = "white", bins = sqrt(100))+
-  facet_wrap(~group,scales = 'free')+
+  facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks a bit weird but a similar kind of weird
 
 
@@ -723,32 +723,32 @@ df_corr_apo%>%
   ggplot(aes(x = mean_aperiodic_offset))+
   geom_histogram(color = "black",
                  fill = "white", bins = sqrt(100))+
-  facet_wrap(~group,scales = 'free')+
+  facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks quite normally distributed
 
-shapiro.test(shapiro_df_withPCS$mean_aperiodic_offset)# 0.4348
-shapiro.test(shapiro_df_withoutPCS$mean_aperiodic_offset)# 0.2891
+shapiro.test(shapiro_df_c1$mean_aperiodic_offset)# 0.4348
+shapiro.test(shapiro_df_c2$mean_aperiodic_offset)# 0.2891
 
-shapiro_df_withPCS <- df_corr_ape%>%
-  filter(group == 'withPCS')
+shapiro_df_c1 <- df_corr_ape%>%
+  filter(cluster_2 == '1')
 
-shapiro_df_withoutPCS <- df_corr_ape%>%
-  filter(group == 'withoutPCS')
+shapiro_df_c2 <- df_corr_ape%>%
+  filter(cluster_2 == '2')
 
 df_corr_ape%>%
   ggplot(aes(x = mean_aperiodic_exponent))+
   geom_histogram(color = "black",
                  fill = "white", bins = sqrt(100))+
-  facet_wrap(~group,scales = 'free')# looks okay?
+  facet_wrap(~cluster_2,scales = 'free')# looks okay?
 
-shapiro.test(shapiro_df_withPCS$mean_aperiodic_exponent)# 0.02776
-shapiro.test(shapiro_df_withoutPCS$mean_aperiodic_exponent)# 0.5502
+shapiro.test(shapiro_df_c1$mean_aperiodic_exponent)# 0.02776
+shapiro.test(shapiro_df_c2$mean_aperiodic_exponent)# 0.5502
 
 # variance
-leveneTest(mean_delta_power~group,data = df_corr_frontal_filtered_group)# not significant
-leveneTest(mean_beta_power~group,data = df_corr_central_filtered_group)# not significant
-leveneTest(mean_aperiodic_exponent~group,data = df_corr_ape)# significant
-leveneTest(mean_aperiodic_offset~group,data = df_corr_apo)# not significant
+leveneTest(mean_delta_power~cluster_2,data = df_corr_frontal_filtered_cluster_2)# not significant
+leveneTest(mean_beta_power~cluster_2,data = df_corr_central_filtered_cluster_2)# not significant
+leveneTest(mean_aperiodic_exponent~cluster_2,data = df_corr_ape)# significant
+leveneTest(mean_aperiodic_offset~cluster_2,data = df_corr_apo)# not significant
 
 
 # conclusion: variances are not a problem, normality is though! with the aperiodic offset we have normality in both groups

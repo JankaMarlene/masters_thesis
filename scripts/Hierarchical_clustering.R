@@ -87,6 +87,9 @@ merged_data <- participants %>%
 merged_data <- merged_data %>%
   rename(cluster_2 = cluster)
 
+merged_data <- merged_data %>%
+  mutate(cluster_2 = recode(cluster_2, '1' = 'badperformer', '2' = 'goodperformer'))
+
 # Check the structure of the merged data to ensure everything is correct
 str(merged_data)
 

@@ -249,13 +249,13 @@ cor.test(df_corr_central$mean_delta_power,df_corr_central$number_epochs)
 # have a look at the whole data set (boxplots)
 table_power_5%>%
   group_by(cluster_2)%>%
-  ggplot(aes(x = group, y = rel_delta, color = group))+
+  ggplot(aes(x = cluster_2, y = rel_delta, color = cluster_2))+
   geom_boxplot() 
 
 # per group
 table_power_5%>%
   group_by(cluster_2)%>%
-  ggplot(aes(x = group, y = rel_beta, color = group))+
+  ggplot(aes(x = cluster_2, y = rel_beta, color = cluster_2))+
   geom_boxplot() 
 
 
@@ -269,14 +269,14 @@ table_power_frontal%>%
 # just per group
 df_corr_frontal%>%
   group_by(cluster_2)%>%
-  ggplot(aes(x = group, y = mean_delta_power, color = group))+
+  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
   geom_boxplot()
 
 
 # just per group (beta)
 df_corr_central%>%
   group_by(cluster_2)%>%
-  ggplot(aes(x = group, y = mean_beta_power, color = group))+
+  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
   geom_boxplot()
 
 # outliers delta relative
@@ -520,14 +520,14 @@ df_corr_apo <- table_apo_filtered%>%
 
 
 df_corr_apo%>%
-  group_by(group)%>%
-  ggplot(aes(x = group, y = mean_aperiodic_offset, color = group))+
+  group_by(cluster_2)%>%
+  ggplot(aes(x = cluster_2, y = mean_aperiodic_offset, color = cluster_2))+
   geom_boxplot()+
   geom_jitter()
 
 #-------- export tables for boxplots ---------------------
 export_beta_c1 <- table_beta_filtered_cluster_2%>%
-  filter(cluster_2 == '1')%>% 
+  filter(cluster_2 == 'badperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_rel_beta = mean(rel_beta))%>%
@@ -535,7 +535,7 @@ export_beta_c1 <- table_beta_filtered_cluster_2%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_beta_c2 <- table_beta_filtered_cluster_2%>%
-  filter(cluster_2 == '2')%>% 
+  filter(cluster_2 == 'goodperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_rel_beta = mean(rel_beta))%>%
@@ -543,7 +543,7 @@ export_beta_c2 <- table_beta_filtered_cluster_2%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_delta_c1 <- table_delta_filtered_cluster_2%>%
-  filter(cluster_2 == '1')%>% 
+  filter(cluster_2 == 'badperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_rel_delta = mean(rel_delta))%>%
@@ -551,7 +551,7 @@ export_delta_c1 <- table_delta_filtered_cluster_2%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_delta_c2 <- table_delta_filtered_cluster_2%>%
-  filter(cluster_2 == '2')%>% 
+  filter(cluster_2 == 'goodperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_rel_delta = mean(rel_delta))%>%

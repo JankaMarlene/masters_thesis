@@ -299,16 +299,16 @@ for (variable in variables) {
   descriptive_stats_list[[variable]] <- descriptive_stats
   
   # Check normality of residuals
-  #shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
-  #normality_results[[variable]] <- shapiro_test
+  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  normality_results[[variable]] <- shapiro_test
   
   # Check homogeneity of variances
-  #levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
-  #homogeneity_results[[variable]] <- levene_test
+  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  homogeneity_results[[variable]] <- levene_test
   
   # Calculate effect size (Eta Squared)
-  #eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
-  #effect_sizes[[variable]] <- eta_squared
+  eta_squared <- summary(anova_result)[[1]][["Sum Sq"]][1] / sum(summary(anova_result)[[1]][["Sum Sq"]])
+  effect_sizes[[variable]] <- eta_squared
 }
 
 # Display results

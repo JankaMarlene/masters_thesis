@@ -586,7 +586,7 @@ export_delta_c2%>%
 
 # now the same for aperiodic exponent
 export_ape_c1 <- table_ape_filtered%>%
-  filter(cluster_2 == '1')%>% 
+  filter(cluster_2 == 'badperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_ape = mean(aperiodic_exponent))%>%
@@ -594,7 +594,7 @@ export_ape_c1 <- table_ape_filtered%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_ape_c2 <- table_ape_filtered%>%
-  filter(cluster_2 == '2')%>% 
+  filter(cluster_2 == 'goodperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_ape = mean(aperiodic_exponent))%>%
@@ -602,7 +602,7 @@ export_ape_c2 <- table_ape_filtered%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_apo_c1 <- table_apo_filtered%>%
-  filter(cluster_2 == '1')%>% 
+  filter(cluster_2 == 'badperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_apo = mean(aperiodic_offset))%>%
@@ -610,7 +610,7 @@ export_apo_c1 <- table_apo_filtered%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_apo_c2 <- table_apo_filtered%>%
-  filter(cluster_2 == '2')%>% 
+  filter(cluster_2 == 'goodperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_apo = mean(aperiodic_offset))%>%
@@ -641,7 +641,7 @@ export_apo_c2%>%
 
 # now the same with the r squared
 export_r_c1 <- table_power_5%>%
-  filter(cluster_2 == '1')%>% 
+  filter(cluster_2 == 'badperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_r = mean(r_squared, na.rm = T))%>%
@@ -649,7 +649,7 @@ export_r_c1 <- table_power_5%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_r_c2 <- table_power_5%>%
-  filter(cluster_2 == '2')%>% 
+  filter(cluster_2 == 'goodperformer')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_r = mean(r_squared, na.rm = T))%>%

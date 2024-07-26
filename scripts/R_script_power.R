@@ -53,7 +53,7 @@ table_power_5 <- table_power_5%>%
 
 table_power_5 <- merge(table_power_5, number_of_epochs_5)
 
-#test <- table_power%>%
+# test <- table_power%>%
 # group_by(participant_id,group,number_epochs)%>%
 # summarise(mean_delta_power = mean(rel_delta))%>%
 # filter(number_epochs > 37.5)%>%

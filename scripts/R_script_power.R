@@ -560,10 +560,10 @@ export_delta_c2 <- table_delta_filtered_cluster_2%>%
 
 
 
-write.table(export_beta_c1, file = "export_beta_p1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_beta_c2, file = "export_beta_c2.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_delta_c1, file = "export_delta_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_delta_c2, file = "export_delta_c2.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_beta_c1, file = "data/export_beta_p1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_beta_c2, file = "data/export_beta_c2.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_delta_c1, file = "data/export_delta_c1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_delta_c2, file = "data/export_delta_c2.txt", row.names = FALSE, col.names = FALSE)
 
 export_beta_c1%>%
   summarise(min = min(mean_rel_beta),

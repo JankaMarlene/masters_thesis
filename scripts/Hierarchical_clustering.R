@@ -87,8 +87,13 @@ merged_data <- participants %>%
 merged_data <- merged_data %>%
   rename(cluster_2 = cluster)
 
+# Convert cluster_4 to character if necessary
 merged_data <- merged_data %>%
-  mutate(cluster_2 = recode(cluster_2, '1' = 'badperformer', '2' = 'goodperformer'))
+  mutate(cluster_2 = as.character(cluster_2))
+
+# Use dplyr::recode explicitly
+merged_data <- merged_data %>%
+  mutate(cluster_2 = dplyr::recode(cluster_2, `1` = 'c1', `2` = 'c2'))
 
 # Check the structure of the merged data to ensure everything is correct
 str(merged_data)

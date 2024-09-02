@@ -8,6 +8,7 @@
     % 2.1. High pass filter
     % 2.2. Resampling
     % 2.3 Low pass filter
+    % 2.4 CAR
 % 3. Safe the data for further processing
 
 %% 0.Preliminaries
@@ -20,7 +21,6 @@ addpath('C:\Users\jankj\OneDrive\Desktop\fieldtrip-20240504\'); %initialize Fiel
 ft_defaults;
 
 %% 1. Define the current dataset
-
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
 addpath(genpath(proj_dir)); % add dir to project to Matlab path
 indir = fullfile('D:\EPOC\02_data\00_bids\');% path to folder with BIDS datasets on Server
@@ -40,7 +40,7 @@ for v = 1:length(indat) % begin to create a loop over data sets
     if isempty(eegdat_eeg);continue;end
     
     eegdat_mrk = eegdat(contains({eegdat.name}, 'restingstate_events.tsv')); % resting state eeg data events
-
+    % extract the participant id
     tmp_id = extractBefore(eegdat_eeg.name,'_');
     
     % load the BIDS data with the preprocessing function
@@ -55,14 +55,13 @@ for v = 1:length(indat) % begin to create a loop over data sets
     event = ft_read_event(fullfile(eegdat_mrk.folder,eegdat_mrk.name), 'header', hdr, 'eventformat', 'bids_tsv'); % read in BIDS events
     
     %1.1 Read in Markers and define trial (between Experiment start and
-    %Close eyes
+    %Close eyes)
     cfg = [];
     cfg.dataset             =  fullfile(eegdat_eeg.folder,eegdat_eeg.name);
     cfg.trialdef.eventtype  = 'Markers';
     cfg.trialfun             = 'mytrialfun';% I wrote my own trialfun -> you can find it in the Src file
     cfg = ft_definetrial(cfg);
     
-
     % 1.2. Save the trial-definition
     trl = cfg.trl;
     
@@ -73,12 +72,13 @@ for v = 1:length(indat) % begin to create a loop over data sets
     cfg.hpfilter    = 'yes';
     cfg.hpfreq      = .1;       % high-pass filter, cutting everything under .1 Hz
     cfg.hpfilttype  = 'firws';
-    cfg.pad         = 'nextpow2';
+    %cfg.pad         = 'nextpow2'; cfg pad is not even a ft_preprocessing
+    %option (would be cfg.padding)
     
     data_p = ft_preprocessing(cfg); % save processed data
         
     %% 2.2 Resampling 
-    cfg.resamplefs = 250;
+    cfg.resamplefs = 250; % do not go below the Nyquist frequency
     cfg.method = 'resample';
     data_p = ft_resampledata(cfg, data_p);
     
@@ -90,20 +90,16 @@ for v = 1:length(indat) % begin to create a loop over data sets
     data_clean = ft_preprocessing(cfg, data_p);
 
     %% apply CAR
-
     % After cleaning the data, it is best to re-reference the data to
     % the average across channels to remove the influence of the
     % reference
-    
     cfg = [];
     cfg.reref = 'yes';
     cfg.refchannel = 1:length(data_clean.label)-1; % Take all channels
     cfg.refmethod = 'avg'; % Take the average
-    
     data_clean = ft_preprocessing(cfg,data_clean);
 
     %% 3. Save output
-    save(fullfile(outdir,tmp_id + "_ft_clean.mat"),"data_clean");
+    save(fullfile(outdir,tmp_id + "_ft_clean.mat"),"data_clean"); % save with participant ID in the name
     
-
 end

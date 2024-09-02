@@ -4,14 +4,12 @@
 % 2. exclude big artifacts 
 % 3. Common average reference
 % 4. ICA 
-% 5. ICLabel and reject components
+% 5. ICLabel (automatic component rejection)
 % 6. Additional artifact removal
 % 7. Interpolate bad channels: Repair the Cleaned and ICA-Corrected Data
 % 8. Re-Reference 
 % 9. Extract epochs 
 % 10. save data in prep_power
-% 11. Laplacian for connectivity data
-% 12. save data in prep_connectivity
 % 13. find out how many epochs survived
 
 %% 0.Preliminaries
@@ -34,17 +32,14 @@ outdir = fullfile(proj_dir,'data\icaweights'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
 
-
 %% run loop over participants
-
 for s = 1:length(indat) % loop over all subjects
 
     %% 1. read in data and convert into EEGLAB structure
-    load(fullfile(indir,indat(s).name));
+    load(fullfile(indir,indat(s).name)); % load read in data sets
     
-    tmp_id = extractBefore(indat(s).name,'_');
-    
-    data_clean.label = extractAfter(data_clean.label,'_');
+    tmp_id = extractBefore(indat(s).name,'_'); % get the participant ID
+    data_clean.label = extractAfter(data_clean.label,'_'); % remove letters from the channel names so that they match the .loc file
     
     % convert to EEGLAB structure and prepare Layout
     EEG = fieldtrip2eeglab(data_clean);
@@ -54,13 +49,11 @@ for s = 1:length(indat) % loop over all subjects
     
     %% 2. Clean data ( exclude big artifacts)
     EEG_clean = pop_clean_rawdata(EEG, 'FlatlineCriterion',5,'ChannelCriterion',0.85,'Highpass','off','BurstCriterion',100,'WindowCriterion',0.4,'BurstRejection','on','Distance','Euclidian','WindowCriterionTolerances',[-Inf 7] );
-
     %plot histogram to understand the dirstribution of the values
     %histogram(EEG.data)
     %histogram(EEG_clean.data)
    
     %% 3. apply CAR
-
     % After cleaning the data, it is best to re-reference the data to
     % the average across channels to remove the influence of the
     % reference
@@ -70,9 +63,9 @@ for s = 1:length(indat) % loop over all subjects
      %% 4. ICA EEGLAB
      EEG_ica = pop_runica(EEG_ref, 'icatype', 'runica', 'extended',1,'interrupt','on','pca',EEG_ref.nbchan-1);
      outdir = fullfile(proj_dir,'data\icaweights'); % path to prep ft data
-     save(fullfile(outdir,[tmp_id + "_comp_EEGLAB.mat"]),"EEG_ica");
+     save(fullfile(outdir,[tmp_id + "_comp_EEGLAB.mat"]),"EEG_ica"); % save icaweights in case you change something later in the pipeline
      
-     %% 5. ICLABEL
+     %% 5. ICLABEL (automatic component rejection)
      EEG_ica_label = pop_iclabel(EEG_ica, 'default');
      EEG_ica_comp = pop_icflag(EEG_ica_label, [0 0;0.8 1; 0.5 1; 0 0; 0 0; 0 0; 0 0]); % see function help message
      rejected_comps = find(EEG_ica_comp.reject.gcompreject > 0);
@@ -81,8 +74,6 @@ for s = 1:length(indat) % loop over all subjects
      EEG_ica_clean = eeg_checkset(EEG_ica_comp);
      
     %% 6. Additional artifact removal
-    % Julius said to make a histogram of the mean here to see if the
-    % distribution is normal
     std_check = std(EEG_ica_clean.data, 0, 2);
     std_hist = mean(std_check);
     mean_check = mean(EEG_ica_clean.data,2);
@@ -99,8 +90,7 @@ for s = 1:length(indat) % loop over all subjects
     EEG_chan_clean = pop_select(EEG_chan_clean, 'rmchannel', channels_to_reject_min);
     
     %% 7. Interpolate bad channels
-    % found an approach here: https://gist.github.com/disbeat/6c484ca61eafd64f071a8c80a36a9211
-            
+    % found an approach here: https://gist.github.com/disbeat/6c484ca61eafd64f071a8c80a36a9211  
     % get a list of existent chanloc names in the EEG structure
     chans_eeg = [];
     for i=1:length(EEG_chan_clean.chanlocs)
@@ -124,7 +114,6 @@ idxs = idxs(~ismember(idxs,remove_EOG));
 
     % call EEGLAB pop_interp method
     EEG_interp = pop_interp(EEG_chan_clean, chanlocs(idxs));
-
 
     % get current EEG chanlocs names
     chans_eeg = cell(1, length(EEG_interp.chanlocs));
@@ -165,18 +154,23 @@ chanlocs(indices_to_remove) = [];
     
     %% 9. Epoch the data   
     % Define epoch length in seconds
-   epoch_length_seconds = 4;
-   EEG_epoched_4 = eeg_regepochs(EEG_final, 'recurrence', epoch_length_seconds, 'extractepochs', 'on');
    epoch_length_seconds = 5;
    EEG_epoched_5 = eeg_regepochs(EEG_final, 'recurrence', epoch_length_seconds, 'extractepochs', 'on');
    
-   % we have the problem here, that only consecutive segments can be put
-   % into 4s long epochs -> that is why there are only 2 instead of 12 here
-   % makes sense for connectivity but what about the power?
+   %    % sanity check for how many epochs it actually are
+%    % Get the sampling rate
+% sampling_rate = EEG_final.srate;
+% 
+% % Calculate expected number of data points per epoch
+% expected_data_points_per_epoch = epoch_length_seconds * sampling_rate;
+% 
+% % Get the time vector for the epochs
+% epoch_time_vector = EEG_epoched_5.times;
+% 
+% % Calculate the actual epoch length in seconds
+% actual_epoch_length = length(epoch_time_vector) / sampling_rate;
 
     %% 10. save data in prep_power
-    outdir = fullfile(proj_dir,'data\prep_power');
-    save(fullfile(outdir,[tmp_id + "_prep_p_4.mat"]),"EEG_epoched_4");
     outdir = fullfile(proj_dir,'data\prep_power_5');
     save(fullfile(outdir,[tmp_id + "_prep_p_5.mat"]),"EEG_epoched_5");
     
@@ -186,8 +180,7 @@ clear
 close all
 clc
 
-%% 13. find out how many epochs survived
-% => use lenght(EEG_epoched_4.epoch)
+%% 11. find out how many epochs survived
 % set paths
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
 indir = fullfile(proj_dir,'data\prep_power_5');% 

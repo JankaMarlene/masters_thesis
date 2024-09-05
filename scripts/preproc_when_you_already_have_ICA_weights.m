@@ -45,6 +45,8 @@ outdir = fullfile(proj_dir,'data\prep_power_5'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
 
+n_bad_channels = table();
+
 for s = 50:length(indat)
     
     %% 1. load the already existing ICA-weights
@@ -101,9 +103,31 @@ remove_EOG = [30, 31]; % channel 31 and 32 are in the place 30 and 31 because nr
 % Using logical indexing
 idxs = idxs(~ismember(idxs,remove_EOG));
 
+% register how many channels are bad
+cell_info = cell(1,3); 
+   for row = 1
+   for col = 1
+      cell_info{row,col} = tmp_id;% VPCode
+   end 
+   for col = 2
+       cell_info{row,col} = length(EEG_ica.chanlocs);% number of channels after ICA
+   end
+   for col = 3
+       cell_info{row,col} = length(EEG_chan_clean.chanlocs); % number of channels after additional cleaning
+   end
+   end
+   % create table names
+   VarNames = ["participant_id" "num_chan_ica" "num_chan_artefact"];
+
+   currTable = table(cell_info(:,1),cell_info(:,2),cell_info(:,3),'VariableNames',VarNames);
+    
+    n_bad_channels = vertcat(n_bad_channels, currTable);
+    
+    csvFile = 'number_of_bad_channels.csv';
+    writetable(n_bad_channels, fullfile(pwd,'data','analysis_power',csvFile));
+    
     % call EEGLAB pop_interp method
     EEG_interp = pop_interp(EEG_chan_clean, chanlocs(idxs));
-
 
     % get current EEG chanlocs names
     chans_eeg = cell(1, length(EEG_interp.chanlocs));

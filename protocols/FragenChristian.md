@@ -5,4 +5,5 @@
 - Code in Anhang? Oder reicht es, wenn man Github verlinkt?
 - Roll-off
 - Wortanzahl
-- 
+- Was für ein Bildschirm wurde verwendet
+- Julius und ihn zitieren bei pvt und nback (beziehungsweise auf GitHub verweisen)

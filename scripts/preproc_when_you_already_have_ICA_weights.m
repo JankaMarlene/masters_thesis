@@ -47,7 +47,7 @@ indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start 
 
 n_bad_channels = table();
 
-for s = 50:length(indat)
+for s = 1:length(indat)
     
     %% 1. load the already existing ICA-weights
 load(fullfile(indir,indat(s).name));
@@ -125,7 +125,7 @@ cell_info = cell(1,3);
     
     csvFile = 'number_of_bad_channels.csv';
     writetable(n_bad_channels, fullfile(pwd,'data','analysis_power',csvFile));
-    
+
     % call EEGLAB pop_interp method
     EEG_interp = pop_interp(EEG_chan_clean, chanlocs(idxs));
 

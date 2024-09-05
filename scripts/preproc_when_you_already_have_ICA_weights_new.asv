@@ -51,8 +51,59 @@ indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start 
 
 
         
-Error processing participant sub-YV23KA_prep_p_5.mat: Index in position 1 exceeds array bounds. Index must not exceed 6.
+ % Initialize table to store all participant results
+n_bad_channels = table('Size', [0 3], 'VariableTypes', ["string", "double", "double"], ...
+    'VariableNames', ["participant_id", "num_chan_ica", "num_chan_artefact"]);
 
+for s = 53:length(indat)
+    try
+        % Log participant ID for debugging
+        fprintf('Processing participant: %s\n', indat(s).name);
+        
+        % 1. Load the already existing ICA-weights
+        load(fullfile(indir, indat(s).name));
+        tmp_id = extractBefore(indat(s).name,'_');
+        
+        % 2. ICLABEL and remove EOG channels
+        EEG_ica_label = pop_iclabel(EEG_ica, 'default');
+        EEG_ica_comp = pop_icflag(EEG_ica_label, [0 0;0.8 1; 0.5 1; 0 0; 0 0; 0 0]);
+        rejected_comps = find(EEG_ica_comp.reject.gcompreject > 0);
+        EEG_ica_comp = pop_subcomp(EEG_ica_comp, rejected_comps);
+        EEG_ica_comp  = pop_select(EEG_ica_comp, 'rmchannel', {'31', '32'});  % remove the two EOG channels
+        EEG_ica_clean = eeg_checkset(EEG_ica_comp);
+
+        % 3. Additional artifact removal
+        std_check = std(EEG_ica_clean.data, 0, 2);
+        mean_check = mean(EEG_ica_clean.data, 2);
+        std_hist = mean(std_check);
+        mean_hist = mean(mean_check);
+        threshold_max = mean_hist + 2.5*std_hist;
+        threshold_min = mean_hist - 2.5*std_hist;
+        channels_to_reject_max = find(std_check > threshold_max);
+        channels_to_reject_min = find(std_check < threshold_min);
+        EEG_chan_clean = pop_select(EEG_ica_clean, 'rmchannel', channels_to_reject_max);
+        EEG_chan_clean = pop_select(EEG_chan_clean, 'rmchannel', channels_to_reject_min);
+        
+        % Ensure channels are being logged
+        fprintf('Participant: %s, Rejected channels max: %d, min: %d\n', tmp_id, length(channels_to_reject_max), length(channels_to_reject_min));
+
+        % 4. Prepare data for n_bad_channels table
+        num_chan_ica = length(EEG_ica.chanlocs);          % Number of channels after ICA
+        num_chan_artefact = length(EEG_chan_clean.chanlocs); % Number of channels after additional cleaning
+        
+        % Append the participant data to n_bad_channels table
+        newRow = {tmp_id, num_chan_ica, num_chan_artefact}; % create new row
+        n_bad_channels = [n_bad_channels; newRow];          % append row to table
+
+    catch ME
+        % Catch and log any errors for specific participants
+        fprintf('Error processing participant %s: %s\n', indat(s).name, ME.message);
+    end
+end
+
+% Save the final table after processing all participants
+csvFile = 'number_of_bad_channels.csv';
+writetable(n_bad_channels, fullfile(pwd, 'data', 'analysis_power', csvFile));
 
 
 

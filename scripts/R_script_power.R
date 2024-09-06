@@ -65,6 +65,8 @@ test_table <- table_power_5%>%
             mean_beta_power = mean(rel_beta),
             mean_aperiodic_exponent = mean(aperiodic_exponent))
 
+write_csv(test_table, "C:/Users/jankj/OneDrive/Desktop/masters_thesis/data/test_table.csv")
+
 test_table%>%
   group_by(cluster_2)%>%
   summarise(mean_age = mean(age),

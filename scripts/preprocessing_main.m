@@ -27,7 +27,7 @@ eeglab; close; % add paths to EEGLAB (was in the loop before -> inefficient)
 
 % set paths
 proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
-indir = fullfile(proj_dir,'data\prep\new');% path to folder with BIDS datasets
+indir = fullfile(proj_dir,'data\prep');% path to folder with BIDS datasets
 outdir = fullfile(proj_dir,'data\icaweights'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)

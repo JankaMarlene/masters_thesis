@@ -70,7 +70,7 @@ save(fullfile(outdir,"power_results_final_5.mat"),"oscillatory", "original", "fr
 % Initialize an empty table
 bigTable = table();
 
-   for s = 1:length(oscillatory)
+   for s = 41:length(oscillatory)
     % subject ID
     clear patient_id
     patient_id = oscillatory{s,1}.id;

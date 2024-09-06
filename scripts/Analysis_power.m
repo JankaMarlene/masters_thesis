@@ -30,7 +30,7 @@ original = cell(length(indat),1);
 oscillatory = cell(length(indat),1);
 
 
-for s = 41:length(indat) % loop over all subjects   
+for s = 1:length(indat) % loop over all subjects   
 %% 1. Spectral Parameterization
 % is originally Python Code, but was implemented in the Brainstorm Toolbox
 % but not in EEGLAB -> convert back to FieldTrip

@@ -1,7 +1,7 @@
 - EPOC wofür steht das? Muss ich das schreiben?
 - Brauche ich statistische Hypothesen?
 - Bad channels warum funktioniert code da nicht?
-- Wie Lars Skript zitieren, kann ich auf GitHub verweisen (auch wenn noch nicht veröffentlicht?)
+- Wie Laras Skript zitieren, kann ich auf GitHub verweisen (auch wenn noch nicht veröffentlicht?)
 - Code in Anhang? Oder reicht es, wenn man Github verlinkt?
 - Roll-off
 - Wortanzahl

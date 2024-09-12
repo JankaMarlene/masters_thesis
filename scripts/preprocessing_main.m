@@ -33,7 +33,7 @@ indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
 
 %% run loop over participants
-for s = 1:length(indat) % loop over all subjects
+for s = 53:length(indat) % loop over all subjects
 
     %% 1. read in data and convert into EEGLAB structure
     load(fullfile(indir,indat(s).name)); % load read in data sets

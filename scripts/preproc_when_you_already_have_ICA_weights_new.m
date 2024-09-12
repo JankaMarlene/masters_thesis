@@ -45,21 +45,6 @@ outdir = fullfile(proj_dir,'data\prep_power'); % path to prep ft data
 indat = dir(indir); % content of that folder
 indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
 
-
-
-
-
-
-        
-Error processing participant sub-YV23KA_prep_p_5.mat: Index in position 1 exceeds array bounds. Index must not exceed 6.
-
-
-
-
-
-
-
-
 n_bad_channels = table();
 
 for s = 53:length(indat)
@@ -184,56 +169,10 @@ chanlocs(indices_to_remove) = [];
     
     %% 6. Epoch the data   
     % Define epoch length in seconds
-   epoch_length_seconds = 4;
-   EEG_epoched_4 = eeg_regepochs(EEG_final, 'recurrence', epoch_length_seconds, 'extractepochs', 'on', 'limits', [0 4]);
    epoch_length_seconds = 5;
    EEG_epoched_5 = eeg_regepochs(EEG_final, 'recurrence', epoch_length_seconds, 'extractepochs', 'on', 'limits', [0 5]);
 
     %% 7. save data in prep_power
     outdir = fullfile(proj_dir,'data\prep_power_5');
     save(fullfile(outdir,[tmp_id + "_prep_p_5.mat"]),"EEG_epoched_5");
-    
 end
-
-clear
-close all
-clc
-
-%% 8. find out how many epochs survived
-% set paths
-proj_dir = fullfile(pwd); % automatically get path of script location, and parent dir
-indir = fullfile(proj_dir,'data\prep_power_5');% 
-outdir = fullfile(proj_dir,'data\analysis_power'); % 
-indat = dir(indir); % content of that folder
-indat = indat(startsWith({indat.name}, 'sub-')); % only keep folders that start with 'sub-' (i.e. the subjects)
-
-n_epochs = table();
-
-for m = 1:length(indat)
-load(fullfile(indir,indat(m).name));
-    
-    tmp_id = extractBefore(indat(m).name,'_');
-    cell_info = cell(1,3); 
-   for row = 1
-   for col = 1
-      cell_info{row,col} = tmp_id;% VPCode
-   end 
-   for col = 2
-       cell_info{row,col} = length(EEG_epoched_5.epoch);% number of epochs that survived
-   end
-   for col = 3
-       cell_info{row,col} = 60 - length(EEG_epoched_5.epoch); % number of 'missing' epochs
-   end
-   end
-   % create table names
-   VarNames = ["participant_id" "number_epochs" "missing_epochs"];
-
-   currTable = table(cell_info(:,1),cell_info(:,2),cell_info(:,3),'VariableNames',VarNames);
-    
-    n_epochs = vertcat(n_epochs, currTable);
-  
-end
-
-% save
-csvFile = 'number_of_epochs_5.csv';
-writetable(n_epochs, fullfile(pwd,'data','analysis_power',csvFile));

@@ -43,7 +43,6 @@ data_prep = eeglab2fieldtrip(EEG_epoched_5, 'raw');% the 'raw' specification see
     cfg.foi        = 0.3 :0.2: 30;% changed to 0.5 for better fit
     cfg.method        = 'mtmfft';
     cfg.taper         = 'hanning';
-    cfg.pad           = 'nextpow2';
     cfg.output        = 'fooof_aperiodic'; % there is also fooof_peaks and just fooof
     fractal{s} = ft_freqanalysis(cfg, data_prep); % this contains info on the aperiodic component already -> I do not need fooof option additionally
     cfg.output        = 'pow';

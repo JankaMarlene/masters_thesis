@@ -1,8 +1,8 @@
 # To-Dos
 ## Theoretical background
-[] Hypotheses 
-[] Structure
-[] What is missing?
+[ ] Hypotheses 
+[ ] Structure
+[ ] What is missing?
 ## Methods
 [] N-back
 [] PVT

@@ -609,7 +609,7 @@ export_delta_c1 <- table_delta_filtered_group%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
 export_delta_c2 <- table_delta_filtered_group%>%
-  filter(cluster_c2 == 'c2')%>% 
+  filter(cluster_2 == 'c2')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
   summarise(mean_rel_delta = mean(rel_delta))%>%

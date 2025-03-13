@@ -7,7 +7,7 @@ library(gridExtra)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
-cog_df <- clean_data[, c("group","pvt_reaction_time","nback_miss_1","nback_miss_2","tmt_a_time","tmt_b_time")]
+cog_df <- clean_data[, c("group","z_pvt_reaction_time_w","z_tmt_a_time_w","z_tmt_b_time_w")]
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -58,7 +58,7 @@ scree_plot +
 
 # Cluster solution for 4 clusters
 # Select number of clusters
-k <- 2
+k <- 4
 set.seed(123)
 
 # Build model with k clusters: km.out

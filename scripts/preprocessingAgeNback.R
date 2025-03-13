@@ -160,7 +160,7 @@ clean_data <- clean_data %>%
 # Calculate mean and standard deviation for each age group and variable
 age_group_summary <- clean_data %>%
   group_by(age_group) %>%
-  summarize(across(c("pvt_reaction_time_w", "tmt_a_time_w", "tmt_b_time_w"), 
+  summarize(across(c("pvt_reaction_time_w", "tmt_a_time_w", "tmt_b_time_w","tmt_diff_w", "nback_miss_1_w", "nback_miss_2_w"), 
                    list(mean = mean, sd = sd)))
 
 age_group_summary_tmt_diff <- clean_data %>%

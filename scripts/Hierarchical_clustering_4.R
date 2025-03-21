@@ -5,13 +5,16 @@ library(dendextend)
 library(ggplot2)
 library(gridExtra)
 library(effsize)
-library(rstatix)
+#library(rstatix)
 library(purrr)
 library(car)
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
 cog_df <- clean_data[, c("group","z_pvt_reaction_time_w","z_tmt_a_time_w","z_tmt_b_time_w")]
+clean_data$group[clean_data$group == "withPCS"] <- "self-reported CD"
+clean_data$group[clean_data$group == "withoutPCS"] <- "no self-reported CD"
+
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -19,6 +22,8 @@ summary(cog_df)
 # Store group labels in a separate variable and exclude label (group column) from the dataset to do clustering
 # Later true labels will be used to check how good clustering turned out
 cog_label <- cog_df$group
+cog_label[cog_label == "withPCS"] <- "self-reported CD"
+cog_label[cog_label == "withoutPCS"] <- "no self-reported CD"
 cog_df$group <- NULL
 str(cog_df)
 
@@ -143,13 +148,13 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group))
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "Age", title = "Age Distribution within Clusters based on withPCS and withoutPCS Labels")
+  labs(x = "Cluster", y = "Age", title = "Age Distribution within Clusters based on self-reported CD")
 
 # Perform ANOVA for age within "withPCS" group between clusters
-anova_withPCS <- aov(age ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+anova_withPCS <- aov(age ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
 
 # Perform ANOVA for age within "withoutPCS" group between clusters
-anova_withoutPCS <- aov(age ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+anova_withoutPCS <- aov(age ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
 
 # Display ANOVA results for "withPCS" group
 summary(anova_withPCS)
@@ -221,13 +226,13 @@ mean_sd_stats <- clean_data %>%
 print(mean_sd_stats)
 
 # Perform ANOVA for years of education within the "withPCS" group between clusters
-anova_withPCS_education <- aov(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+anova_withPCS_education <- aov(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
 
 # Display ANOVA results for the "withPCS" group
 summary(anova_withPCS_education)
 
 # Perform ANOVA for years of education within the "withoutPCS" group between clusters
-anova_withoutPCS_education <- aov(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+anova_withoutPCS_education <- aov(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
 
 # Display ANOVA results for the "withoutPCS" group
 summary(anova_withoutPCS_education)
@@ -239,7 +244,7 @@ ggplot(clean_data, aes(x = as.factor(cluster), y = years_of_education, fill = gr
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "Years of Education", title = "Years of Education Distribution within Clusters based on withPCS and withoutPCS Labels")
+  labs(x = "Cluster", y = "Years of Education", title = "Years of Education Distribution within Clusters based on self-reported CD")
 
 # Perform t-test for years of education between "withPCS" and "withoutPCS" groups within each cluster
 
@@ -357,11 +362,11 @@ anova_results_withoutPCS <- list()
 # Loop over each variable to perform ANOVA within the "withPCS" and "withoutPCS" groups
 for (variable in variables) {
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   
   # Store the ANOVA results
@@ -424,13 +429,13 @@ for (variable in variables) {
   anova_models[[variable]] <- anova_result
   
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   anova_results_withPCS[[variable]] <- summary(anova_withPCS)
   anova_models_withPCS[[variable]] <- anova_withPCS
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
   anova_models_withoutPCS[[variable]] <- anova_withoutPCS
@@ -590,11 +595,11 @@ anova_results_withoutPCS <- list()
 # Loop over each variable to perform ANOVA within the "withPCS" and "withoutPCS" groups
 for (variable in variables) {
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   
   # Store the ANOVA results
@@ -657,13 +662,13 @@ for (variable in variables) {
   anova_models[[variable]] <- anova_result
   
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   anova_results_withPCS[[variable]] <- summary(anova_withPCS)
   anova_models_withPCS[[variable]] <- anova_withPCS
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
   anova_models_withoutPCS[[variable]] <- anova_withoutPCS
@@ -797,11 +802,11 @@ anova_results_withoutPCS <- list()
 # Loop over each variable to perform ANOVA within the "withPCS" and "withoutPCS" groups
 for (variable in variables) {
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   
   # Store the ANOVA results
@@ -944,11 +949,11 @@ anova_results_withoutPCS <- list()
 # Loop over each variable to perform ANOVA within the "withPCS" and "withoutPCS" groups
 for (variable in new_variables) {
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   
   # Store the ANOVA results
@@ -974,13 +979,13 @@ for (variable in new_variables) {
   anova_models[[variable]] <- anova_result
   
   # Perform ANOVA for the current variable within "withPCS" group
-  withPCS_data <- subset(clean_data, group == "withPCS")
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
   anova_withPCS <- aov(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster), data = withPCS_data)
   anova_results_withPCS[[variable]] <- summary(anova_withPCS)
   anova_models_withPCS[[variable]] <- anova_withPCS
   
   # Perform ANOVA for the current variable within "withoutPCS" group
-  withoutPCS_data <- subset(clean_data, group == "withoutPCS")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
   anova_withoutPCS <- aov(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster), data = withoutPCS_data)
   anova_results_withoutPCS[[variable]] <- summary(anova_withoutPCS)
   anova_models_withoutPCS[[variable]] <- anova_withoutPCS

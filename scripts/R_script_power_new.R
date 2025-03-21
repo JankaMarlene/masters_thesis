@@ -159,8 +159,8 @@ df_corr_frontal%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# c2 is very skew
 
-shapiro.test(shapiro_df_withPCS$facit_f_FS)
-shapiro.test(shapiro_df_withoutPCS$facit_f_FS)
+shapiro.test(shapiro_df_self-reportedCD$facit_f_FS)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$facit_f_FS)
 leveneTest(facit_f_FS~cluster_2,data = df_corr_frontal)# not significant
 wilcox.test(facit_f_FS~cluster_2, data = df_corr_frontal, 
             exact = FALSE, 
@@ -189,8 +189,8 @@ df_corr_frontal%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# c2 is very skew, c1 also a little
 
-shapiro.test(shapiro_df_withPCS$hads_d_total_score)
-shapiro.test(shapiro_df_withoutPCS$hads_d_total_score)
+shapiro.test(shapiro_df_self-reportedCD$hads_d_total_score)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$hads_d_total_score)
 leveneTest(hads_d_total_score~cluster_2,data = df_corr_frontal)# not significant
 t.test(hads_d_total_score~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# p = 0.095
 wilcox.test(hads_d_total_score~cluster_2, data = df_corr_frontal, 
@@ -215,8 +215,8 @@ df_corr_frontal%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks okay
 
-shapiro.test(shapiro_df_withPCS$tmt_a_time)
-shapiro.test(shapiro_df_withoutPCS$tmt_a_time)
+shapiro.test(shapiro_df_self-reportedCD$tmt_a_time)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$tmt_a_time)
 leveneTest(tmt_a_time~cluster_2,data = df_corr_frontal)# not significant
 t.test(tmt_a_time~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# p = 0.059
 wilcox.test(tmt_a_time~cluster_2, data = df_corr_frontal, 
@@ -241,8 +241,8 @@ df_corr_frontal%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# both skew
 
-shapiro.test(shapiro_df_withPCS$tmt_diff)
-shapiro.test(shapiro_df_withoutPCS$tmt_diff)
+shapiro.test(shapiro_df_self-reportedCD$tmt_diff)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$tmt_diff)
 leveneTest(tmt_diff~cluster_2,data = df_corr_frontal)# not significant
 t.test(tmt_diff~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# 0.2434
 wilcox.test(tmt_diff~cluster_2, data = df_corr_frontal, 
@@ -266,8 +266,8 @@ df_corr_frontal%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# both skew
 
-shapiro.test(shapiro_df_withPCS$moca)
-shapiro.test(shapiro_df_withoutPCS$moca)
+shapiro.test(shapiro_df_self-reportedCD$moca)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$moca)
 leveneTest(moca~cluster_2,data = df_corr_frontal)# not significant
 t.test(moca~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)
 wilcox.test(moca~cluster_2, data = df_corr_frontal, 
@@ -724,10 +724,10 @@ export_r_c%>%
 
 #--------- 7. check requirements-----------------------------
 # I need data sets per cluster_2 in order to check the normality requirement separately
-shapiro_df_withPCS <- df_corr_frontal_filtered_group%>%
+shapiro_df_self-reportedCD <- df_corr_frontal_filtered_group%>%
   filter(cluster_2 == 'c1')
 
-shapiro_df_withoutPCS <- df_corr_frontal_filtered_group%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_frontal_filtered_group%>%
   filter(cluster_2 == 'c2')
 
 # normality delta
@@ -738,13 +738,13 @@ df_corr_frontal_filtered_group%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks a bit weird but a similar kind of weird
 
-shapiro.test(shapiro_df_withPCS$mean_delta_power)# 0.1776
-shapiro.test(shapiro_df_withoutPCS$mean_delta_power)# 0.02614
+shapiro.test(shapiro_df_self-reportedCD$mean_delta_power)# 0.1776
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_delta_power)# 0.02614
 
 # normality beta
-shapiro_df_withPCS <- df_corr_central_filtered_group%>%
+shapiro_df_self-reportedCD <- df_corr_central_filtered_group%>%
   filter(cluster_2 == 'c1')
-shapiro_df_withoutPCS <- df_corr_central_filtered_group%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_central_filtered_group%>%
   filter(cluster_2 == 'c2')
 
 df_corr_central_filtered%>%
@@ -753,13 +753,13 @@ df_corr_central_filtered%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
 
-shapiro.test(shapiro_df_withPCS$mean_beta_power)# 8.953e-05
-shapiro.test(shapiro_df_withoutPCS$mean_beta_power)# 0.001104
+shapiro.test(shapiro_df_self-reportedCD$mean_beta_power)# 8.953e-05
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta_power)# 0.001104
 
 # beta 1
-shapiro_df_withPCS <- df_corr_central1_filtered%>%
+shapiro_df_self-reportedCD <- df_corr_central1_filtered%>%
   filter(cluster_2 == 'c1')
-shapiro_df_withoutPCS <- df_corr_central1_filtered%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_central1_filtered%>%
   filter(cluster_2 == 'c2')
 
 df_corr_central1_filtered%>%
@@ -768,13 +768,13 @@ df_corr_central1_filtered%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
 
-shapiro.test(shapiro_df_withPCS$mean_beta1_power)# <.001
-shapiro.test(shapiro_df_withoutPCS$mean_beta1_power)# <.001
+shapiro.test(shapiro_df_self-reportedCD$mean_beta1_power)# <.001
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta1_power)# <.001
 
 # beta 2
-shapiro_df_withPCS <- df_corr_central2_filtered%>%
+shapiro_df_self-reportedCD <- df_corr_central2_filtered%>%
   filter(cluster_2 == 'c1')
-shapiro_df_withoutPCS <- df_corr_central2_filtered%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_central2_filtered%>%
   filter(cluster_2 == 'c2')
 
 df_corr_central2_filtered%>%
@@ -783,13 +783,13 @@ df_corr_central2_filtered%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
 
-shapiro.test(shapiro_df_withPCS$mean_beta2_power)# <.001
-shapiro.test(shapiro_df_withoutPCS$mean_beta2_power)# <.001
+shapiro.test(shapiro_df_self-reportedCD$mean_beta2_power)# <.001
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta2_power)# <.001
 
 # normality aperiodic offset
-shapiro_df_withPCS <- df_corr_apo%>%
+shapiro_df_self-reportedCD <- df_corr_apo%>%
   filter(cluster_2 == 'c1')
-shapiro_df_withoutPCS <- df_corr_apo%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_apo%>%
   filter(cluster_2 == 'c2')
 
 df_corr_apo%>%
@@ -799,13 +799,13 @@ df_corr_apo%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks quite normally distributed
 
-shapiro.test(shapiro_df_withPCS$mean_aperiodic_offset)# 0.3911
-shapiro.test(shapiro_df_withoutPCS$mean_aperiodic_offset)# 0.4375
+shapiro.test(shapiro_df_self-reportedCD$mean_aperiodic_offset)# 0.3911
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_aperiodic_offset)# 0.4375
 
 # normality aperiodic exponent
-shapiro_df_withPCS <- df_corr_ape%>%
+shapiro_df_self-reportedCD <- df_corr_ape%>%
   filter(cluster_2 == 'c1')
-shapiro_df_withoutPCS <- df_corr_ape%>%
+shapiro_df_no_self-reportedCDPCS <- df_corr_ape%>%
   filter(cluster_2 == 'c2')
 
 df_corr_ape%>%
@@ -814,8 +814,8 @@ df_corr_ape%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks different between the groups
 
-shapiro.test(shapiro_df_withPCS$mean_aperiodic_exponent)# 0.01124
-shapiro.test(shapiro_df_withoutPCS$mean_aperiodic_exponent)# 0.5865
+shapiro.test(shapiro_df_self-reportedCD$mean_aperiodic_exponent)# 0.01124
+shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_aperiodic_exponent)# 0.5865
 
 # variance
 leveneTest(mean_delta_power~cluster_2,data = df_corr_frontal_filtered_group)# not significant

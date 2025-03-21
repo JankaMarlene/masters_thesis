@@ -10,6 +10,9 @@ load("clean_data.RData")
 
 # Extract relevant columns from clean_data
 cog_df <- clean_data[, c("group","z_pvt_reaction_time_w","z_tmt_a_time_w","z_tmt_b_time_w")]
+clean_data$group[clean_data$group == "withPCS"] <- "self-reported CD"
+clean_data$group[clean_data$group == "withoutPCS"] <- "no self-reported CD"
+
 # Check structure and summarize contents of cog_df
 str(cog_df)
 summary(cog_df)
@@ -17,8 +20,11 @@ summary(cog_df)
 # Store group labels in a separate variable and exclude label (group column) from the dataset to do clustering
 # Later true labels will be used to check how good clustering turned out
 cog_label <- cog_df$group
+cog_label[cog_label == "withPCS"] <- "self-reported CD"
+cog_label[cog_label == "withoutPCS"] <- "no self-reported CD"
 cog_df$group <- NULL
 str(cog_df)
+
 
 # Build distance matrix
 # Since all values are continuous numerical values I use euclidean distance method
@@ -145,13 +151,13 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group))
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters based on withPCS and withoutPCS Labels")
+  labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters based on self-reported CD")
 
 # Perform t-test for age within "withPCS" group between clusters
-t_test_withPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+t_test_withPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
 
 # Perform t-test for age within "withoutPCS" group between clusters
-t_test_withoutPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+t_test_withoutPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
 
 # Display t-test results for "withPCS" group
 t_test_withPCS
@@ -216,13 +222,13 @@ mean_sd_stats <- clean_data %>%
 print(mean_sd_stats)
 
 # T-Test for years of education within the "withPCS" group between clusters
-t_test_withPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withPCS"))
+t_test_withPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
 
 # Display t-Test results for the "withPCS" group
 t_test_withPCS_education
 
 # T-Test for years of education within the "withoutPCS" group between clusters
-t_test_withoutPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "withoutPCS"))
+t_test_withoutPCS_education <- t.test(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
 
 # Display t-Test results for the "withoutPCS" group
 t_test_withoutPCS_education
@@ -234,7 +240,7 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = years_of_education,
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "years_of_education", title = "years_of_education Distribution within Clusters based on withPCS and withoutPCS Labels")
+  labs(x = "Cluster", y = "years_of_education", title = "years_of_education Distribution within Clusters based on self-reported CD")
 
 # Filter the data for Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)
@@ -381,12 +387,12 @@ test_results_withoutPCS <- list()
 # Loop over each variable
 for (variable in variables) {
   # Perform t-test for the current variable within "withPCS" group
-  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
-                           clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 1],
+                           clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 2])
   
   # Perform t-test for the current variable within "withoutPCS" group
-  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
-                              clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 1],
+                              clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 2])
   
   # Store the test results for withPCS group in the list
   test_results_withPCS[[variable]] <- t_test_result_withPCS
@@ -566,12 +572,12 @@ test_results_withoutPCS <- list()
 # Loop over each variable
 for (variable in variables) {
   # Perform t-test for the current variable within "withPCS" group
-  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
-                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 2])
   
   # Perform t-test for the current variable within "withoutPCS" group
-  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
-                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 2])
   
   # Store the test results for withPCS group in the list
   test_results_withPCS[[variable]] <- t_test_result_withPCS
@@ -614,13 +620,13 @@ for (i in seq_along(variables)) {
   cat("Variable:", variables[i], "\n")
   
   cat("Cluster 1:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
   
   cat("Cluster 2:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
 }
 
@@ -751,12 +757,12 @@ test_results_withoutPCS <- list()
 # Loop over each variable
 for (variable in variables) {
   # Perform t-test for the current variable within "withPCS" group
-  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
-                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 2])
   
   # Perform t-test for the current variable within "withoutPCS" group
-  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
-                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 2])
   
   # Store the test results for withPCS group in the list
   test_results_withPCS[[variable]] <- t_test_result_withPCS
@@ -799,13 +805,13 @@ for (i in seq_along(variables)) {
   cat("Variable:", variables[i], "\n")
   
   cat("Cluster 1:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
   
   cat("Cluster 2:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
 }
 
@@ -912,12 +918,12 @@ test_results_withoutPCS <- list()
 # Loop over each variable
 for (variable in new_variables) {
   # Perform t-test for the current variable within "withPCS" group
-  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 1],
-                                  clean_data[[variable]][clean_data$group == "withPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withPCS <- t.test(clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 1],
+                                  clean_data[[variable]][clean_data$group == "self-reported CD" & cog_df_cl$cluster == 2])
   
   # Perform t-test for the current variable within "withoutPCS" group
-  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 1],
-                                     clean_data[[variable]][clean_data$group == "withoutPCS" & cog_df_cl$cluster == 2])
+  t_test_result_withoutPCS <- t.test(clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 1],
+                                     clean_data[[variable]][clean_data$group == "no self-reported CD" & cog_df_cl$cluster == 2])
   
   # Store the test results for withPCS group in the list
   test_results_withPCS[[variable]] <- t_test_result_withPCS
@@ -960,13 +966,13 @@ for (i in seq_along(new_variables)) {
   cat("Variable:", new_variables[i], "\n")
   
   cat("Cluster 1:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_1$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_1$p.value, 4), "\n\n")
   
   cat("Cluster 2:\n")
-  cat("Mean in group withoutPCS:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
-  cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
+  cat("Mean in group no self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[1], 2), "\n")
+  cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
 }
 

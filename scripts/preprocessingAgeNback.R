@@ -9,10 +9,6 @@ subset <- alldata %>%
   select(participant_id,nr, age, sex, group, graduation, years_of_education, neurological_diseases_1, facit_f_FS, hads_a_total_score, hads_d_total_score, psqi_total_score, moca, pvt_reaction_time, nback_miss_1, nback_false_alarm_1 ,nback_miss_2 ,nback_false_alarm_2 ,tmt_a_time,tmt_b_time) %>%
   mutate(tmt_diff = tmt_b_time - tmt_a_time)
 
-# Rename group labels early in the pipeline
-subset$group[subset$group == "withPCS"] <- "self-reported CD"
-subset$group[subset$group == "withoutPCS"] <- "no self-reported CD"
-
 # Adding the TMT difference
 
 # Convert 'moca' variable to a binary variable based on a cutoff score of 25 
@@ -32,14 +28,14 @@ cog_subset %>%
 # Filter to get all "withPCS" rows
 # Summary of "withPCS" group
 cog_subset %>%
-  filter(group == "self-reported CD") %>%
-  summary(group == "self-reported CD")
+  filter(group == "withPCS") %>%
+  summary(group == "withPCS")
 
 # Filter to get all "withoutPCS" rows
 # Summary of "withoutPCS" group
 cog_subset %>%
-  filter(group == "no self-reported CD") %>%
-  summary(group == "no self-reported CD")
+  filter(group == "withoutPCS") %>%
+  summary(group == "withoutPCS")
 
 # Checking for missing values
 any(is.na(subset))
@@ -178,18 +174,25 @@ calculate_z_scores <- function(x, mean, sd) {
 }
 
 # Function to calculate z-scores for each individual based on age for all variables
-calculate_z_scores_individual <- function(x, age, age_group_summary, age_group_summary_tmt_diff) {
+calculate_z_scores_individual_all <- function(x, age, age_group_summary, age_group_summary_tmt_diff) {
   # Find the corresponding age group for each individual
   age_group <- sapply(age, create_age_groups)
   age_group_tmt_diff <- sapply(age, create_age_groups_tmt_diff)
   
   # Join the age group summary data to the individual data based on age group
-  individual_data <- data.frame(x, age, age_group) %>%
+  individual_data <- x %>%
+    mutate(
+      age_group = sapply(age, create_age_groups),
+      age_group_tmt_diff = sapply(age, create_age_groups_tmt_diff)
+    ) %>%
     left_join(age_group_summary, by = "age_group") %>%
-    left_join(age_group_summary_tmt_diff, by = "age_group_tmt_diff")
-  
+    left_join(age_group_summary_tmt_diff, by = "age_group_tmt_diff") %>%
+    rename(
+      tmt_diff_w_mean = tmt_diff_w_mean.y,
+      tmt_diff_w_sd = tmt_diff_w_sd.y
+    )
   # Calculate z-scores for all variables
-  z_scores <- individual_data %>%
+  z_scores_all <- individual_data %>%
     mutate(
       z_pvt_reaction_time_w = calculate_z_scores(pvt_reaction_time_w, pvt_reaction_time_w_mean, pvt_reaction_time_w_sd),
       z_tmt_a_time_w = calculate_z_scores(tmt_a_time_w, tmt_a_time_w_mean, tmt_a_time_w_sd),
@@ -199,13 +202,13 @@ calculate_z_scores_individual <- function(x, age, age_group_summary, age_group_s
     select(starts_with("z_"))
   
   # Combine the Z-scores with the original data
-  x <- cbind(x, z_scores)
+  x <- cbind(x, z_scores_all)
   
   return(x)
 }
 
 # Calculate z-scores for each individual based on age for all variables
-clean_data <- calculate_z_scores_individual(clean_data, clean_data$age, age_group_summary, age_group_summary_tmt_diff)
+clean_data <- calculate_z_scores_individual_all(clean_data, clean_data$age, age_group_summary, age_group_summary_tmt_diff)
 
 # Scale the variables nback_miss_1 and nback_miss_2 and add them as new columns
 clean_data <- clean_data %>%
@@ -218,8 +221,3 @@ clean_data <- clean_data %>%
 # clean_data[, c("nback_miss_1","nback_miss_2")] = scale(clean_data[, c("nback_miss_1","nback_miss_2")])
 
 save(clean_data, file = "clean_data.RData")
-
-
-
-
-

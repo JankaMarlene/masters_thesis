@@ -148,7 +148,7 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group))
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "Age", title = "Age Distribution within Clusters based on self-reported CD")
+  labs(x = "Cluster", y = "Age", title = "Age Distribution within Clusters")
 
 # Perform ANOVA for age within "withPCS" group between clusters
 anova_withPCS <- aov(age ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))

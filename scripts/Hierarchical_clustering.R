@@ -151,7 +151,7 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group))
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters based on self-reported CD")
+  labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters")
 
 # Perform t-test for age within "withPCS" group between clusters
 t_test_withPCS <- t.test(age ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
@@ -240,7 +240,7 @@ ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = years_of_education,
                shape = 18, size = 4, color = "red") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
-  labs(x = "Cluster", y = "years_of_education", title = "years_of_education Distribution within Clusters based on self-reported CD")
+  labs(x = "Cluster", y = "years of education", title = "years_of_education Distribution within Clusters")
 
 # Filter the data for Cluster 1
 cluster_1_data <- subset(clean_data, cluster == 1)

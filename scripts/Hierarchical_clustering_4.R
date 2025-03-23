@@ -164,6 +164,16 @@ summary(anova_withPCS)
 # Display ANOVA results for "withoutPCS" group
 summary(anova_withoutPCS)
 
+shapiro_age <- shapiro.test(residuals(lm(age ~ as.factor(cog_df_cl$cluster), data = clean_data)))
+print(shapiro_age)
+shapiro.test(residuals(lm(age ~ as.factor(cluster), data = clean_data[clean_data$group == "self-reported CD", ])))
+shapiro.test(residuals(lm(age ~ as.factor(cluster), data = clean_data[clean_data$group == "no self-reported CD", ])))
+
+leveneTest(age ~ as.factor(cog_df_cl$cluster), data = clean_data)
+leveneTest(age ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
+leveneTest(age ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
+
+
 # Perform ANOVA for age between "withPCS" and "withoutPCS" groups within each cluster
 
 # Cluster 1
@@ -247,6 +257,15 @@ ggplot(clean_data, aes(x = as.factor(cluster), y = years_of_education, fill = gr
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
   labs(x = "Cluster", y = "Years of Education", title = "Years of Education Distribution within Clusters based on self-reported CD")
+
+shapiro_education <- shapiro.test(residuals(lm(years_of_education ~ as.factor(cog_df_cl$cluster), data = clean_data)))
+print(shapiro_education)
+shapiro.test(residuals(lm(years_of_education ~ as.factor(cluster), data = clean_data[clean_data$group == "self-reported CD", ])))
+shapiro.test(residuals(lm(years_of_education ~ as.factor(cluster), data = clean_data[clean_data$group == "no self-reported CD", ])))
+
+leveneTest(years_of_education ~ as.factor(cog_df_cl$cluster), data = clean_data)
+leveneTest(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "self-reported CD"))
+leveneTest(years_of_education ~ as.factor(cluster), data = subset(clean_data, group == "no self-reported CD"))
 
 # Perform t-test for years of education between "withPCS" and "withoutPCS" groups within each cluster
 
@@ -598,6 +617,61 @@ effect_sizes_withoutPCS
 dunn_results
 dunn_results_withPCS
 dunn_results_withoutPCS
+
+
+##
+# Prepare cluster comparison labels
+cluster_pairs <- c("1 - 2", "1 - 3", "1 - 4", "2 - 3", "2 - 4", "3 - 4")
+signif_matrix <- data.frame(matrix(nrow = length(variables), ncol = length(cluster_pairs)))
+rownames(signif_matrix) <- variables
+colnames(signif_matrix) <- cluster_pairs
+
+# Fill in ✅ / ❌ for each pair based on Dunn p.adj
+for (var in variables) {
+  res <- dunn_results[[var]]$res
+  signif_matrix[var, res$Comparison] <- ifelse(res$P.adj < 0.05, "✅", "❌")
+}
+
+# View the matrix
+print(signif_matrix)
+
+write.csv(signif_matrix, "dunn_significance_matrix.csv", row.names = TRUE)
+
+# Create summary table
+summary_table <- data.frame(
+  Variable = variables,
+  KW_Chi2 = sapply(variables, function(v) round(kruskal_results[[v]]$statistic, 2)),
+  df = sapply(variables, function(v) kruskal_results[[v]]$parameter),
+  p_value = sapply(variables, function(v) format.pval(kruskal_results[[v]]$p.value, digits = 3, eps = .001)),
+  Epsilon2 = sapply(variables, function(v) round(effect_sizes[[v]], 2)),
+  Significant_Comparisons = sapply(variables, function(v) {
+    res <- dunn_results[[v]]$res
+    sigs <- res$Comparison[res$P.adj < 0.05]
+    if (length(sigs) == 0) return("-")
+    paste(sigs, collapse = ", ")
+  })
+)
+
+# View the table
+print(summary_table)
+
+
+# Convert to long format
+long_sig_df <- data.frame()
+
+for (v in variables) {
+  dunn_df <- dunn_results[[v]]$res
+  dunn_df$Variable <- v
+  dunn_df$Significant <- dunn_df$P.adj < 0.05
+  long_sig_df <- rbind(long_sig_df, dunn_df)
+}
+
+write.csv(summary_table, "kruskal_dunn_summary.csv", row.names = FALSE)
+
+
+##
+
+
 
 
 
@@ -1299,3 +1373,124 @@ for (variable in new_variables) {
   print(results[[variable]])
   cat("\n")
 }
+
+#-------
+# Questionnaire variables - Kruskal-Wallis
+
+# Vector of questionnaire variables
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Initialize result lists
+kruskal_results_q <- list()
+kruskal_models_q <- list()
+kruskal_results_withPCS_q <- list()
+kruskal_models_withPCS_q <- list()
+kruskal_results_withoutPCS_q <- list()
+kruskal_models_withoutPCS_q <- list()
+
+effect_sizes_q <- list()
+effect_sizes_withPCS_q <- list()
+effect_sizes_withoutPCS_q <- list()
+
+dunn_results_q <- list()
+dunn_results_withPCS_q <- list()
+dunn_results_withoutPCS_q <- list()
+
+# Epsilon squared function
+epsilon_squared <- function(kruskal_result) {
+  H <- kruskal_result$statistic
+  n <- sum(kruskal_result$parameter) + 1
+  epsilon <- as.numeric(H) / (n - 1)
+  return(round(epsilon, 4))
+}
+
+# Loop through all questionnaire variables
+for (variable in new_variables) {
+  # === Overall ===
+  kruskal_result <- kruskal.test(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  kruskal_results_q[[variable]] <- kruskal_result
+  kruskal_models_q[[variable]] <- kruskal_result
+  effect_sizes_q[[variable]] <- epsilon_squared(kruskal_result)
+  
+  if (kruskal_result$p.value < 0.05) {
+    dunn_results_q[[variable]] <- dunnTest(
+      x = clean_data[[variable]],
+      g = as.factor(clean_data$cluster),
+      method = "bonferroni"
+    )
+  }
+  
+  # === WithPCS ===
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
+  kw_withPCS <- kruskal.test(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster))
+  kruskal_results_withPCS_q[[variable]] <- kw_withPCS
+  kruskal_models_withPCS_q[[variable]] <- kw_withPCS
+  effect_sizes_withPCS_q[[variable]] <- epsilon_squared(kw_withPCS)
+  
+  if (kw_withPCS$p.value < 0.05) {
+    dunn_results_withPCS_q[[variable]] <- dunnTest(
+      x = withPCS_data[[variable]],
+      g = as.factor(withPCS_data$cluster),
+      method = "bonferroni"
+    )
+  }
+  
+  # === WithoutPCS ===
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
+  kw_withoutPCS <- kruskal.test(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster))
+  kruskal_results_withoutPCS_q[[variable]] <- kw_withoutPCS
+  kruskal_models_withoutPCS_q[[variable]] <- kw_withoutPCS
+  effect_sizes_withoutPCS_q[[variable]] <- epsilon_squared(kw_withoutPCS)
+  
+  if (kw_withoutPCS$p.value < 0.05) {
+    dunn_results_withoutPCS_q[[variable]] <- dunnTest(
+      x = withoutPCS_data[[variable]],
+      g = as.factor(withoutPCS_data$cluster),
+      method = "bonferroni"
+    )
+  }
+}
+
+#------------------------------------
+# SIGNIFICANCE MATRIX for Dunn tests
+
+cluster_pairs <- c("1 - 2", "1 - 3", "1 - 4", "2 - 3", "2 - 4", "3 - 4")
+signif_matrix_q <- data.frame(matrix(nrow = length(new_variables), ncol = length(cluster_pairs)))
+rownames(signif_matrix_q) <- new_variables
+colnames(signif_matrix_q) <- cluster_pairs
+
+for (var in new_variables) {
+  if (!is.null(dunn_results_q[[var]])) {
+    res <- dunn_results_q[[var]]$res
+    signif_matrix_q[var, res$Comparison] <- ifelse(res$P.adj < 0.05, "✅", "❌")
+  } else {
+    signif_matrix_q[var, ] <- "❌"
+  }
+}
+
+# View and export
+print(signif_matrix_q)
+write.csv(signif_matrix_q, "dunn_significance_matrix_questionnaires.csv", row.names = TRUE)
+
+# SUMMARY TABLE for Kruskal + Dunn
+summary_table_q <- data.frame(
+  Variable = new_variables,
+  KW_Chi2 = sapply(new_variables, function(v) round(kruskal_results_q[[v]]$statistic, 2)),
+  df = sapply(new_variables, function(v) kruskal_results_q[[v]]$parameter),
+  p_value = sapply(new_variables, function(v) format.pval(kruskal_results_q[[v]]$p.value, digits = 3, eps = .001)),
+  Epsilon2 = sapply(new_variables, function(v) round(effect_sizes_q[[v]], 2)),
+  Significant_Comparisons = sapply(new_variables, function(v) {
+    if (!is.null(dunn_results_q[[v]])) {
+      res <- dunn_results_q[[v]]$res
+      sigs <- res$Comparison[res$P.adj < 0.05]
+      if (length(sigs) == 0) return("-")
+      paste(sigs, collapse = ", ")
+    } else {
+      "-"
+    }
+  })
+)
+
+print(summary_table_q)
+write.csv(summary_table_q, "kruskal_dunn_summary_questionnaires.csv", row.names = FALSE)
+

@@ -452,7 +452,7 @@ descriptive_stats_list <- list()
 normality_results <- list()
 homogeneity_results <- list()
 
-# Perform ANOVA, calculate descriptive statistics, check assumptions, and calculate effect sizes
+# Calculate descriptive statistics, check assumptions, and calculate effect sizes
 for (variable in variables) {
   
   # Calculate descriptive statistics
@@ -520,11 +520,6 @@ for (variable in variables) {
 
 shapiro_per_cluster
 levene_results
-
-
-
-
-
 
 #--------
 # Cognitive variables winsorized Data
@@ -1056,6 +1051,86 @@ for (i in seq_along(new_variables)) {
   cat("Mean in group self-reported CD:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
 }
+
+# =============================
+# 📋 Questionnaire Assumptions Check
+# =============================
+
+# Define questionnaire variables
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Initialize result containers
+descriptive_stats_q <- list()
+normality_results_q <- list()
+homogeneity_results_q <- list()
+
+# Loop over each questionnaire variable
+for (variable in new_variables) {
+  
+  # Descriptive stats by cluster
+  descriptive_stats <- clean_data %>%
+    group_by(cluster = as.factor(cluster)) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  descriptive_stats_q[[variable]] <- descriptive_stats
+  
+  # Shapiro-Wilk normality test on residuals
+  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  normality_results_q[[variable]] <- shapiro_test
+  
+  # Levene’s test for homogeneity of variances
+  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  homogeneity_results_q[[variable]] <- levene_test
+}
+
+# View results
+descriptive_stats_q
+normality_results_q
+homogeneity_results_q
+
+# =============================
+#  Per Cluster Normality + Levene Test
+# =============================
+
+shapiro_per_cluster_q <- list()
+levene_results_q <- list()
+
+for (variable in new_variables) {
+  
+  # Extract cluster-wise vectors
+  group1 <- clean_data[[variable]][cog_df_cl$cluster == 1]
+  group2 <- clean_data[[variable]][cog_df_cl$cluster == 2]
+  
+  # Run Shapiro tests per cluster
+  shapiro_1 <- shapiro.test(group1)
+  shapiro_2 <- shapiro.test(group2)
+  
+  # Store results
+  shapiro_per_cluster_q[[variable]] <- list(
+    cluster_1 = list(
+      W = round(shapiro_1$statistic, 4),
+      p_value = round(shapiro_1$p.value, 4)
+    ),
+    cluster_2 = list(
+      W = round(shapiro_2$statistic, 4),
+      p_value = round(shapiro_2$p.value, 4)
+    )
+  )
+  
+  # Levene’s test for variance homogeneity
+  levene_result <- car::leveneTest(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster))
+  levene_results_q[[variable]] <- levene_result
+}
+
+# View per-cluster Shapiro and Levene results
+shapiro_per_cluster_q
+levene_results_q
 
 #-------
   

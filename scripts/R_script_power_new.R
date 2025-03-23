@@ -41,6 +41,7 @@ library(ggpubr)
 library(coin)# need this for z value of wilcox test
 library(effectsize)
 library(effsize)# for cohens d
+library(backports) 
 library(rstatix)# for wilcox test
 library(dplyr)
 
@@ -490,55 +491,6 @@ df_corr_central_filtered_group%>%
   geom_boxplot(outlier.colour = 'black')+
   geom_jitter()# 1 outlier in c2 and 2 in c1
 
-# sd +- 3 for beta 1
-table_beta1_filtered <-table_power_5%>%
-  group_by(participant_id) %>%
-  mutate(mean_rel_beta1 = mean(rel_beta1),
-         sd_rel_beta1 = sd(rel_beta1),
-         lower_bound = mean_rel_beta1 - 3 * sd_rel_beta1,
-         upper_bound = mean_rel_beta1 + 3 * sd_rel_beta1) %>%
-  filter(rel_beta1 >= lower_bound & rel_beta1 <= upper_bound) %>%
-  ungroup()
-
-table_central1_filtered <- table_beta1_filtered%>%
-  filter(table_beta1_filtered$channel %in% central_channels)
-
-df_corr_central1_filtered <- table_central1_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca,hads_d_total_score)%>%
-  summarise(mean_beta1_power = mean(rel_beta1))
-
-df_corr_central1_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta1_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')
-
-# sd +- 3 for beta 2
-table_beta2_filtered <-table_power_5%>%
-  group_by(participant_id) %>%
-  mutate(mean_rel_beta2 = mean(rel_beta2),
-         sd_rel_beta2 = sd(rel_beta2),
-         lower_bound = mean_rel_beta2 - 3 * sd_rel_beta2,
-         upper_bound = mean_rel_beta2 + 3 * sd_rel_beta2) %>%
-  filter(rel_beta2 >= lower_bound & rel_beta2 <= upper_bound) %>%
-  ungroup()
-
-table_central2_filtered <- table_beta2_filtered%>%
-  filter(table_beta2_filtered$channel %in% central_channels)
-
-df_corr_central2_filtered <- table_central2_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca,hads_d_total_score)%>%
-  summarise(mean_beta2_power = mean(rel_beta2))
-
-df_corr_central2_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta2_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')
-
-wilcox.test(mean_beta2_power~cluster_2, data = df_corr_central2_filtered, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)
-
 ## ----------- 5.3 aperiodic components -------------------------------------------
 # +- 3 sd for aperiodic exponent
 table_ape_filtered <-table_power_5%>%
@@ -623,24 +575,24 @@ write.table(export_delta_c1, file = "export_delta_c1.txt", row.names = FALSE, co
 write.table(export_delta_c2, file = "export_delta_c2.txt", row.names = FALSE, col.names = FALSE)
 
 # have a look at min/max values for visualisation purposes
-export_beta_c%>%
+export_beta_c2%>%
   summarise(min = min(mean_rel_beta),
             max = max(mean_rel_beta))
 
-export_beta_pcs%>%
+export_beta_c1%>%
   summarise(min = min(mean_rel_beta),
             max = max(mean_rel_beta))
 
-export_delta_c%>%
+export_delta_c2%>%
   summarise(min = min(mean_rel_delta),
             max = max(mean_rel_delta))
 
-export_delta_pcs%>%
+export_delta_c1%>%
   summarise(min = min(mean_rel_delta),
             max = max(mean_rel_delta))
 
 # now the same for aperiodic exponent
-export_ape_pcs <- table_ape_filtered%>%
+export_ape_c1 <- table_ape_filtered%>%
   filter(cluster_2 == 'c1')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -648,7 +600,7 @@ export_ape_pcs <- table_ape_filtered%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-export_ape_c <- table_ape_filtered%>%
+export_ape_c2 <- table_ape_filtered%>%
   filter(cluster_2 == 'c2')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -656,7 +608,7 @@ export_ape_c <- table_ape_filtered%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-export_apo_pcs <- table_apo_filtered%>%
+export_apo_c1 <- table_apo_filtered%>%
   filter(cluster_2 == 'c1')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -664,7 +616,7 @@ export_apo_pcs <- table_apo_filtered%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-export_apo_c <- table_apo_filtered%>%
+export_apo_c2 <- table_apo_filtered%>%
   filter(cluster_2 == 'c2')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -672,30 +624,29 @@ export_apo_c <- table_apo_filtered%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-write.table(export_ape_pcs, file = "export_ape_pcs.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_ape_c, file = "export_ape_c.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_apo_pcs, file = "export_apo_pcs.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_apo_c, file = "export_apo_c.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_ape_c1, file = "export_ape_c1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_ape_c2, file = "export_ape_c2.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_apo_c1, file = "export_apo_c1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_apo_c2, file = "export_apo_c2.txt", row.names = FALSE, col.names = FALSE)
 
-
-export_ape_pcs%>%
+export_ape_c1%>%
   summarise(min = min(mean_ape),
             max = max(mean_ape))
 
-export_ape_c%>%
+export_ape_c2%>%
   summarise(min = min(mean_ape),
             max = max(mean_ape))
 
-export_apo_pcs%>%
+export_apo_c1%>%
   summarise(min = min(mean_apo),
             max = max(mean_apo))
 
-export_apo_c%>%
+export_apo_c2%>%
   summarise(min = min(mean_apo),
             max = max(mean_apo))
 
 # now the same with the r squared
-export_r_c <- table_power_5%>%
+export_r_c2 <- table_power_5%>%
   filter(cluster_2 == 'c2')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -703,7 +654,7 @@ export_r_c <- table_power_5%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-export_r_pcs <- table_power_5%>%
+export_r_c1 <- table_power_5%>%
   filter(cluster_2 == 'c1')%>% 
   mutate(channel = as.numeric(channel)) %>%
   group_by(channel)%>%
@@ -711,26 +662,26 @@ export_r_pcs <- table_power_5%>%
   arrange(channel)%>%
   mutate(channel = replace(channel, is.na(channel), "Gnd"))  
 
-write.table(export_r_pcs, file = "export_r_pcs.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_r_c, file = "export_r_c.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_r_c1, file = "export_r_c1.txt", row.names = FALSE, col.names = FALSE)
+write.table(export_r_c2, file = "export_r_c2.txt", row.names = FALSE, col.names = FALSE)
 
-export_r_pcs%>%
+export_r_c1%>%
   summarise(min = min(mean_r),
             max = max(mean_r))
 
-export_r_c%>%
+export_r_c2%>%
   summarise(min = min(mean_r),
             max = max(mean_r))
 
 #--------- 7. check requirements-----------------------------
 # I need data sets per cluster_2 in order to check the normality requirement separately
-shapiro_df_self-reportedCD <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c1')
+shapiro_df_c1 <- df_corr_frontal_filtered_group%>%
+  filter(cluster_2 == '1')
 
-shapiro_df_no_self-reportedCDPCS <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c2')
+shapiro_df_c2 <- df_corr_frontal_filtered_group%>%
+  filter(cluster_2 == '2')
 
-# normality delta
+# normality
 df_corr_frontal_filtered_group%>%
   ggplot(aes(x = mean_delta_power))+
   geom_histogram(color = "black",
@@ -738,13 +689,13 @@ df_corr_frontal_filtered_group%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks a bit weird but a similar kind of weird
 
-shapiro.test(shapiro_df_self-reportedCD$mean_delta_power)# 0.1776
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_delta_power)# 0.02614
+shapiro.test(shapiro_df_c1$mean_delta_power)# 0.02
+shapiro.test(shapiro_df_c2$mean_delta_power)# 0.0388
 
 # normality beta
-shapiro_df_self-reportedCD <- df_corr_central_filtered_group%>%
+shapiro_df_c1 <- df_corr_central_filtered_group%>%
   filter(cluster_2 == 'c1')
-shapiro_df_no_self-reportedCDPCS <- df_corr_central_filtered_group%>%
+shapiro_df_c2 <- df_corr_central_filtered_group%>%
   filter(cluster_2 == 'c2')
 
 df_corr_central_filtered%>%
@@ -753,43 +704,13 @@ df_corr_central_filtered%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
 
-shapiro.test(shapiro_df_self-reportedCD$mean_beta_power)# 8.953e-05
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta_power)# 0.001104
-
-# beta 1
-shapiro_df_self-reportedCD <- df_corr_central1_filtered%>%
-  filter(cluster_2 == 'c1')
-shapiro_df_no_self-reportedCDPCS <- df_corr_central1_filtered%>%
-  filter(cluster_2 == 'c2')
-
-df_corr_central1_filtered%>%
-  ggplot(aes(x = mean_beta1_power))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
-
-shapiro.test(shapiro_df_self-reportedCD$mean_beta1_power)# <.001
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta1_power)# <.001
-
-# beta 2
-shapiro_df_self-reportedCD <- df_corr_central2_filtered%>%
-  filter(cluster_2 == 'c1')
-shapiro_df_no_self-reportedCDPCS <- df_corr_central2_filtered%>%
-  filter(cluster_2 == 'c2')
-
-df_corr_central2_filtered%>%
-  ggplot(aes(x = mean_beta2_power))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
-
-shapiro.test(shapiro_df_self-reportedCD$mean_beta2_power)# <.001
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_beta2_power)# <.001
+shapiro.test(shapiro_df_c1$mean_beta_power)# 8.953e-05
+shapiro.test(shapiro_df_c2$mean_beta_power)# 0.001104
 
 # normality aperiodic offset
-shapiro_df_self-reportedCD <- df_corr_apo%>%
+shapiro_df_c1<- df_corr_apo%>%
   filter(cluster_2 == 'c1')
-shapiro_df_no_self-reportedCDPCS <- df_corr_apo%>%
+shapiro_df_c2 <- df_corr_apo%>%
   filter(cluster_2 == 'c2')
 
 df_corr_apo%>%
@@ -799,13 +720,13 @@ df_corr_apo%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks quite normally distributed
 
-shapiro.test(shapiro_df_self-reportedCD$mean_aperiodic_offset)# 0.3911
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_aperiodic_offset)# 0.4375
+shapiro.test(shapiro_df_c1$mean_aperiodic_offset)# 0.3911
+shapiro.test(shapiro_df_c2$mean_aperiodic_offset)# 0.4375
 
 # normality aperiodic exponent
-shapiro_df_self-reportedCD <- df_corr_ape%>%
+shapiro_df_c1 <- df_corr_ape%>%
   filter(cluster_2 == 'c1')
-shapiro_df_no_self-reportedCDPCS <- df_corr_ape%>%
+shapiro_df_c2 <- df_corr_ape%>%
   filter(cluster_2 == 'c2')
 
 df_corr_ape%>%
@@ -814,8 +735,8 @@ df_corr_ape%>%
                  fill = "white", bins = sqrt(100))+
   facet_wrap(~cluster_2,scales = 'free')# looks different between the groups
 
-shapiro.test(shapiro_df_self-reportedCD$mean_aperiodic_exponent)# 0.01124
-shapiro.test(shapiro_df_no_self-reportedCDPCS$mean_aperiodic_exponent)# 0.5865
+shapiro.test(shapiro_df_c1$mean_aperiodic_exponent)# 0.01124
+shapiro.test(shapiro_df_c2$mean_aperiodic_exponent)# 0.5865
 
 # variance
 leveneTest(mean_delta_power~cluster_2,data = df_corr_frontal_filtered_group)# not significant

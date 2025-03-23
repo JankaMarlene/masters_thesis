@@ -696,7 +696,6 @@ df_corr_frontal_filtered_cluster_2%>%
   facet_wrap(~cluster_2,scales = 'free')+
   theme_classic()# looks a bit weird but a similar kind of weird
 
-
 shapiro.test(shapiro_df_c1$mean_delta_power)# 0.02
 shapiro.test(shapiro_df_c2$mean_delta_power)# 0.0388
 

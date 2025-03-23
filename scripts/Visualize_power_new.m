@@ -17,6 +17,9 @@ proj_dir = fullfile(pwd);
 indir = fullfile(proj_dir,'data\analysis_power');
 eeglab;close;% initialize EEGLAB, you will need it for the plots
 
+% add source folder for functions, toolboxes, etc.
+addpath(fullfile(pwd,"source"))
+
 roi_delta = [21,102,11,37,72,36,46,79,45,19,109,24,91,90,80,89,92,93,20,47,10,56,25]; % frontal ROI (channel indices are not always the number of the actual electrode!)
 roi_beta = [82,31,62,34,87,63,1,65,3,64,2,67,71,73,78,31,34,39,83,40,84,41,85,42,86,43,74,5,75,6,7,76,8,77,68,32,69,33,70]; % put channel indices here
 
@@ -25,6 +28,7 @@ roi_beta = [82,31,62,34,87,63,1,65,3,64,2,67,71,73,78,31,34,39,83,40,84,41,85,42
 % take a data vector and plot it
 % for this to work you need to load in one dataset in order to have the
 % structure of the layout
+% load('C:\Users\jankj\OneDrive\Desktop\prep_power_5\sub-AN03NU_prep_p_5')
 
 data_beta_c1 = importdata('data\analysis_power\export_beta_c1.txt');
 data_beta_c2 = importdata('data\analysis_power\export_beta_c2.txt');
@@ -40,10 +44,12 @@ topoplot(data_beta_c1.data,EEG_epoched_5.chanlocs,'colormap',viridis,'electrodes
 hc=colorbar;
 caxis([0.346 2.97])
 xlabel(hc,'beta Power [μV^2]');
-%title ('mit PCS ');
+%title ('cluster 1 ');
 set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 17);
-save_fig(f,'C:\Users\jankj\OneDrive\Desktop\masters_thesis\plots\final\','beta_C1', 'fontsize',17, 'figsize', [0 0 10 6.5]);
+%save_fig(f,'C:\Users\jankj\OneDrive\Desktop\masters_thesis\plots\final\','beta_C1', 'fontsize',17, 'figsize', [0 0 10 6.5]);
+saveas(f, 'C:\Users\jankj\OneDrive\Desktop\masters_thesis\plots\final\beta_C1.png');
+exportgraphics(f, 'C:\Users\jankj\OneDrive\Desktop\masters_thesis\plots\final\beta_C1.png', 'Resolution', 300);
 
 %Beta C2
  f = figure;
@@ -98,7 +104,6 @@ title ('cluster 1 ');
 set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 14);
 
-
 figure;
 topoplot(data_ape_c2.data,EEG_epoched_5.chanlocs,'colormap',viridis,'electrodes','on','emarker2',{roi_sig,'o','w',3,1});
 hc=colorbar;
@@ -144,138 +149,39 @@ topoplot(data_r_c2.data,EEG_epoched_5.chanlocs,'colormap',cividis,'electrodes','
 hc=colorbar;
 caxis([0.833 0.959]);
 xlabel(hc,'R^2');
+title ('cluster 2 ');
 %set(findobj(gca,'type','patch'),'facecolor', '#FFFFFF'); % Change [0.5, 0.5, 0.5] to your desired color
 
-
-%% 2. plot the whole spectrum!
-
-% load the results of the power analysis: original, oscillatory, fractal
-
-for i = 1:length(oscillatory)
-    participant_id =  oscillatory{i}.id;
-    
-    if ismember(participant_id,c1) == 1
-   M_c1 =  M_c1 + oscillatory{i}.powspctrm;
-    elseif ismember(participant_id,c2) == 1
-   M_c2 = M_c2 + oscillatory{i}.powspctrm;
-    else
-        M_rest = M_rest + oscillatory{i}.powspctrm;
-    end
-end
-
-avg_power_c1 = M_c1/23;
-avg_power_c2 = M_c2/23;
-
-v = 1;
- hold on;
-    plot((original{1,1}.freq),avg_power_c1,'k');
-    plot((original{1,1}.freq),avg_power_c2,'b');
-    plot((fractal{v,1}.freq), mean(fractal{v,1}.powspctrm),'b');
-    plot((oscillatory{v,1}.freq), mean(oscillatory{v,1}.powspctrm),'r');
-
-    plot((original{1,1}.freq),avg_power_c2,'k');
-    
-% now average over ROIs!
-frontal_roi_c2 = mean(avg_power_c2(roi_delta,:));
-central_roi_c2 = mean(avg_power_c2(roi_beta,:));
-
-frontal_roi_c1 = mean(avg_power_c1(roi_delta,:));
-central_roi_c1 = mean(avg_power_c1(roi_beta,:));
-
-hold on;
-    plot((original{1,1}.freq),frontal_roi_c2,'k');% I used 'original' here just to get the freq, the data shown is from oscillatory!
-    plot((original{1,1}.freq),frontal_roi_c1,'b');
-    
-hold on;
-    plot((original{1,1}.freq),central_roi_c2,'k');
-    plot((original{1,1}.freq),central_roi_c1,'b');
-    
-% plot the spectral parameterization as an example for the Thesis
-v = 35;
- hold on;
-    plot(log((original{v,1}.freq)),log(mean(original{v,1}.powspctrm)),'k');
-    plot(log((fractal{v,1}.freq)), log(mean(fractal{v,1}.powspctrm)),'b');
-    plot(log((oscillatory{v,1}.freq)), log(mean(oscillatory{v,1}.powspctrm)),'r');
-    
-% Example RGB color code (replace with your desired color)
-rgbColor = '#BA4BF5'; % This is a teal color, for example
-% % Compute the logarithm of the frequency and power spectrum
-logFreq = log(original{v,1}.freq);
-logPower = log(mean(original{v,1}.powspctrm));
-
-% Plot the data with the desired modifications
-plot(logFreq, logPower, 'Color', rgbColor, 'LineWidth', 2);
-% Add axis labels
-xlabel('log(frequency)');
-ylabel('log(power)');
-% Set the font size for the axis ticks
-set(gca, 'FontSize', 14);
-
-% Example RGB color code (replace with your desired color)
-rgbColor = '#6547F5'; % This is a teal color, for example
-logFreq = log(fractal{v,1}.freq);
-logPower = log(mean(fractal{v,1}.powspctrm));
-% Plot the data with the desired modifications
-plot(logFreq, logPower, 'Color', rgbColor, 'LineWidth', 2);
-% Add axis labels
-xlabel('log(frequency)');
-ylabel('log(power)');
-% Set the font size for the axis ticks
-set(gca, 'FontSize', 14);
-
-% Example RGB color code (replace with your desired color)
-rgbColor = '#F54B46'; % This is a teal color, for example
-logFreq = log(oscillatory{v,1}.freq);
-logPower = log(mean(oscillatory{v,1}.powspctrm));
-% Plot the data with the desired modifications
-plot(logFreq, logPower, 'Color', rgbColor, 'LineWidth', 2);
-% Add axis labels
-xlabel('log(frequency)');
-ylabel('log(power)');
-% Set the font size for the axis ticks
-set(gca, 'FontSize', 14);
+% load the age matched data
+data_behav = readtable("C:\Users\jankj\OneDrive\Desktop\masters_thesis\data\merged_data_all.tsv", "FileType","text",'Delimiter', '\t');
 
 %% 3. permutation test
 % add group to every individual data set
 for i = 1:length(oscillatory)
-    participant_id =  oscillatory{i}.id;
-    
-    if ismember(participant_id,withPCS) == 1
-   oscillatory{i}.group = 'withPCS';
-    elseif ismember(participant_id,withoutPCS) == 1
-   oscillatory{i}.group = 'withoutPCS';
+    participant_id = oscillatory{i}.id;
+    if ismember(participant_id, c1)
+        oscillatory{i}.group = 'c1';
+    elseif ismember(participant_id, c2)
+        oscillatory{i}.group = 'c2';
     else
-       oscillatory{i}.group = 'irrelevant';
+        oscillatory{i}.group = 'irrelevant';
     end
 end
 
 % Initialize empty arrays for P and W groups
-    oscillatory_P = struct([]);
-    oscillatory_W = struct([]);
+    oscillatory_c1 = struct([]);
+    oscillatory_c2 = struct([]);
 % Loop through the structure array and separate based on group
 for i = 1:length(oscillatory)
-    if strcmp(oscillatory{i}.group, 'withPCS')
-        oscillatory_P = [oscillatory_P, oscillatory{i}];
-    elseif strcmp(oscillatory{i}.group, 'withoutPCS')
-        oscillatory_W = [oscillatory_W, oscillatory{i}];
-    end
-end
-
-% Initialize empty cell arrays for P and W groups
-oscillatory_P = {};
-oscillatory_W = {};
-
-% Loop through the cell array and separate based on group
-for i = 1:length(oscillatory)
-    if strcmp(oscillatory{i}.group, 'withPCS')
-        oscillatory_P = [oscillatory_P, oscillatory(i)];
-    elseif strcmp(oscillatory{i}.group, 'withoutPCS')
-        oscillatory_W = [oscillatory_W, oscillatory(i)];
+    if strcmp(oscillatory{i}.group, 'c1')
+        oscillatory_c1 = [oscillatory_c1, oscillatory(i)];
+    elseif strcmp(oscillatory{i}.group, 'c2')
+        oscillatory_c2 = [oscillatory_c2, oscillatory(i)];
     end
 end
 
 % load the layout
-elec = fullfile(proj_dir,'Src\BC-128-pass-lay.mat');  
+elec = fullfile(proj_dir,'source\BC-128-pass-lay.mat');  
 cfg = [];
 cfg.elec = elec;
 layout = ft_prepare_layout(cfg);
@@ -313,14 +219,14 @@ cfg.numrandomization = 1000;
 % prepare_neighbours determines what sensors may form clusters
 cfg.neighbours       = neigh;
 
-design = zeros(1,length(oscillatory_W) + length(oscillatory_P));
-design(1,1:length(oscillatory_W)) = 1;
-design(1,(length(oscillatory_W)+1):(length(oscillatory_W)+length(oscillatory_P))) = 2;
+design = zeros(1,length(oscillatory_c1) + length(oscillatory_c2));
+design(1,1:length(oscillatory_c1)) = 1;
+design(1,(length(oscillatory_c1)+1):(length(oscillatory_c1)+length(oscillatory_c2))) = 2;
 
 cfg.design           = design;
 cfg.ivar             = 1;
 
-[stat_delta] = ft_freqstatistics(cfg, oscillatory_P{:},oscillatory_W{:});
+[stat_delta] = ft_freqstatistics(cfg, oscillatory_c2{:},oscillatory_c1{:});
         
 % get the topography of stat
 plot_stat_delta = mean(stat_delta.stat,2);
@@ -356,14 +262,14 @@ cfg.numrandomization = 1000;
 % prepare_neighbours determines what sensors may form clusters
 cfg.neighbours       = neigh;
 
-design = zeros(1,length(oscillatory_W) + length(oscillatory_P));
-design(1,1:length(oscillatory_W)) = 1;
-design(1,(length(oscillatory_W)+1):(length(oscillatory_W)+length(oscillatory_P))) = 2;
+design = zeros(1,length(oscillatory_c1) + length(oscillatory_c2));
+design(1,1:length(oscillatory_c1)) = 1;
+design(1,(length(oscillatory_c1)+1):(length(oscillatory_c1)+length(oscillatory_c2))) = 2;
 
 cfg.design           = design;
 cfg.ivar             = 1;
 
-[stat_beta] = ft_freqstatistics(cfg, oscillatory_P{:},oscillatory_W{:});
+[stat_beta] = ft_freqstatistics(cfg, oscillatory_c2{:},oscillatory_c1{:});
 
 plot_stat_beta = mean(stat_beta.stat,2);
         

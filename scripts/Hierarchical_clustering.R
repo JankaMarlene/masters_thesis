@@ -6,6 +6,8 @@ library(ggplot2)
 library(gridExtra)
 library(purrr)
 library(vroom)
+library(cowplot)
+theme_set(theme_cowplot())
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -148,7 +150,7 @@ print(mean_sd_stats)
 ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = age, fill = group)) +
   geom_boxplot(position = position_dodge(width = 0.75)) + # Adjust position of boxplots
   stat_summary(fun = mean, geom = "point", position = position_dodge(width = 0.75), # Adjust position of points
-               shape = 18, size = 4, color = "red") + # Add mean point
+               shape = 18, size = 4, color = "black") + # Add mean point
   stat_summary(fun = mean, geom = "text", aes(label = round(after_stat(y), 1)), 
                position = position_dodge(width = 0.75), vjust = -0.5) + # Add mean as text
   labs(x = "Cluster", y = "age", title = "Age Distribution within Clusters")
@@ -296,8 +298,8 @@ for (variable in variables) {
   descriptive_stats <- clean_data %>%
     group_by(cog_df_cl$cluster) %>%
     summarise(
-      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
-      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 4),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 4)
     ) %>%
     mutate(
       mean = format(mean, nsmall = 2),
@@ -444,6 +446,85 @@ for (i in seq_along(variables)) {
   cat("Mean in group withPCS:", round(stats_t_test[[i]]$cluster_2$estimate[2], 2), "\n")
   cat("p-value:", round(stats_t_test[[i]]$cluster_2$p.value, 4), "\n\n")
 }
+
+# Initialize lists to store results
+descriptive_stats_list <- list()
+normality_results <- list()
+homogeneity_results <- list()
+
+# Perform ANOVA, calculate descriptive statistics, check assumptions, and calculate effect sizes
+for (variable in variables) {
+  
+  # Calculate descriptive statistics
+  descriptive_stats <- clean_data %>%
+    group_by(cluster = as.factor(cluster)) %>%
+    summarise(
+      mean = round(mean(!!sym(variable), na.rm = TRUE), 2),
+      sd = round(sd(!!sym(variable), na.rm = TRUE), 2)
+    ) %>%
+    mutate(
+      mean = format(mean, nsmall = 2),
+      sd = format(sd, nsmall = 2)
+    )
+  descriptive_stats_list[[variable]] <- descriptive_stats
+  
+  # Check normality of residuals
+  shapiro_test <- shapiro.test(residuals(lm(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)))
+  normality_results[[variable]] <- shapiro_test
+  
+  # Check homogeneity of variances
+  levene_test <- car::leveneTest(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  homogeneity_results[[variable]] <- levene_test
+  
+}
+
+# Display results
+descriptive_stats_list
+normality_results
+homogeneity_results
+
+
+
+
+# Initialize result containers
+shapiro_per_cluster <- list()
+levene_results <- list()
+
+# Loop over each variable
+for (variable in variables) {
+  
+  # Extract data for each cluster
+  group1 <- clean_data[[variable]][cog_df_cl$cluster == 1]
+  group2 <- clean_data[[variable]][cog_df_cl$cluster == 2]
+  
+  # Run Shapiro-Wilk normality test on each cluster
+  shapiro_1 <- shapiro.test(group1)
+  shapiro_2 <- shapiro.test(group2)
+  
+  # Save results
+  shapiro_per_cluster[[variable]] <- list(
+    cluster_1 = list(
+      W = round(shapiro_1$statistic, 4),
+      p_value = round(shapiro_1$p.value, 4)
+    ),
+    cluster_2 = list(
+      W = round(shapiro_2$statistic, 4),
+      p_value = round(shapiro_2$p.value, 4)
+    )
+  )
+  
+  # Levene's Test for homogeneity of variances
+  levene_result <- car::leveneTest(clean_data[[variable]] ~ as.factor(cog_df_cl$cluster))
+  levene_results[[variable]] <- levene_result
+}
+
+shapiro_per_cluster
+levene_results
+
+
+
+
+
 
 #--------
 # Cognitive variables winsorized Data

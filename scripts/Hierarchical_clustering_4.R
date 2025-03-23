@@ -8,6 +8,8 @@ library(effsize)
 #library(rstatix)
 library(purrr)
 library(car)
+library(FSA)
+
 load("clean_data.RData")
 
 # Extract relevant columns from clean_data
@@ -269,7 +271,7 @@ t_test_cluster_4 <- t.test(years_of_education ~ group, data = cluster_4_data)
 t_test_cluster_4
 
 #--------
-# Cognitive variables actual values
+# Cognitive variables actual values - Test for normality, etc. ANOVA (Cannot use ANOVA)
 
 # Vector of cognitive variables
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
@@ -499,6 +501,218 @@ for (variable in variables) {
   print(results[[variable]])
   cat("\n")
 }
+
+
+#--------
+# Cognitive variables - Kruskal Wallis
+
+# Vector of cognitive variables
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2",
+               "tmt_a_time", "tmt_b_time", "tmt_diff")
+
+# Initialize lists to store Kruskal-Wallis results and models
+kruskal_results <- list()
+kruskal_models <- list()
+kruskal_results_withPCS <- list()
+kruskal_models_withPCS <- list()
+kruskal_results_withoutPCS <- list()
+kruskal_models_withoutPCS <- list()
+
+# Initialize lists for effect sizes
+effect_sizes <- list()
+effect_sizes_withPCS <- list()
+effect_sizes_withoutPCS <- list()
+
+# Initialize lists for Dunn test results
+dunn_results <- list()
+dunn_results_withPCS <- list()
+dunn_results_withoutPCS <- list()
+
+# Function to calculate epsilon squared from Kruskal-Wallis test
+# Epsilon squared function
+epsilon_squared <- function(kruskal_result) {
+  H <- kruskal_result$statistic
+  n <- sum(kruskal_result$parameter) + 1
+  epsilon <- as.numeric(H) / (n - 1)
+  return(round(epsilon, 4))
+}
+
+for (variable in variables) {
+  # === Overall ===
+  kruskal_result <- kruskal.test(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  kruskal_results[[variable]] <- kruskal_result
+  kruskal_models[[variable]] <- kruskal_result
+  effect_sizes[[variable]] <- epsilon_squared(kruskal_result)
+  
+  if (kruskal_result$p.value < 0.05) {
+    dunn_results[[variable]] <- dunnTest(
+      x = clean_data[[variable]],
+      g = as.factor(clean_data$cluster),
+      method = "bonferroni"
+    )
+  }
+  
+  # === WithPCS (self-reported CD) ===
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
+  kw_withPCS <- kruskal.test(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster))
+  kruskal_results_withPCS[[variable]] <- kw_withPCS
+  kruskal_models_withPCS[[variable]] <- kw_withPCS
+  effect_sizes_withPCS[[variable]] <- epsilon_squared(kw_withPCS)
+  
+  if (kw_withPCS$p.value < 0.05) {
+    dunn_results_withPCS[[variable]] <- dunnTest(
+      x = withPCS_data[[variable]],
+      g = as.factor(withPCS_data$cluster),
+      method = "bonferroni"
+    )
+  }
+  
+  # === WithoutPCS (no self-reported CD) ===
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
+  kw_withoutPCS <- kruskal.test(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster))
+  kruskal_results_withoutPCS[[variable]] <- kw_withoutPCS
+  kruskal_models_withoutPCS[[variable]] <- kw_withoutPCS
+  effect_sizes_withoutPCS[[variable]] <- epsilon_squared(kw_withoutPCS)
+  
+  if (kw_withoutPCS$p.value < 0.05) {
+    dunn_results_withoutPCS[[variable]] <- dunnTest(
+      x = withoutPCS_data[[variable]],
+      g = as.factor(withoutPCS_data$cluster),
+      method = "bonferroni"
+    )
+  }
+}
+
+
+# Overall Kruskal
+kruskal_results
+effect_sizes
+
+# By group
+kruskal_results_withPCS
+kruskal_results_withoutPCS
+effect_sizes_withPCS
+effect_sizes_withoutPCS
+
+# Dunn post-hoc
+dunn_results
+dunn_results_withPCS
+dunn_results_withoutPCS
+
+
+
+
+#--------
+kruskal_results <- list()
+
+for (variable in variables) {
+  result <- kruskal.test(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  kruskal_results[[variable]] <- result
+}
+
+# View results
+kruskal_results
+
+kruskal_results_withPCS <- list()
+kruskal_results_withoutPCS <- list()
+
+for (variable in variables) {
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
+  
+  kruskal_results_withPCS[[variable]] <- kruskal.test(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster))
+  kruskal_results_withoutPCS[[variable]] <- kruskal.test(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster))
+}
+
+dunn_results <- list()
+
+for (variable in variables) {
+  dunn_results[[variable]] <- dunnTest(
+    formula = as.formula(paste(variable, "~ as.factor(cluster)")),
+    data = clean_data,
+    method = "bonferroni"
+  )
+}
+
+epsilon_squared <- function(kruskal_result) {
+  H <- kruskal_result$statistic
+  n <- sum(kruskal_result$parameter) + 1
+  epsilon <- as.numeric(H) / (n - 1)
+  return(round(epsilon, 4))
+}
+
+# Apply for all
+effect_sizes_kruskal <- map(kruskal_results, epsilon_squared)
+
+#####
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2",
+               "tmt_a_time", "tmt_b_time", "tmt_diff")
+kruskal_results <- list()
+
+for (variable in variables) {
+  result <- kruskal.test(clean_data[[variable]] ~ as.factor(cluster), data = clean_data)
+  kruskal_results[[variable]] <- result
+}
+kruskal_results_withPCS <- list()
+kruskal_results_withoutPCS <- list()
+
+for (variable in variables) {
+  withPCS_data <- subset(clean_data, group == "self-reported CD")
+  withoutPCS_data <- subset(clean_data, group == "no self-reported CD")
+  
+  kruskal_results_withPCS[[variable]] <- kruskal.test(withPCS_data[[variable]] ~ as.factor(withPCS_data$cluster))
+  kruskal_results_withoutPCS[[variable]] <- kruskal.test(withoutPCS_data[[variable]] ~ as.factor(withoutPCS_data$cluster))
+}
+dunn_results <- list()
+
+for (variable in variables) {
+  if (kruskal_results[[variable]]$p.value < 0.05) {
+    dunn_results[[variable]] <- dunnTest(
+      formula = as.formula(paste(variable, "~ as.factor(cluster)")),
+      data = clean_data,
+      method = "bonferroni"
+    )
+  }
+}
+epsilon_squared <- function(kruskal_result) {
+  H <- kruskal_result$statistic
+  n <- sum(kruskal_result$parameter) + 1
+  epsilon <- as.numeric(H) / (n - 1)
+  return(round(epsilon, 4))
+}
+
+effect_sizes_kruskal <- map(kruskal_results, epsilon_squared)
+plot_list <- list()
+
+for (variable in variables) {
+  plot <- ggplot(clean_data, aes(x = as.factor(cluster), y = !!sym(variable), fill = group)) +
+    geom_boxplot(position = position_dodge(width = 0.75)) +
+    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster and Group"))
+  
+  plot_list[[variable]] <- plot
+}
+
+grid.arrange(grobs = plot_list, ncol = 2)
+for (variable in variables) {
+  cat("===== ", variable, " =====\n")
+  
+  cat("Kruskal-Wallis p-value (overall):", round(kruskal_results[[variable]]$p.value, 4), "\n")
+  cat("Epsilon squared effect size:", effect_sizes_kruskal[[variable]], "\n")
+  
+  if (!is.null(dunn_results[[variable]])) {
+    cat("Post-hoc Dunn test:\n")
+    print(dunn_results[[variable]]$res)
+  } else {
+    cat("No significant differences found → Dunn test skipped.\n")
+  }
+  
+  cat("\n---\n")
+}
+
+
+
+
+
 
 
 #--------

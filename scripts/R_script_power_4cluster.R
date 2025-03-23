@@ -61,9 +61,9 @@ table_power_5 <- table_power_5%>%
   mutate(facit_f_FS = as.numeric(facit_f_FS),
          tmt_diff = tmt_b_time-tmt_a_time)
 
-# Remove rows with NA values in 'cluster_2'
+# Remove rows with NA values in 'cluster_4'
 table_power_5 <- table_power_5 %>%
-  filter(!is.na(cluster_2))
+  filter(!is.na(cluster_4))
 
 # Define the channel names you want to select (for delta)
 frontal_channels <- c('22','105','11','40','75','39','49','82','48','19','112','25','94','93','83','92','95','96','21','50','10','59','26')
@@ -97,266 +97,203 @@ df_corr_central <- table_power_central%>%
             mean_aperiodic_exponent = mean(aperiodic_exponent))
 
 # is the variance different between the groups?
-leveneTest(mean_delta_power~cluster_2,data = df_corr_frontal)# not significant, homogeneity of variance
-leveneTest(mean_beta_power~cluster_2,data = df_corr_central)# not significant, homogeneity of variance
+leveneTest(mean_delta_power~cluster_4,data = df_corr_frontal)# not significant, homogeneity of variance
+leveneTest(mean_beta_power~cluster_4,data = df_corr_central)# not significant, homogeneity of variance
 #------- 4. demographics-----------------
-shapiro_df_c1 <- df_corr_frontal%>%
-  filter(cluster_2 == 'c1')
+shapiro_df_c1 <- df_corr_frontal %>% filter(cluster_4 == 'c1')
+shapiro_df_c2 <- df_corr_frontal %>% filter(cluster_4 == 'c2')
+shapiro_df_c3 <- df_corr_frontal %>% filter(cluster_4 == 'c3')
+shapiro_df_c4 <- df_corr_frontal %>% filter(cluster_4 == 'c4')
 
-shapiro_df_c2 <- df_corr_frontal%>%
-  filter(cluster_2 == 'c2')
-# sex
-df_corr_frontal%>%
-  group_by(cluster_2,sex)%>%
+# sex distribution
+df_corr_frontal %>%
+  group_by(cluster_4, sex) %>%
   count()
 
 # age
-df_corr_frontal%>%
-  group_by(participant_id)%>%
-  ggplot(aes(age))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
+df_corr_frontal %>%
+  ggplot(aes(age)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
   theme_classic()
 
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
+df_corr_frontal %>%
+  group_by(cluster_4) %>%
   summarise(mean_age = mean(age),
             sd_age = sd(age))
 
-t.test(age~cluster_2, data = df_corr_frontal, alternative = "two.sided")#
-wilcox.test(age~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)#
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(age~cluster_2)# small
+kruskal.test(age ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(age ~ cluster_4)  # interpret with caution – better with pairwise
 
 # years of education
-df_corr_frontal%>%
-  group_by(participant_id)%>%
-  ggplot(aes(years_of_education))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
+df_corr_frontal %>%
+  ggplot(aes(years_of_education)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
   theme_classic()
 
-t.test(years_of_education~cluster_2, data = df_corr_frontal, alternative = "two.sided")# 0.82
-wilcox.test(years_of_education~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.85
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(years_of_education~cluster_2)# small
+kruskal.test(years_of_education ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(years_of_education ~ cluster_4)
 
 # FACIT
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(facit_f_FS))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# c2 is very skew
+df_corr_frontal %>%
+  ggplot(aes(facit_f_FS)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
+  theme_classic()
 
-shapiro.test(shapiro_df_self-reportedCD$facit_f_FS)
-shapiro.test(shapiro_df_no_self-reportedCDPCS$facit_f_FS)
-leveneTest(facit_f_FS~cluster_2,data = df_corr_frontal)# not significant
-wilcox.test(facit_f_FS~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.0027
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(facit_f_FS~cluster_2)# moderate
+leveneTest(facit_f_FS ~ cluster_4, data = df_corr_frontal)
+kruskal.test(facit_f_FS ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(facit_f_FS ~ cluster_4)
 
-t.test(facit_f_FS~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# significant p = 0.0031
-
-df_corr_frontal <- df_corr_frontal%>%
-  mutate(cluster_2 = as.factor(cluster_2))# otherwise wilcoxon_test from coin does not work
-
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_frontal,facit_f_FS~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-
+# pairwise comparisons
+df_corr_frontal %>%
+  pairwise_wilcox_test(facit_f_FS ~ cluster_4, p.adjust.method = "bonferroni")
 
 # HADS
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(hads_d_total_score))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# c2 is very skew, c1 also a little
+df_corr_frontal %>%
+  ggplot(aes(hads_d_total_score)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
+  theme_classic()
 
-shapiro.test(shapiro_df_self-reportedCD$hads_d_total_score)
-shapiro.test(shapiro_df_no_self-reportedCDPCS$hads_d_total_score)
-leveneTest(hads_d_total_score~cluster_2,data = df_corr_frontal)# not significant
-t.test(hads_d_total_score~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# p = 0.095
-wilcox.test(hads_d_total_score~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.0276
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(hads_d_total_score~cluster_2)# moderate
+leveneTest(hads_d_total_score ~ cluster_4, data = df_corr_frontal)
+kruskal.test(hads_d_total_score ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(hads_d_total_score ~ cluster_4)
 
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_frontal,hads_d_total_score~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-
+df_corr_frontal %>%
+  pairwise_wilcox_test(hads_d_total_score ~ cluster_4, p.adjust.method = "bonferroni")
 
 # TMT A
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(tmt_a_time))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# looks okay
+df_corr_frontal %>%
+  ggplot(aes(tmt_a_time)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
+  theme_classic()
 
-shapiro.test(shapiro_df_self-reportedCD$tmt_a_time)
-shapiro.test(shapiro_df_no_self-reportedCDPCS$tmt_a_time)
-leveneTest(tmt_a_time~cluster_2,data = df_corr_frontal)# not significant
-t.test(tmt_a_time~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# p = 0.059
-wilcox.test(tmt_a_time~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.038
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(tmt_a_time~cluster_2)# moderate
+leveneTest(tmt_a_time ~ cluster_4, data = df_corr_frontal)
+kruskal.test(tmt_a_time ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(tmt_a_time ~ cluster_4)
 
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_frontal,tmt_a_time~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
+df_corr_frontal %>%
+  pairwise_wilcox_test(tmt_a_time ~ cluster_4, p.adjust.method = "bonferroni")
 
+# TMT B - A
+df_corr_frontal %>%
+  ggplot(aes(tmt_diff)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
+  theme_classic()
 
-# TMT B-A
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(tmt_diff))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# both skew
+leveneTest(tmt_diff ~ cluster_4, data = df_corr_frontal)
+kruskal.test(tmt_diff ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(tmt_diff ~ cluster_4)
 
-shapiro.test(shapiro_df_self-reportedCD$tmt_diff)
-shapiro.test(shapiro_df_no_self-reportedCDPCS$tmt_diff)
-leveneTest(tmt_diff~cluster_2,data = df_corr_frontal)# not significant
-t.test(tmt_diff~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# 0.2434
-wilcox.test(tmt_diff~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.2768
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  wilcox_effsize(tmt_diff~cluster_2)# small
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_frontal,tmt_diff~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-
+df_corr_frontal %>%
+  pairwise_wilcox_test(tmt_diff ~ cluster_4, p.adjust.method = "bonferroni")
 
 # MOCA
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(moca))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# both skew
+df_corr_frontal %>%
+  ggplot(aes(moca)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = 'free') +
+  theme_classic()
 
-shapiro.test(shapiro_df_self-reportedCD$moca)
-shapiro.test(shapiro_df_no_self-reportedCDPCS$moca)
-leveneTest(moca~cluster_2,data = df_corr_frontal)# not significant
-t.test(moca~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)
-wilcox.test(moca~cluster_2, data = df_corr_frontal, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.2768
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  cohens_d(moca ~ cluster_2)
+leveneTest(moca ~ cluster_4, data = df_corr_frontal)
+kruskal.test(moca ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  wilcox_effsize(moca ~ cluster_4)
+
+df_corr_frontal %>%
+  pairwise_wilcox_test(moca ~ cluster_4, p.adjust.method = "bonferroni")
 
 # number of epochs
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
+df_corr_frontal %>%
+  group_by(cluster_4) %>%
   summarise(mean_epoch = mean(number_epochs),
-            sd_epoch = sd(number_epochs))
+            sd_epoch = sd(number_epochs),
+            min_epoch = min(number_epochs),
+            max_epoch = max(number_epochs))
 
-t.test(number_epochs~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# 0.4701
-#effsize
-df_corr_frontal%>%
-  ungroup()%>%
-  cohens_d(number_epochs~cluster_2)# small
+kruskal.test(number_epochs ~ cluster_4, data = df_corr_frontal)
+df_corr_frontal %>%
+  ungroup() %>%
+  cohens_d(number_epochs ~ cluster_4)
 
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  summarise(max_epoch = max(number_epochs),
-            min_epoch = min(number_epochs))
-
-# do they correlate with the power?
-df_corr_frontal%>%
-  ggplot(aes(x = number_epochs, y = mean_delta_power, color = cluster_2))+
+# correlation: epochs and power
+df_corr_frontal %>%
+  ggplot(aes(x = number_epochs, y = mean_delta_power, color = cluster_4)) +
   geom_point()
-cor.test(df_corr_frontal$mean_delta_power,df_corr_frontal$number_epochs)
 
-df_corr_central%>%
-  ggplot(aes(x = number_epochs, y = mean_beta_power, color = cluster_2))+
-  geom_point()
-cor.test(df_corr_central$mean_delta_power,df_corr_central$number_epochs)
+cor.test(df_corr_frontal$number_epochs, df_corr_frontal$mean_delta_power)
 
-# number of epochs correlates with fatigue score!
-table_power_5%>%
-  ggplot(aes(x = number_epochs, y = facit_f_FS))+
+df_corr_central %>%
+  ggplot(aes(x = number_epochs, y = mean_beta_power, color = cluster_4)) +
   geom_point()
+
+cor.test(df_corr_central$number_epochs, df_corr_central$mean_beta_power)
+
+# number of epochs vs fatigue score
+table_power_5 %>%
+  ggplot(aes(x = number_epochs, y = facit_f_FS)) +
+  geom_point()
+
 cor.test(table_power_5$number_epochs, table_power_5$facit_f_FS)
 
-# summarize values into one table
-table_behav <- df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  summarise(mean_facit = mean(facit_f_FS, na.rm = T),
-            sd_facit = sd(facit_f_FS, na.rm = T),
-            mean_hads = mean(hads_d_total_score, na.rm = T),
-            sd_hads = sd(hads_d_total_score, na.rm = T),
-            mean_tmta = mean(tmt_a_time),
-            sd_tmta = sd(tmt_a_time),
-            mean_tmtb_a = mean(tmt_diff),
-            sd_tmtb_a = sd(tmt_diff),
-            mean_y_o = mean(years_of_education),
-            sd_y_o = sd(years_of_education),
-            mean_epoc = mean(number_epochs),
-            sd_epoc = sd(number_epochs),
-            mean_moca = mean(moca, na.rm = T),
-            sd_moca = sd(moca, na.rm = T))
+# summarized behavioral values
+table_behav <- df_corr_frontal %>%
+  group_by(cluster_4) %>%
+  summarise(mean_facit = mean(facit_f_FS, na.rm = TRUE),
+            sd_facit = sd(facit_f_FS, na.rm = TRUE),
+            mean_hads = mean(hads_d_total_score, na.rm = TRUE),
+            sd_hads = sd(hads_d_total_score, na.rm = TRUE),
+            mean_tmta = mean(tmt_a_time, na.rm = TRUE),
+            sd_tmta = sd(tmt_a_time, na.rm = TRUE),
+            mean_tmtb_a = mean(tmt_diff, na.rm = TRUE),
+            sd_tmtb_a = sd(tmt_diff, na.rm = TRUE),
+            mean_y_o = mean(years_of_education, na.rm = TRUE),
+            sd_y_o = sd(years_of_education, na.rm = TRUE),
+            mean_epoc = mean(number_epochs, na.rm = TRUE),
+            sd_epoc = sd(number_epochs, na.rm = TRUE),
+            mean_moca = mean(moca, na.rm = TRUE),
+            sd_moca = sd(moca, na.rm = TRUE))
 
-# good channels
-channel_artefacts <- table_power_5%>%
-  group_by(cluster_2)%>%
-  summarise(mean_channels_ica = mean(num_chan_ica),
-            sd_channels_ica = sd(num_chan_ica),
-            max_channels_ica = max(num_chan_ica),
-            min_channels_ica = min(num_chan_ica),
-            mean_channels_arte = mean(num_chan_artefact),
-            sd_channels_arte = sd(num_chan_artefact),
-            max_channels_arte = max(num_chan_artefact),
-            min_channels_arte = min(num_chan_artefact))
+# artifact-related channels
+channel_artefacts <- table_power_5 %>%
+  group_by(cluster_4) %>%
+  summarise(mean_channels_ica = mean(num_chan_ica, na.rm = TRUE),
+            sd_channels_ica = sd(num_chan_ica, na.rm = TRUE),
+            max_channels_ica = max(num_chan_ica, na.rm = TRUE),
+            min_channels_ica = min(num_chan_ica, na.rm = TRUE),
+            mean_channels_arte = mean(num_chan_artefact, na.rm = TRUE),
+            sd_channels_arte = sd(num_chan_artefact, na.rm = TRUE),
+            max_channels_arte = max(num_chan_artefact, na.rm = TRUE),
+            min_channels_arte = min(num_chan_artefact, na.rm = TRUE))
 
 #------ 5. exclude outliers--------
-##-------- 5.1 delta ---------------
-# relative delta power frontal
-df_corr_frontal%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot()# two outliers in the c2 cluster_2
+##-------- 5.1 delta (relative) ---------------
 
+# Quick check for outliers
+df_corr_frontal %>%
+  group_by(cluster_4) %>%
+  ggplot(aes(x = cluster_4, y = mean_delta_power, color = cluster_4)) +
+  geom_boxplot()
 
-# outlier removal inside the participant with +/- 3SD
-table_delta_filtered <-table_power_5%>%
+# Participant-wise filtering (within-person 3SD)
+table_delta_filtered <- table_power_5 %>%
   group_by(participant_id) %>%
   mutate(mean_rel_delta = mean(rel_delta),
          sd_rel_delta = sd(rel_delta),
@@ -365,34 +302,34 @@ table_delta_filtered <-table_power_5%>%
   filter(rel_delta >= lower_bound & rel_delta <= upper_bound) %>%
   ungroup()
 
-# last step: remove negative values
-table_delta_filtered$rel_delta <- ifelse(
-  table_delta_filtered$rel_delta < 0, 0, table_delta_filtered$rel_delta)
+# Set negative values to 0
+table_delta_filtered$rel_delta <- ifelse(table_delta_filtered$rel_delta < 0, 0, table_delta_filtered$rel_delta)
 
-# visualize the filtered data
-table_delta_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = rel_delta, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
+# Visualize cleaned data
+table_delta_filtered %>%
+  group_by(cluster_4) %>%
+  ggplot(aes(x = cluster_4, y = rel_delta, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
   geom_jitter()
 
-# select only frontal channels
-table_delta_frontal_filtered <- table_delta_filtered%>%
-  filter(table_delta_filtered$channel %in% frontal_channels)
+# Keep only frontal channels
+table_delta_frontal_filtered <- table_delta_filtered %>%
+  filter(channel %in% frontal_channels)
 
-df_corr_frontal_filtered <- table_delta_frontal_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,years_of_education,moca)%>%
-  summarise(mean_delta_power = mean(rel_delta))
+# Average per participant
+df_corr_frontal_filtered <- table_delta_frontal_filtered %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, years_of_education, moca) %>%
+  summarise(mean_delta_power = mean(rel_delta), .groups = "drop")
 
-df_corr_frontal_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
-  geom_jitter()# 4 outliers in c2
+# Visualize
+df_corr_frontal_filtered %>%
+  ggplot(aes(x = cluster_4, y = mean_delta_power, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
+  geom_jitter()
 
-# additional filtering (across cluster_2)
-table_delta_filtered_group <- table_delta_filtered%>%
-  group_by(cluster_2)%>%
+# Additional filtering across clusters (group-based 3SD)
+table_delta_filtered_group <- table_delta_filtered %>%
+  group_by(cluster_4) %>%
   mutate(mean_rel_delta = mean(rel_delta),
          sd_rel_delta = sd(rel_delta),
          lower_bound = mean_rel_delta - 3 * sd_rel_delta,
@@ -400,24 +337,29 @@ table_delta_filtered_group <- table_delta_filtered%>%
   filter(rel_delta >= lower_bound & rel_delta <= upper_bound) %>%
   ungroup()
 
-table_frontal_filtered_group <- table_delta_filtered_group%>%
-  filter(table_delta_filtered_group$channel %in% frontal_channels)
+table_frontal_filtered_group <- table_delta_filtered_group %>%
+  filter(channel %in% frontal_channels)
 
-df_corr_frontal_filtered_group <- table_frontal_filtered_group%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
-  summarise(mean_delta_power = mean(rel_delta),
-            mean_delta_power = mean(rel_delta),
-            mean_aperiodic_exponent = mean(aperiodic_exponent))
+df_corr_frontal_filtered_group <- table_frontal_filtered_group %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, moca, hads_d_total_score) %>%
+  summarise(
+    mean_delta_power = mean(rel_delta),
+    mean_aperiodic_exponent = mean(aperiodic_exponent),
+    .groups = "drop"
+  )
 
-df_corr_frontal_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
-  geom_jitter()# 2 outliers in c2 and 1 in c1
+# Visualize
+df_corr_frontal_filtered_group %>%
+  ggplot(aes(x = cluster_4, y = mean_delta_power, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
+  geom_jitter()
 
+# Statistical test
+kruskal.test(mean_delta_power ~ cluster_4, data = df_corr_frontal_filtered_group)
 
-# outliers delta absolute
-table_delta_filtered_abs <-table_power_5%>%
+##-------- 5.1 delta (absolute) ---------------
+
+table_delta_filtered_abs <- table_power_5 %>%
   group_by(participant_id) %>%
   mutate(mean_abs_delta = mean(abs_delta),
          sd_abs_delta = sd(abs_delta),
@@ -426,29 +368,29 @@ table_delta_filtered_abs <-table_power_5%>%
   filter(abs_delta >= lower_bound & abs_delta <= upper_bound) %>%
   ungroup()
 
-table_delta_frontal_filtered_abs <- table_delta_filtered_abs%>%
-  filter(table_delta_filtered_abs$channel %in% frontal_channels)
+table_delta_frontal_filtered_abs <- table_delta_filtered_abs %>%
+  filter(channel %in% frontal_channels)
 
-df_corr_frontal_filtered_abs <- table_delta_frontal_filtered_abs%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,years_of_education)%>%
-  summarise(mean_delta_power_abs = mean(abs_delta))
+df_corr_frontal_filtered_abs <- table_delta_frontal_filtered_abs %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, years_of_education) %>%
+  summarise(mean_delta_power_abs = mean(abs_delta), .groups = "drop")
 
-df_corr_frontal_filtered_abs%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power_abs, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
+df_corr_frontal_filtered_abs %>%
+  ggplot(aes(x = cluster_4, y = mean_delta_power_abs, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
   geom_jitter()
 
-kruskal.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs)
+kruskal.test(mean_delta_power_abs ~ cluster_4, data = df_corr_frontal_filtered_abs)
 
-## ----------- 5.2 relative beta power central ----------------------------
-df_corr_central%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
-  geom_boxplot()# one outlier in c2, one in the c1 cluster_2
+## ----------- 5.2 beta (relative) central ----------------------------
 
-# sd +- 3 for beta
-table_beta_filtered <-table_power_5%>%
+# Check original distribution
+df_corr_central %>%
+  ggplot(aes(x = cluster_4, y = mean_beta_power, color = cluster_4)) +
+  geom_boxplot()
+
+# Participant-wise 3SD filter
+table_beta_filtered <- table_power_5 %>%
   group_by(participant_id) %>%
   mutate(mean_rel_beta = mean(rel_beta),
          sd_rel_beta = sd(rel_beta),
@@ -457,22 +399,21 @@ table_beta_filtered <-table_power_5%>%
   filter(rel_beta >= lower_bound & rel_beta <= upper_bound) %>%
   ungroup()
 
-table_central_filtered <- table_beta_filtered%>%
-  filter(table_beta_filtered$channel %in% central_channels)
+table_central_filtered <- table_beta_filtered %>%
+  filter(channel %in% central_channels)
 
-df_corr_central_filtered <- table_central_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca,hads_d_total_score)%>%
-  summarise(mean_beta_power = mean(rel_beta))
+df_corr_central_filtered <- table_central_filtered %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, moca, hads_d_total_score) %>%
+  summarise(mean_beta_power = mean(rel_beta), .groups = "drop")
 
-df_corr_central_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
-  geom_jitter()# one outlier in c2 cluster_2 and one in c1 cluster_2
+df_corr_central_filtered %>%
+  ggplot(aes(x = cluster_4, y = mean_beta_power, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
+  geom_jitter()
 
-# additional filtering (across cluster_2)
-table_beta_filtered_group <- table_beta_filtered%>%
-  group_by(cluster_2)%>%
+# Additional group-level filtering
+table_beta_filtered_group <- table_beta_filtered %>%
+  group_by(cluster_4) %>%
   mutate(mean_rel_beta = mean(rel_beta),
          sd_rel_beta = sd(rel_beta),
          lower_bound = mean_rel_beta - 3 * sd_rel_beta,
@@ -480,22 +421,27 @@ table_beta_filtered_group <- table_beta_filtered%>%
   filter(rel_beta >= lower_bound & rel_beta <= upper_bound) %>%
   ungroup()
 
-table_central_filtered_group <- table_beta_filtered_group%>%
-  filter(table_beta_filtered_group$channel %in% central_channels)
+table_central_filtered_group <- table_beta_filtered_group %>%
+  filter(channel %in% central_channels)
 
-df_corr_central_filtered_group <- table_central_filtered_group%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca, hads_d_total_score)%>%
-  summarise(mean_beta_power = mean(rel_beta))
+df_corr_central_filtered_group <- table_central_filtered_group %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, moca, hads_d_total_score) %>%
+  summarise(mean_beta_power = mean(rel_beta), .groups = "drop")
 
-df_corr_central_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
-  geom_boxplot(outlier.colour = 'black')+
-  geom_jitter()# 1 outlier in c2 and 2 in c1
+df_corr_central_filtered_group %>%
+  ggplot(aes(x = cluster_4, y = mean_beta_power, color = cluster_4)) +
+  geom_boxplot(outlier.colour = 'black') +
+  geom_jitter()
+
+# Statistical test
+kruskal.test(mean_beta_power ~ cluster_4, data = df_corr_central_filtered_group)
+
 
 ## ----------- 5.3 aperiodic components -------------------------------------------
-# +- 3 sd for aperiodic exponent
-table_ape_filtered <-table_power_5%>%
+
+# ----- Aperiodic Exponent: participant-wise 3SD filtering -----
+
+table_ape_filtered <- table_power_5 %>%
   group_by(participant_id) %>%
   mutate(mean_ape = mean(aperiodic_exponent),
          sd_ape = sd(aperiodic_exponent),
@@ -504,19 +450,25 @@ table_ape_filtered <-table_power_5%>%
   filter(aperiodic_exponent >= lower_bound & aperiodic_exponent <= upper_bound) %>%
   ungroup()
 
+df_corr_ape <- table_ape_filtered %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, moca, hads_d_total_score) %>%
+  summarise(mean_aperiodic_exponent = mean(aperiodic_exponent), .groups = "drop")
 
-df_corr_ape <- table_ape_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
-  summarise(mean_aperiodic_exponent = mean(aperiodic_exponent))
+# Plot
+df_corr_ape %>%
+  ggplot(aes(x = cluster_4, y = mean_aperiodic_exponent, color = cluster_4)) +
+  geom_boxplot(outlier.colour = "black") +
+  geom_jitter(width = 0.2, alpha = 0.7) +
+  theme_classic() +
+  labs(y = "Mean Aperiodic Exponent")
 
-df_corr_ape%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_aperiodic_exponent, color = cluster_2))+
-  geom_boxplot()+
-  geom_jitter()
+# Kruskal-Wallis test
+kruskal.test(mean_aperiodic_exponent ~ cluster_4, data = df_corr_ape)
 
-# +- 3 SD for aperiodic offset
-table_apo_filtered <-table_power_5%>%
+
+# ----- Aperiodic Offset: participant-wise 3SD filtering -----
+
+table_apo_filtered <- table_power_5 %>%
   group_by(participant_id) %>%
   mutate(mean_apo = mean(aperiodic_offset),
          sd_apo = sd(aperiodic_offset),
@@ -525,462 +477,281 @@ table_apo_filtered <-table_power_5%>%
   filter(aperiodic_offset >= lower_bound & aperiodic_offset <= upper_bound) %>%
   ungroup()
 
-df_corr_apo <- table_apo_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
-  summarise(mean_aperiodic_offset = mean(aperiodic_offset))
+df_corr_apo <- table_apo_filtered %>%
+  group_by(participant_id, cluster_4, tmt_a_time, facit_f_FS, tmt_diff, age, moca, hads_d_total_score) %>%
+  summarise(mean_aperiodic_offset = mean(aperiodic_offset), .groups = "drop")
 
-df_corr_apo%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_aperiodic_offset, color = cluster_2))+
-  geom_boxplot()+
-  geom_jitter()
+# Plot
+df_corr_apo %>%
+  ggplot(aes(x = cluster_4, y = mean_aperiodic_offset, color = cluster_4)) +
+  geom_boxplot(outlier.colour = "black") +
+  geom_jitter(width = 0.2, alpha = 0.7) +
+  theme_classic() +
+  labs(y = "Mean Aperiodic Offset")
+
+# Kruskal-Wallis test
+kruskal.test(mean_aperiodic_offset ~ cluster_4, data = df_corr_apo)
+
+# Post-hoc pairwise comparisons (notsignificant)
+#df_corr_ape %>%
+ # pairwise_wilcox_test(mean_aperiodic_exponent ~ cluster_4, p.adjust.method = "bonferroni")
+
+#df_corr_apo %>%
+ # pairwise_wilcox_test(mean_aperiodic_offset ~ cluster_4, p.adjust.method = "bonferroni")
 
 #-------- 6. export tables for topoplots ---------------------
-# beta power
-export_beta_c1 <- table_beta_filtered_group%>%
-  filter(cluster_2 == 'c1')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_rel_beta = mean(rel_beta))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
+# Define cluster labels
+clusters <- c("c1", "c2", "c3", "c4")
 
-export_beta_c2 <- table_beta_filtered_group%>%
-  filter(cluster_2 == 'c2')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_rel_beta = mean(rel_beta))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
+# Function to export topoplot data
+export_topoplot_data <- function(df, cluster_col, value_col, file_prefix) {
+  for (cl in clusters) {
+    export_df <- df %>%
+      filter(.data[[cluster_col]] == cl) %>%
+      mutate(channel = as.numeric(channel)) %>%
+      group_by(channel) %>%
+      summarise(mean_val = mean(.data[[value_col]], na.rm = TRUE), .groups = "drop") %>%
+      arrange(channel) %>%
+      mutate(channel = replace(channel, is.na(channel), "Gnd"))
+    
+    write.table(export_df,
+                file = paste0("export_", file_prefix, "_", cl, ".txt"),
+                row.names = FALSE,
+                col.names = FALSE)
+    
+    cat("Cluster:", cl, "\n")
+    print(export_df %>%
+            summarise(min = min(mean_val),
+                      max = max(mean_val)))
+    cat("\n")
+  }
+}
 
-# delta power
-export_delta_c1 <- table_delta_filtered_group%>%
-  filter(cluster_2 == 'c1')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_rel_delta = mean(rel_delta))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
+# Export beta power
+export_topoplot_data(table_beta_filtered_group, "cluster_4", "rel_beta", "beta")
 
-export_delta_c2 <- table_delta_filtered_group%>%
-  filter(cluster_2 == 'c2')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_rel_delta = mean(rel_delta))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
+# Export delta power
+export_topoplot_data(table_delta_filtered_group, "cluster_4", "rel_delta", "delta")
 
-# save in folder
-write.table(export_beta_c1, file = "export_beta_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_beta_c2, file = "export_beta_c2.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_delta_c1, file = "export_delta_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_delta_c2, file = "export_delta_c2.txt", row.names = FALSE, col.names = FALSE)
+# Export aperiodic exponent
+export_topoplot_data(table_ape_filtered, "cluster_4", "aperiodic_exponent", "ape")
 
-# have a look at min/max values for visualisation purposes
-export_beta_c2%>%
-  summarise(min = min(mean_rel_beta),
-            max = max(mean_rel_beta))
+# Export aperiodic offset
+export_topoplot_data(table_apo_filtered, "cluster_4", "aperiodic_offset", "apo")
 
-export_beta_c1%>%
-  summarise(min = min(mean_rel_beta),
-            max = max(mean_rel_beta))
+# Export r_squared (use table_power_5 directly)
+export_topoplot_data(table_power_5, "cluster_4", "r_squared", "r")
 
-export_delta_c2%>%
-  summarise(min = min(mean_rel_delta),
-            max = max(mean_rel_delta))
-
-export_delta_c1%>%
-  summarise(min = min(mean_rel_delta),
-            max = max(mean_rel_delta))
-
-# now the same for aperiodic exponent
-export_ape_c1 <- table_ape_filtered%>%
-  filter(cluster_2 == 'c1')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_ape = mean(aperiodic_exponent))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-export_ape_c2 <- table_ape_filtered%>%
-  filter(cluster_2 == 'c2')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_ape = mean(aperiodic_exponent))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-export_apo_c1 <- table_apo_filtered%>%
-  filter(cluster_2 == 'c1')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_apo = mean(aperiodic_offset))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-export_apo_c2 <- table_apo_filtered%>%
-  filter(cluster_2 == 'c2')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_apo = mean(aperiodic_offset))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-write.table(export_ape_c1, file = "export_ape_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_ape_c2, file = "export_ape_c2.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_apo_c1, file = "export_apo_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_apo_c2, file = "export_apo_c2.txt", row.names = FALSE, col.names = FALSE)
-
-export_ape_c1%>%
-  summarise(min = min(mean_ape),
-            max = max(mean_ape))
-
-export_ape_c2%>%
-  summarise(min = min(mean_ape),
-            max = max(mean_ape))
-
-export_apo_c1%>%
-  summarise(min = min(mean_apo),
-            max = max(mean_apo))
-
-export_apo_c2%>%
-  summarise(min = min(mean_apo),
-            max = max(mean_apo))
-
-# now the same with the r squared
-export_r_c2 <- table_power_5%>%
-  filter(cluster_2 == 'c2')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_r = mean(r_squared, na.rm = T))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-export_r_c1 <- table_power_5%>%
-  filter(cluster_2 == 'c1')%>% 
-  mutate(channel = as.numeric(channel)) %>%
-  group_by(channel)%>%
-  summarise(mean_r = mean(r_squared, na.rm = T))%>%
-  arrange(channel)%>%
-  mutate(channel = replace(channel, is.na(channel), "Gnd"))  
-
-write.table(export_r_c1, file = "export_r_c1.txt", row.names = FALSE, col.names = FALSE)
-write.table(export_r_c2, file = "export_r_c2.txt", row.names = FALSE, col.names = FALSE)
-
-export_r_c1%>%
-  summarise(min = min(mean_r),
-            max = max(mean_r))
-
-export_r_c2%>%
-  summarise(min = min(mean_r),
-            max = max(mean_r))
 
 #--------- 7. check requirements-----------------------------
-# I need data sets per cluster_2 in order to check the normality requirement separately
-shapiro_df_c1 <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == '1')
 
-shapiro_df_c2 <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == '2')
+# Shapiro-Wilk normality test for each cluster: DELTA POWER
+shapiro_clusters <- split(df_corr_frontal_filtered_group, df_corr_frontal_filtered_group$cluster_4)
 
-# normality
-df_corr_frontal_filtered_group%>%
-  ggplot(aes(x = mean_delta_power))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# looks a bit weird but a similar kind of weird
+cat("Shapiro-Wilk test for mean_delta_power:\n")
+lapply(names(shapiro_clusters), function(cl) {
+  cat("Cluster", cl, ": ")
+  print(shapiro.test(shapiro_clusters[[cl]]$mean_delta_power))
+})
 
-shapiro.test(shapiro_df_c1$mean_delta_power)# 0.02
-shapiro.test(shapiro_df_c2$mean_delta_power)# 0.0388
-
-# normality beta
-shapiro_df_c1 <- df_corr_central_filtered_group%>%
-  filter(cluster_2 == 'c1')
-shapiro_df_c2 <- df_corr_central_filtered_group%>%
-  filter(cluster_2 == 'c2')
-
-df_corr_central_filtered%>%
-  ggplot(aes(x = mean_beta_power))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')# looks really skew (bot equally skew in both groups, a bit worse in c1 maybe) -> maybe use nonparametric stats
-
-shapiro.test(shapiro_df_c1$mean_beta_power)# 8.953e-05
-shapiro.test(shapiro_df_c2$mean_beta_power)# 0.001104
-
-# normality aperiodic offset
-shapiro_df_c1<- df_corr_apo%>%
-  filter(cluster_2 == 'c1')
-shapiro_df_c2 <- df_corr_apo%>%
-  filter(cluster_2 == 'c2')
-
-df_corr_apo%>%
-  ggplot(aes(x = mean_aperiodic_offset))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')+
-  theme_classic()# looks quite normally distributed
-
-shapiro.test(shapiro_df_c1$mean_aperiodic_offset)# 0.3911
-shapiro.test(shapiro_df_c2$mean_aperiodic_offset)# 0.4375
-
-# normality aperiodic exponent
-shapiro_df_c1 <- df_corr_ape%>%
-  filter(cluster_2 == 'c1')
-shapiro_df_c2 <- df_corr_ape%>%
-  filter(cluster_2 == 'c2')
-
-df_corr_ape%>%
-  ggplot(aes(x = mean_aperiodic_exponent))+
-  geom_histogram(color = "black",
-                 fill = "white", bins = sqrt(100))+
-  facet_wrap(~cluster_2,scales = 'free')# looks different between the groups
-
-shapiro.test(shapiro_df_c1$mean_aperiodic_exponent)# 0.01124
-shapiro.test(shapiro_df_c2$mean_aperiodic_exponent)# 0.5865
-
-# variance
-leveneTest(mean_delta_power~cluster_2,data = df_corr_frontal_filtered_group)# not significant
-leveneTest(mean_beta_power~cluster_2,data = df_corr_central_filtered_group)# not significant
-leveneTest(mean_aperiodic_offset~cluster_2,data = df_corr_apo)# 0.0451
-leveneTest(mean_aperiodic_exponent~cluster_2,data = df_corr_ape)# not significant
-leveneTest(mean_beta1_power~cluster_2,data = df_corr_central1_filtered)# not significant
-leveneTest(mean_beta2_power~cluster_2,data = df_corr_central2_filtered)# not significant
+# Plot histogram for delta
+df_corr_frontal_filtered_group %>%
+  ggplot(aes(x = mean_delta_power)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = "free") +
+  theme_classic() +
+  labs(title = "Mean Delta Power Distribution by Cluster")
 
 
-# conclusion: variances are not that big of a problem, normality is though! with the aperiodic offset we have normality in both groups
-# but then there is no equal variances in that case
-# => use NONPARAMETRIC Tests for beta, delta and the exponent + offset?
+# Shapiro-Wilk test for BETA POWER
+shapiro_clusters_beta <- split(df_corr_central_filtered_group, df_corr_central_filtered_group$cluster_4)
+
+cat("\nShapiro-Wilk test for mean_beta_power:\n")
+lapply(names(shapiro_clusters_beta), function(cl) {
+  cat("Cluster", cl, ": ")
+  print(shapiro.test(shapiro_clusters_beta[[cl]]$mean_beta_power))
+})
+
+df_corr_central_filtered_group %>%
+  ggplot(aes(x = mean_beta_power)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = "free") +
+  theme_classic() +
+  labs(title = "Mean Beta Power Distribution by Cluster")
+
+
+# Shapiro-Wilk test for APERIODIC OFFSET
+shapiro_clusters_apo <- split(df_corr_apo, df_corr_apo$cluster_4)
+
+cat("\nShapiro-Wilk test for mean_aperiodic_offset:\n")
+lapply(names(shapiro_clusters_apo), function(cl) {
+  cat("Cluster", cl, ": ")
+  print(shapiro.test(shapiro_clusters_apo[[cl]]$mean_aperiodic_offset))
+})
+
+df_corr_apo %>%
+  ggplot(aes(x = mean_aperiodic_offset)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = "free") +
+  theme_classic() +
+  labs(title = "Mean Aperiodic Offset Distribution by Cluster")
+
+
+# Shapiro-Wilk test for APERIODIC EXPONENT
+shapiro_clusters_ape <- split(df_corr_ape, df_corr_ape$cluster_4)
+
+cat("\nShapiro-Wilk test for mean_aperiodic_exponent:\n")
+lapply(names(shapiro_clusters_ape), function(cl) {
+  cat("Cluster", cl, ": ")
+  print(shapiro.test(shapiro_clusters_ape[[cl]]$mean_aperiodic_exponent))
+})
+
+df_corr_ape %>%
+  ggplot(aes(x = mean_aperiodic_exponent)) +
+  geom_histogram(color = "black", fill = "white", bins = sqrt(100)) +
+  facet_wrap(~cluster_4, scales = "free") +
+  theme_classic() +
+  labs(title = "Mean Aperiodic Exponent Distribution by Cluster")
+
+
+# ---------------- VARIANCE TESTS ----------------
+
+cat("\nLevene's Test Results:\n")
+
+cat("Delta Power:\n")
+print(leveneTest(mean_delta_power ~ cluster_4, data = df_corr_frontal_filtered_group))
+
+cat("\nBeta Power:\n")
+print(leveneTest(mean_beta_power ~ cluster_4, data = df_corr_central_filtered_group))
+
+cat("\nAperiodic Offset:\n")
+print(leveneTest(mean_aperiodic_offset ~ cluster_4, data = df_corr_apo))
+
+cat("\nAperiodic Exponent:\n")
+print(leveneTest(mean_aperiodic_exponent ~ cluster_4, data = df_corr_ape))
+
+# (Optional: If you have beta1 or beta2 measures)
+# leveneTest(mean_beta1_power ~ cluster_4, data = df_corr_central1_filtered)
+# leveneTest(mean_beta2_power ~ cluster_4, data = df_corr_central2_filtered)
+
+
+# ---------------- INTERPRETATION NOTE ----------------
+# Normality assumption: mostly violated across clusters (p < 0.05)
+# Variance assumption: generally okay (except maybe aperiodic offset)
+# => Recommended: Use non-parametric tests (e.g., Kruskal-Wallis) for delta, beta, exponent, and offset
 
 # ----- 8. boxplots and stats -------------------
-# Define custom colors
-color_palette <- c("c1" = '#02CAF5',
-                   "c2" = "#F59541")
+# Define color palette for 4 clusters
+color_palette <- c(
+  "c1" = '#02CAF5',
+  "c2" = "#F59541",
+  "c3" = "#B589D6",
+  "c4" = "#F5418C"
+)
 
-##---- 8.1 aperiodic exponent general ------------
-# mean
-df_corr_ape%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_aperiodic_exponent, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
-  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
-  geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p), test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic exponent')+
-  scale_color_manual(values = color_palette) +
-  theme_classic()+
-  guides(color = FALSE)+
-  theme(
-    text = element_text(size = 14)  # Adjust the size here
+plot_and_stats <- function(df, outcome, ylabel) {
+  outcome_sym <- rlang::sym(outcome)
+  df$cluster_4 <- as.factor(df$cluster_4)
+  
+  # Kruskal-Wallis
+  cat("\n🔹 Kruskal-Wallis test for", outcome, ":\n")
+  print(kruskal.test(reformulate("cluster_4", outcome), data = df))
+  
+  # Pairwise Wilcoxon
+  pairwise_stats <- df %>%
+    pairwise_wilcox_test(
+      formula = reformulate("cluster_4", outcome),
+      p.adjust.method = "bonferroni"
+    ) %>%
+    add_xy_position(x = "cluster_4", fun = "median")
+  
+  # 🔺 Set ALL labels to be at top of the plot
+  top_y <- max(df[[outcome]], na.rm = TRUE)
+  pairwise_stats$y.position <- top_y * 1.15  # Pushes them high above everything
+  
+  cat("\n🔸 Pairwise Wilcoxon tests:\n")
+  print(pairwise_stats)
+  
+  # Effect size
+  cat("\n📏 Kruskal effect size:\n")
+  print(df %>% kruskal_effsize(reformulate("cluster_4", outcome)))
+  
+  # Plot
+  p <- ggplot(df, aes(x = cluster_4, y = !!outcome_sym, color = cluster_4)) +
+    geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5) +
+    geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
+    stat_pvalue_manual(
+      pairwise_stats,
+      hide.ns = FALSE,
+      label = "p.adj.signif",  # or use paste() for raw p-values
+      tip.length = 0.01,
+      size = 4
+    ) +
+    expand_limits(y = top_y * 1.3) +  # Extra headroom for long comparisons
+    scale_color_manual(values = color_palette) +
+    theme_classic(base_size = 14) +
+    labs(y = ylabel, x = "Cluster") +
+    guides(color = FALSE)
+  
+  print(p)
+}
+
+plot_and_stats(df_corr_ape, "mean_aperiodic_exponent", "Mean Aperiodic Exponent")
+plot_and_stats(df_corr_apo, "mean_aperiodic_offset", "Mean Aperiodic Offset")
+plot_and_stats(df_corr_frontal_filtered_group, "mean_delta_power", "Mean Delta Power [μV²] (Frontal ROI)")
+plot_and_stats(df_corr_frontal_filtered_abs, "mean_delta_power_abs", "Absolute Delta Power [μV²] (Frontal ROI)")
+plot_and_stats(df_corr_central_filtered_group, "mean_beta_power", "Mean Beta Power [μV²] (Central ROI)")
+plot_and_stats(df_corr_central_filtered_group, "mean_beta_power_abs", "Absolute Beta Power [μV²] (Central ROI)")
+
+# --------- 8.5 Summary tables of EEG values per cluster_4 ---------
+
+# Relative delta power (frontal ROI)
+df_corr_frontal_filtered_group %>%
+  group_by(cluster_4) %>%
+  summarise(
+    mean_delta = mean(mean_delta_power, na.rm = TRUE),
+    sd_delta = sd(mean_delta_power, na.rm = TRUE)
   )
 
-
-wilcox.test(mean_aperiodic_exponent~cluster_2, data = df_corr_ape, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)# 0.6057
-
-df_corr_ape <- df_corr_ape%>%
-  mutate(cluster_2 = as.factor(cluster_2))# otherwise wilcoxon_test from coin does not work
-
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_ape,mean_aperiodic_exponent~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-
-# get the effsize
-df_corr_ape%>%
-  ungroup()%>% # apparently you have to ungroup here, otherwise, wilcox_effsize does not work
-  wilcox_effsize(mean_aperiodic_exponent~cluster_2)
-
-##-------8.2 aperiodic offset general-----------
-# mean
-df_corr_apo%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_aperiodic_offset, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
-  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
-  geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p), test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic offset')+
-  scale_color_manual(values = color_palette) +
-  theme_classic()+
-  guides(color = FALSE)+
-  theme(
-    text = element_text(size = 14)  # Adjust the size here
+# Relative beta power (central ROI)
+df_corr_central_filtered_group %>%
+  group_by(cluster_4) %>%
+  summarise(
+    mean_beta = mean(mean_beta_power, na.rm = TRUE),
+    sd_beta = sd(mean_beta_power, na.rm = TRUE)
   )
 
-wilcox.test(mean_aperiodic_offset~cluster_2, data = df_corr_apo, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)
-df_corr_apo <- df_corr_apo%>%
-  mutate(cluster_2 = as.factor(cluster_2))# otherwise wilcoxon_test from coin does not work
-result <- coin::wilcox_test(data = df_corr_apo,mean_aperiodic_offset~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-# get the effsize
-df_corr_apo%>%
-  ungroup()%>% # apparently you have to ungroup here, otherwise, wilcox_effsize does not work
-  wilcox_effsize(mean_aperiodic_offset~cluster_2)
-
-# but be aware that the c2 cluster_2 is a bit younger
-# exponent
-df_corr_ape%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = age, y = mean_aperiodic_exponent, color = cluster_2))+
-  geom_point()+
-  geom_smooth(method=lm , color="black", fill="grey", se=TRUE)+
-  scale_color_manual(values = color_palette) +
-  theme_classic() +
-  theme(legend.position = c(0.20, 0.15))+
-  stat_cor(aes(color = "Correlation: "),method = "pearson", label.x = 60, label.y = 1.1,hjust=0)+
-  labs(y = 'mean aperiodic exponent')
-
-cor.test(df_corr_ape$age,df_corr_ape$mean_aperiodic_exponent)# r -.61, p 6.83e-06
-
-# offset
-df_corr_apo%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = age, y = mean_aperiodic_offset, color = cluster_2))+
-  geom_point()+
-  geom_smooth(method=lm , color="black", fill="grey", se=TRUE)+
-  scale_color_manual(values = color_palette) +
-  theme_classic() +
-  theme(legend.position = c(0.20, 0.15))+
-  stat_cor(aes(color = "Correlation: "),method = "pearson", label.x = 60, label.y = 0.8,hjust=0)+
-  labs(y = 'mean aperiodic offset')
-
-cor.test(df_corr_apo$age,df_corr_apo$mean_aperiodic_offset)# significant (p = 0.036) r = -0.31
-
-
-##------ 8.3 rel and absolute delta frontal---------------
-df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
-  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
-  geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
-  labs(y = 'mean delta power [μV^2] in frontal ROI')+
-  scale_color_manual(values = color_palette) +
-  theme_classic()+
-  guides(color = FALSE)+
-  theme(
-    text = element_text(size = 14)  # Adjust the size here
+# Aperiodic exponent (whole brain)
+df_corr_ape %>%
+  group_by(cluster_4) %>%
+  summarise(
+    mean_ape = mean(mean_aperiodic_exponent, na.rm = TRUE),
+    sd_ape = sd(mean_aperiodic_exponent, na.rm = TRUE)
   )
 
-# in order to get the W statistics
-wilcox.test(mean_delta_power~cluster_2, data = df_corr_frontal_filtered_group, 
-            alternative = 'less',
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)
-
-df_corr_frontal_filtered_group <-df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = as.factor(cluster_2))# otherwise wilcoxon_test from coin does not work
-
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_frontal_filtered_group,mean_delta_power~cluster_2, comparisons = list(c('c1','c2')), alternative = 'less')
-
-# get the effsize
-df_corr_frontal_filtered_group%>%
-  ungroup()%>%
-  wilcox_effsize(mean_delta_power~cluster_2)
-
-# absolute delta
-df_corr_frontal_filtered_abs%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_delta_power_abs))+
-  geom_boxplot()+
-  geom_jitter(width = 0.3, height = 0, alpha = 0.1)
-
-wilcox.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)
-t.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs, alternative = "less", paired = FALSE)
-
-##----- 8.4 rel beta -----------------
-df_corr_central_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
-  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+                                         # Add p-value to plot
-  geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
-  labs(y = 'mean beta power [μV^2] in central ROI')+
-  scale_color_manual(values = color_palette) +
-  theme_classic()+
-  guides(color = FALSE)+
-  theme(
-    text = element_text(size = 14)  # Adjust the size here
+# Aperiodic offset (whole brain)
+df_corr_apo %>%
+  group_by(cluster_4) %>%
+  summarise(
+    mean_apo = mean(mean_aperiodic_offset, na.rm = TRUE),
+    sd_apo = sd(mean_aperiodic_offset, na.rm = TRUE)
   )
-
-
-wilcox.test(mean_beta_power~cluster_2, data = df_corr_central_filtered_group, 
-            exact = FALSE, 
-            correct = FALSE, 
-            conf.int = FALSE)
-
-df_corr_central_filtered_group <-df_corr_central_filtered_group%>%
-  mutate(cluster_2 = as.factor(cluster_2))# otherwise wilcoxon_test from coin does not work
-
-# in order to get the z value
-result <- coin::wilcox_test(data = df_corr_central_filtered_group,mean_beta_power~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
-
-# get effsize
-df_corr_central_filtered_group%>%
-  ungroup()%>%
-  wilcox_effsize(mean_beta_power~cluster_2)
-
-## --------- 8.5 tables of all EEG values ----
-df_corr_frontal_filtered_group%>%
-  group_by(cluster_2)%>%
-  summarise(mean_delta = mean(mean_delta_power),
-            sd_delta = sd(mean_delta_power))
-
-df_corr_central_filtered_group%>%
-  group_by(cluster_2)%>%
-  summarise(mean_beta = mean(mean_beta_power),
-            sd_beta = sd(mean_beta_power))
-
-df_corr_ape%>%
-  group_by(cluster_2)%>%
-  summarise(mean_ape = mean(mean_aperiodic_exponent),
-            sd_ape = sd(mean_aperiodic_exponent))
-
-df_corr_apo%>%
-  group_by(cluster_2)%>%
-  summarise(mean_apo = mean(mean_aperiodic_offset),
-            sd_apo = sd(mean_aperiodic_offset))
 
 #------ 9. plot behavioral data and corr test ------
 ## ------- 9.1 just behavioral data ---------------
 # TMT A
 df_corr_frontal_filtered%>%
-  ggplot(aes(x = cluster_2, y = tmt_a_time))+
+  ggplot(aes(x = cluster_4, y = tmt_a_time))+
   geom_boxplot()+
   geom_jitter(width = 0.3, height = 0, alpha = 0.1)
 
 # FACIT
 df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = cluster_2, y = facit_f_FS, color = cluster_2))+
+  mutate(cluster_4 = fct_recode(cluster_4,
+                                "c1" = "c1",
+                                "c2" = "c2"))%>%
+  group_by(cluster_4)%>%
+  ggplot(aes(x = cluster_4, y = facit_f_FS, color = cluster_4))+
   geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+                                         # Add p-value to plot
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p),test = "t.test", color = 'black')+
@@ -994,27 +765,27 @@ df_corr_frontal_filtered_group%>%
 
 # TMT B-A
 df_corr_frontal_filtered%>%
-  ggplot(aes(x = cluster_2, y = tmt_diff))+
+  ggplot(aes(x = cluster_4, y = tmt_diff))+
   geom_boxplot()+
   geom_jitter(width = 0.3, height = 0, alpha = 0.1)
 
 # moca
 df_corr_frontal_filtered%>%
-  ggplot(aes(x = cluster_2, y = moca))+
+  ggplot(aes(x = cluster_4, y = moca))+
   geom_boxplot()+
   geom_jitter(width = 0.3, height = 0, alpha = 0.1)
 
-wilcox.test(moca~cluster_2, data = df_corr_frontal_filtered, 
+wilcox.test(moca~cluster_4, data = df_corr_frontal_filtered, 
             exact = FALSE, 
             correct = FALSE, 
             conf.int = FALSE)
 
 # FACIT and HADS-D
 p8<- df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  ggplot(aes(x = hads_d_total_score,y = facit_f_FS, color = cluster_2))+
+  mutate(cluster_4 = fct_recode(cluster_4,
+                                "c1" = "c1",
+                                "c2" = "c2"))%>%
+  ggplot(aes(x = hads_d_total_score,y = facit_f_FS, color = cluster_4))+
   geom_point(size = 2)+
   labs(y = 'FACIT Fatigue Scale [Range: 0-52]',
        x = 'HADS-D Score [Range: 0-21]')+
@@ -1059,15 +830,15 @@ cor.test(df_corr_frontal_filtered_group$tmt_diff,df_corr_frontal_filtered_group$
 ## --------- 9.2 corr tests ---------------------------
 ### ---- 9.2.1 relative delta power with TMT-A and TMT-B-A------------
 df_corr_frontal_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_delta_power,y = tmt_a_time, color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_delta_power,y = tmt_a_time, color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtered_group$tmt_a_time, method = 'spearman', exact = FALSE)
 
 df_corr_frontal_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = tmt_diff,y = mean_delta_power,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = tmt_diff,y = mean_delta_power,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtered_group$tmt_diff, method = 'spearman', exact = FALSE)
@@ -1075,18 +846,18 @@ cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtere
 
 ### ------ 9.2.2 rel delta and moca ---------------
 df_corr_frontal_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = moca,y = mean_delta_power,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = moca,y = mean_delta_power,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_frontal_filtered$mean_delta_power,df_corr_frontal_filtered$moca, method = 'spearman', exact = FALSE)
 
 ###-------- 9.2.3 relative and absolute delta and FACIT score ------------------------
 p1<- df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  ggplot(aes(x = mean_delta_power,y = facit_f_FS, color = cluster_2))+
+  mutate(cluster_4 = fct_recode(cluster_4,
+                                "c1" = "c1",
+                                "c2" = "c2"))%>%
+  ggplot(aes(x = mean_delta_power,y = facit_f_FS, color = cluster_4))+
   geom_point(size = 2.5)+
   labs(y = 'FACIT Fatigue Scale [Range: 0-52]',
        x = 'mean delta power [μV^2]')+
@@ -1107,7 +878,7 @@ cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtere
 
 # just curious = > divide into the two groups and test separately
 p5<- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c1')%>%
+  filter(cluster_4 == 'c1')%>%
   ggplot(aes(x = mean_delta_power,y = facit_f_FS))+
   geom_point()+
   geom_smooth(method=lm , color="black", fill="grey", se=TRUE) +
@@ -1118,12 +889,12 @@ ggMarginal(p5, type = "densigram")
 
 
 test <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c1')
+  filter(cluster_4 == 'c1')
 
 cor.test(test$mean_delta_power,test$facit_f_FS) # 
 
 p6 <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c2')%>%
+  filter(cluster_4 == 'c2')%>%
   ggplot(aes(x = mean_delta_power,y = facit_f_FS))+
   geom_point()+
   geom_smooth(method=lm , color="black", fill="grey", se=TRUE) +
@@ -1133,17 +904,17 @@ p6 <- df_corr_frontal_filtered_group%>%
 ggMarginal(p6, type = "densigram")
 
 test2 <- df_corr_frontal_filtered_group%>%
-  filter(cluster_2 == 'c2')
+  filter(cluster_4 == 'c2')
 
 cor.test(test2$mean_delta_power,test2$facit_f_FS) 
 
 
 # absolute delta power
 p1<- df_corr_frontal_filtered_abs%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  ggplot(aes(x = mean_delta_power_abs,y = facit_f_FS, color = cluster_2))+
+  mutate(cluster_4 = fct_recode(cluster_4,
+                                "c1" = "c1",
+                                "c2" = "c2"))%>%
+  ggplot(aes(x = mean_delta_power_abs,y = facit_f_FS, color = cluster_4))+
   geom_point(size = 2.5)+
   labs(y = 'FACIT Fatigue Scale [Range: 0-52]',
        x = 'mean delta power [μV^2]')+
@@ -1160,11 +931,11 @@ ggMarginal(p1, type = "densigram")
 
 ###------------ 9.2.4 delta and hads d--------------------
 p7<- df_corr_frontal_filtered_group%>%
-  mutate(cluster_2 = fct_recode(cluster_2,
-                            "c1" = "c1",
-                            "c2" = "c2"))%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_delta_power,y = hads_d_total_score, color = cluster_2))+
+  mutate(cluster_4 = fct_recode(cluster_4,
+                                "c1" = "c1",
+                                "c2" = "c2"))%>%
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_delta_power,y = hads_d_total_score, color = cluster_4))+
   geom_point(size = 2.5)+
   labs(y = 'HADS-D Score [Range: 0-21]',
        x = 'mean delta power [μV^2]')+
@@ -1183,24 +954,24 @@ cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtere
 
 ### ------ 9.2.5 relative beta power and with TMT-A and TMT-B-A--------------------
 df_corr_central_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta_power,y = tmt_a_time, color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_beta_power,y = tmt_a_time, color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$tmt_a_time, method = 'spearman', exact = FALSE)
 
 
 df_corr_central_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta_power,y = tmt_diff,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_beta_power,y = tmt_diff,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$tmt_diff, method = 'spearman', exact = FALSE)
 
 ###---- 9.2.6 relative beta power and with FACIT score --------------------
 df_corr_central_filtered_group%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta_power,y = facit_f_FS,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_beta_power,y = facit_f_FS,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$facit_f_FS, method = 'spearman', exact = FALSE)
@@ -1211,16 +982,16 @@ cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered
 
 # beta 1
 df_corr_central1_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta1_power,y = facit_f_FS,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_beta1_power,y = facit_f_FS,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_central1_filtered$mean_beta1_power,df_corr_central1_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
 
 # beta 2
 df_corr_central2_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta2_power,y = facit_f_FS,color = cluster_2))+
+  group_by(cluster_4)%>%
+  ggplot(aes(x = mean_beta2_power,y = facit_f_FS,color = cluster_4))+
   geom_point()
 
 cor.test(df_corr_central2_filtered$mean_beta2_power,df_corr_central2_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
@@ -1263,10 +1034,10 @@ cor.test(table_power_5$aperiodic_offset, table_power_5$r_squared)
 # ---------- 11. permutation tests -------------------------
 # comparing apo and ape at every channel
 table_apo_filtered <- table_apo_filtered%>%
-  mutate(cluster_2 = as.factor(cluster_2))
+  mutate(cluster_4 = as.factor(cluster_4))
 
 table_ape_filtered <- table_ape_filtered%>%
-  mutate(cluster_2 = as.factor(cluster_2))
+  mutate(cluster_4 = as.factor(cluster_4))
 
 # Create permutation test function
 permutation_function <- function(nsim,df,chan,offset_or_exponent){
@@ -1276,12 +1047,12 @@ permutation_function <- function(nsim,df,chan,offset_or_exponent){
   for (i in 1:nsim) {
     ## standard approach: scramble response value
     perm <- sample(nrow(df))
-    bdat <- transform(df,cluster_2 = cluster_2[perm])
+    bdat <- transform(df,cluster_4 = cluster_4[perm])
     ## compute & store difference in means; store the value
-    tt <- t.test(bdat[[offset_or_exponent]]~cluster_2,data=bdat,var.equal=FALSE)
+    tt <- t.test(bdat[[offset_or_exponent]]~cluster_4,data=bdat,var.equal=FALSE)
     res[i] <- tt$statistic
   }
-  obs <- t.test(df[[offset_or_exponent]]~cluster_2,data=df,var.equal=FALSE)
+  obs <- t.test(df[[offset_or_exponent]]~cluster_4,data=df,var.equal=FALSE)
   ## append the observed value to the list of results
   res <- c(res,obs$statistic)
   res <<- res
@@ -1296,12 +1067,12 @@ permutation_function_wilcox <- function(nsim,df,chan,offset_or_exponent){
   for (i in 1:nsim) {
     ## standard approach: scramble response value
     perm <- sample(nrow(df))
-    bdat <- transform(df,cluster_2 = cluster_2[perm])
+    bdat <- transform(df,cluster_4 = cluster_4[perm])
     ## compute & store difference in means; store the value
-    w <- wilcox.test(bdat[[offset_or_exponent]]~cluster_2,data=bdat,var.equal=FALSE)
+    w <- wilcox.test(bdat[[offset_or_exponent]]~cluster_4,data=bdat,var.equal=FALSE)
     res[i] <- w$statistic
   }
-  obs <- wilcox.test(df[[offset_or_exponent]]~cluster_2,data=df,var.equal=FALSE)
+  obs <- wilcox.test(df[[offset_or_exponent]]~cluster_4,data=df,var.equal=FALSE)
   ## append the observed value to the list of results
   res <- c(res,obs$statistic)
   res <<- res

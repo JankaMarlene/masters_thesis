@@ -641,6 +641,9 @@ print(leveneTest(mean_aperiodic_exponent ~ cluster_4, data = df_corr_ape))
 # => Recommended: Use non-parametric tests (e.g., Kruskal-Wallis) for delta, beta, exponent, and offset
 
 # ----- 8. boxplots and stats -------------------
+# Define the output file path
+output_folder <- "plots/final/cluster4/plots"
+
 # Define color palette for 4 clusters
 color_palette <- c(
   "c1" = '#02CAF5',
@@ -678,7 +681,7 @@ plot_and_stats <- function(df, outcome, ylabel) {
   
   # Plot
   p <- ggplot(df, aes(x = cluster_4, y = !!outcome_sym, color = cluster_4)) +
-    geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5) +
+    geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
     geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
     stat_pvalue_manual(
       pairwise_stats,
@@ -690,10 +693,17 @@ plot_and_stats <- function(df, outcome, ylabel) {
     expand_limits(y = top_y * 1.3) +  # Extra headroom for long comparisons
     scale_color_manual(values = color_palette) +
     theme_classic(base_size = 14) +
-    labs(y = ylabel, x = "Cluster") +
+    labs(y = ylabel, x = "cluster") +
     guides(color = FALSE)
   
   print(p)
+
+  # Save the plot as PNG
+  plot_name <- paste0(gsub(" ", "_", outcome), "_boxplot.png")  # Save using outcome name
+  file_name <- file.path(output_folder, plot_name)
+  
+  ggsave(filename = file_name, plot = p, width = 8, height = 6)
+  cat("\nPlot saved as:", file_name, "\n")
 }
 
 plot_and_stats(df_corr_ape, "mean_aperiodic_exponent", "Mean Aperiodic Exponent")
@@ -702,6 +712,31 @@ plot_and_stats(df_corr_frontal_filtered_group, "mean_delta_power", "Mean Delta P
 plot_and_stats(df_corr_frontal_filtered_abs, "mean_delta_power_abs", "Absolute Delta Power [μV²] (Frontal ROI)")
 plot_and_stats(df_corr_central_filtered_group, "mean_beta_power", "Mean Beta Power [μV²] (Central ROI)")
 plot_and_stats(df_corr_central_filtered_group, "mean_beta_power_abs", "Absolute Beta Power [μV²] (Central ROI)")
+
+# Perform Wilcoxon tests and store p-values for relative delta power (df_corr_frontal_filtered_group)
+
+# Define pairwise comparisons for the Wilcoxon test
+pairwise_comparisons_delta <- combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE)
+
+# Perform Wilcoxon tests and store results
+pairwise_results_delta <- sapply(pairwise_comparisons_delta, function(groups) {
+  test_result <- wilcox.test(
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[1]],
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[2]],
+    exact = FALSE
+  )
+  test_result$p.value
+})
+
+# Create a data frame with the comparisons and their p-values
+comparison_df_delta <- data.frame(
+  Group1 = sapply(pairwise_comparisons_delta, `[`, 1),
+  Group2 = sapply(pairwise_comparisons_delta, `[`, 2),
+  p_value = pairwise_results_delta
+)
+
+# Display the table of comparisons and p-values in the console
+print(comparison_df_delta)
 
 # --------- 8.5 Summary tables of EEG values per cluster_4 ---------
 

@@ -753,22 +753,25 @@ leveneTest(mean_beta2_power~cluster_2,data = df_corr_central2_filtered)# not sig
 # => use NONPARAMETRIC Tests for beta, delta and the exponent + offset?
 
 # ----- 8. boxplots and stats -------------------
+# Define the output file path
+output_folder <- "plots/final/cluster2/plots"
+
 # Define custom colors
 color_palette <- c("c1" = '#02CAF5',
                    "c2" = "#F59541")
 
 ##---- 8.1 aperiodic exponent general ------------
 # mean
-df_corr_ape%>%
+plot_ape <- df_corr_ape%>%
   mutate(cluster_2 = fct_recode(cluster_2,
                             "c1" = "c1",
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_aperiodic_exponent, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
+  geom_boxplot(size = 0.75,outlier.colour = NA, width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p), test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic exponent')+
+  labs(y = 'mean aperiodic exponent', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic()+
   guides(color = FALSE)+
@@ -776,7 +779,10 @@ df_corr_ape%>%
     text = element_text(size = 14)  # Adjust the size here
   )
 
+# Save the plot
+ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot.png"), plot = plot_ape)
 
+# Wilcoxon test
 wilcox.test(mean_aperiodic_exponent~cluster_2, data = df_corr_ape, 
             exact = FALSE, 
             correct = FALSE, 
@@ -795,16 +801,16 @@ df_corr_ape%>%
 
 ##-------8.2 aperiodic offset general-----------
 # mean
-df_corr_apo%>%
+plot_apo <- df_corr_apo%>%
   mutate(cluster_2 = fct_recode(cluster_2,
                             "c1" = "c1",
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_aperiodic_offset, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'NA', width=0.5)+
+  geom_boxplot(size = 0.75,outlier.colour = NA, width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p), test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic offset')+
+  labs(y = 'mean aperiodic offset', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic()+
   guides(color = FALSE)+
@@ -812,6 +818,10 @@ df_corr_apo%>%
     text = element_text(size = 14)  # Adjust the size here
   )
 
+# Save the plot
+ggsave(filename = file.path(output_folder, "aperiodic_offset_boxplot.png"), plot = plot_apo)
+
+# Wilcoxon test
 wilcox.test(mean_aperiodic_offset~cluster_2, data = df_corr_apo, 
             exact = FALSE, 
             correct = FALSE, 
@@ -860,16 +870,16 @@ df_corr_apo%>%
 cor.test(df_corr_apo$age,df_corr_apo$mean_aperiodic_offset)# significant (p = 0.036) r = -0.31
 
 ##------ 8.3 rel and absolute delta frontal---------------
-df_corr_frontal_filtered_group%>%
+plot_rel_delta <- df_corr_frontal_filtered_group%>%
   mutate(cluster_2 = fct_recode(cluster_2,
                             "c1" = "c1",
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'NA', width=0.5)+
+  geom_boxplot(size = 0.75,outlier.colour = NA, width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
-  labs(y = 'mean delta power [μV^2] in frontal ROI')+
+  labs(y = 'mean delta power [μV^2] in frontal ROI', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic()+
   guides(color = FALSE)+
@@ -877,6 +887,10 @@ df_corr_frontal_filtered_group%>%
     text = element_text(size = 14)  # Adjust the size here
   )
 
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot.png"), plot = plot_rel_delta)
+
+# Wilcoxon test
 # in order to get the W statistics
 wilcox.test(mean_delta_power~cluster_2, data = df_corr_frontal_filtered_group, 
             alternative = 'less',
@@ -908,8 +922,8 @@ wilcox.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs,
             conf.int = FALSE)
 t.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs, alternative = "less", paired = FALSE)
 
-##----- 8.4 mean beta -----------------
-df_corr_central_filtered_group%>%
+##----- 8.4 rel beta -----------------
+plot_rel_beta <- df_corr_central_filtered_group%>%
   mutate(cluster_2 = fct_recode(cluster_2,
                             "c1" = "c1",
                             "c2" = "c2"))%>%
@@ -918,7 +932,7 @@ df_corr_central_filtered_group%>%
   geom_boxplot(size = 0.75,outlier.colour = NA, width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+   
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
-  labs(y = 'mean beta power [μV^2] in central ROI')+
+  labs(y = 'mean beta power [μV^2] in central ROI', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic()+
   guides(color = FALSE)+
@@ -926,6 +940,8 @@ df_corr_central_filtered_group%>%
     text = element_text(size = 14)  # Adjust the size here
   )
 
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_beta_boxplot.png"), plot = plot_rel_beta)
 
 wilcox.test(mean_beta_power~cluster_2, data = df_corr_central_filtered_group, 
             exact = FALSE, 

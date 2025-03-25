@@ -560,6 +560,10 @@ leveneTest(mean_aperiodic_offset ~ group_combined, data = df_corr_apo)
 leveneTest(mean_aperiodic_exponent ~ group_combined, data = df_corr_ape)
 
 # ----- 8. boxplots and stats -------------------
+
+# Define the output file path
+output_folder <- "plots/final/cluster2_groups/plots"
+
 # Define custom colors for the 4 groups
 color_palette <- c(
   "self-reported CD_c1" = '#02CAF5',
@@ -569,36 +573,42 @@ color_palette <- c(
 )
 
 ##---- 8.1 aperiodic exponent general ------------
-df_corr_ape %>%
+plot_ape <- df_corr_ape %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_aperiodic_exponent, color = group_combined))+
-  geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5)+
+  geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = combn(unique(df_corr_ape$group_combined), 2, simplify = FALSE),
               map_signif_level = TRUE, test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic exponent')+
+  labs(y = 'mean aperiodic exponent', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic() +
   guides(color = FALSE) +
   theme(text = element_text(size = 14))
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot.png"), plot = plot_ape)
 
 # Wilcoxon test and effect size
 pairwise.wilcox.test(df_corr_ape$mean_aperiodic_exponent, df_corr_ape$group_combined, p.adjust.method = "bonferroni")
 df_corr_ape %>% ungroup() %>% wilcox_effsize(mean_aperiodic_exponent ~ group_combined)
 
 ##-------8.2 aperiodic offset general-----------
-df_corr_apo %>%
+plot_apo <- df_corr_apo %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_aperiodic_offset, color = group_combined))+
-  geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5)+
+  geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = combn(unique(df_corr_apo$group_combined), 2, simplify = FALSE),
               map_signif_level = TRUE, test = 'wilcox.test', color = 'black')+
-  labs(y = 'mean aperiodic offset')+
+  labs(y = 'mean aperiodic offset', x = 'cluster')+
   scale_color_manual(values = color_palette) +
   theme_classic() +
   guides(color = FALSE) +
   theme(text = element_text(size = 14))
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot.png"), plot = plot_apo)
 
 pairwise.wilcox.test(df_corr_apo$mean_aperiodic_offset, df_corr_apo$group_combined, p.adjust.method = "bonferroni")
 df_corr_apo %>% ungroup() %>% wilcox_effsize(mean_aperiodic_offset ~ group_combined)
@@ -630,22 +640,74 @@ df_corr_apo %>%
 cor.test(df_corr_apo$age, df_corr_apo$mean_aperiodic_offset)
 
 ##------ 8.3 Relative Delta Power (Frontal ROI) ---------------
+# Run pairwise Wilcoxon test and filter out non-significant comparisons
+pairwise_comparisons <- combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE)
+
+# Perform Wilcoxon tests and store results
+pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+  test_result <- wilcox.test(
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[1]],
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[2]],
+    exact = FALSE
+  )
+  test_result$p.value
+})
+
+# Only keep significant results (p-value < 0.05)
+significant_comparisons <- pairwise_comparisons[which(pairwise_results < 0.05)]
+p_values <- pairwise_results[which(pairwise_results < 0.05)]
 
 # Plot
-df_corr_frontal_filtered_group %>%
+plot_rel_delta <- df_corr_frontal_filtered_group %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_delta_power, color = group_combined)) +
-  geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5) +
+  geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
   geom_signif(
-    comparisons = combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE),
-    map_signif_level = TRUE, test = 'wilcox.test', color = 'black'
+    comparisons = significant_comparisons,
+    map_signif_level = TRUE, 
+    test = 'wilcox.test', 
+    color = 'black',
+    annotations = sapply(p_values, function(p) sprintf("p = %.2g", p))
   ) +
-  labs(y = 'Mean Relative Delta Power [μV²] (Frontal ROI)') +
+  labs(y = 'Mean Relative Delta Power [μV²] (Frontal ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +
   guides(color = FALSE) +
-  theme(text = element_text(size = 14))
+  theme(text = element_text(size = 14), axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels
+        )
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot_1.png"), 
+       plot = plot_rel_delta,
+       width = 10,
+       height = 7)
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot.png"), plot = plot_rel_delta)
+
+# Define pairwise comparisons for the Wilcoxon test
+pairwise_comparisons <- combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE)
+
+# Perform Wilcoxon tests and store p-values
+pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+  test_result <- wilcox.test(
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[1]],
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[2]],
+    exact = FALSE
+  )
+  test_result$p.value
+})
+
+# Create a data frame with the comparisons and their p-values
+comparison_df <- data.frame(
+  Group1 = sapply(pairwise_comparisons, `[`, 1),
+  Group2 = sapply(pairwise_comparisons, `[`, 2),
+  p_value = pairwise_results
+)
+
+# Display the table of comparisons and p-values
+print(comparison_df)
+
 
 # Pairwise Wilcoxon test
 pairwise.wilcox.test(df_corr_frontal_filtered_group$mean_delta_power,
@@ -659,22 +721,66 @@ df_corr_frontal_filtered_group %>%
 
 ##------ 8.3 Absolute Delta Power (Frontal ROI) ---------------
 
+# Run pairwise Wilcoxon test and filter out non-significant comparisons
+pairwise_comparisons_abs <- combn(unique(df_corr_frontal_filtered_abs$group_combined), 2, simplify = FALSE)
+
+# Perform Wilcoxon tests and store results
+pairwise_results_abs <- sapply(pairwise_comparisons_abs, function(groups) {
+  test_result <- wilcox.test(
+    df_corr_frontal_filtered_abs$mean_delta_power_abs[df_corr_frontal_filtered_abs$group_combined == groups[1]],
+    df_corr_frontal_filtered_abs$mean_delta_power_abs[df_corr_frontal_filtered_abs$group_combined == groups[2]],
+    exact = FALSE
+  )
+  test_result$p.value
+})
+
+# Only keep significant results (p-value < 0.05)
+significant_comparisons_abs <- pairwise_comparisons_abs[which(pairwise_results_abs < 0.05)]
+p_values_abs <- pairwise_results_abs[which(pairwise_results_abs < 0.05)]
+
+# Create a data frame to store the significant comparisons and p-values
+comparison_df_abs <- data.frame(
+  Group1 = sapply(significant_comparisons_abs, `[`, 1),
+  Group2 = sapply(significant_comparisons_abs, `[`, 2),
+  p_value = p_values_abs
+)
+
+# Determine y-positions for annotations to avoid overlap
+# Here, you can adjust the y_positions to better fit your data
+max_y_abs <- max(df_corr_frontal_filtered_abs$mean_delta_power_abs)
+y_positions_abs <- seq(max_y_abs * 0.8, max_y_abs * 0.95, length.out = length(p_values_abs))
+
 # Plot
-df_corr_frontal_filtered_abs %>%
-  mutate(group_combined = factor(group_combined, levels = unique(group_combined))) %>%
+plot_abs_delta <- df_corr_frontal_filtered_abs %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_delta_power_abs, color = group_combined)) +
-  geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5) +
+  geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
   geom_signif(
-    comparisons = combn(unique(df_corr_frontal_filtered_abs$group_combined), 2, simplify = FALSE),
-    map_signif_level = TRUE, test = 'wilcox.test', color = 'black'
+    comparisons = significant_comparisons_abs,
+    map_signif_level = TRUE, 
+    test = 'wilcox.test', 
+    color = 'black',
+    y_position = y_positions_abs, # Specify y-positions for annotations
+    annotations = sapply(p_values_abs, function(p) sprintf("p = %.2g", p))
   ) +
-  labs(y = 'Mean Absolute Delta Power [μV²] (Frontal ROI)') +
+  labs(y = 'Mean Absolute Delta Power [μV²] (Frontal ROI)', x = 'Group and Cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +
   guides(color = FALSE) +
-  theme(text = element_text(size = 14))
+  theme(text = element_text(size = 14), axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "abs_delta_boxplot.png"), plot = plot_abs_delta)
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "abs_delta_boxplot_1.png"), 
+       plot = plot_abs_delta,
+       width = 10,
+       height = 7)
+
+
+
 
 # Pairwise Wilcoxon test
 pairwise.wilcox.test(df_corr_frontal_filtered_abs$mean_delta_power_abs,
@@ -689,10 +795,10 @@ df_corr_frontal_filtered_abs %>%
 ##----- 8.4 Relative Beta Power (Central ROI) -----------------
 
 # Boxplot with significance for all group comparisons
-df_corr_central_filtered_group %>%
+plot_rel_beta <- df_corr_central_filtered_group %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_beta_power, color = group_combined)) +
-  geom_boxplot(size = 0.75, outlier.colour = 'black', width = 0.5) +
+  geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
   geom_signif(
     comparisons = combn(unique(df_corr_central_filtered_group$group_combined), 2, simplify = FALSE),
@@ -700,11 +806,21 @@ df_corr_central_filtered_group %>%
     test = "wilcox.test",
     color = "black"
   ) +
-  labs(y = 'Mean Relative Beta Power [μV²] (Central ROI)') +
+  labs(y = 'Mean Relative Beta Power [μV²] (Central ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +
   guides(color = FALSE) +
-  theme(text = element_text(size = 14))
+  theme(text = element_text(size = 14), axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels
+        )
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_beta_boxplot.png"), plot = plot_rel_beta)
+
+# Save the plot
+ggsave(filename = file.path(output_folder, "rel_beta_boxplot_1.png"), 
+       plot = plot_rel_beta,
+       width = 10,
+       height = 7)
 
 # Pairwise Wilcoxon test (Bonferroni correction)
 pairwise.wilcox.test(df_corr_central_filtered_group$mean_beta_power,

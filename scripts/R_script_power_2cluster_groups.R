@@ -496,7 +496,6 @@ export_topoplot_table(filter(table_power_5, group_combined == "no self-reported 
 export_topoplot_table(filter(table_power_5, group_combined == "no self-reported CD_c2"), r_squared, "export_r_noCD_c2")
 
 #--------- 7. Check assumptions: normality & variance -----------------------------
-
 # ----- Shapiro-Wilk normality tests (per group_combined)
 
 # Delta power (frontal)
@@ -561,7 +560,6 @@ leveneTest(mean_aperiodic_offset ~ group_combined, data = df_corr_apo)
 leveneTest(mean_aperiodic_exponent ~ group_combined, data = df_corr_ape)
 
 # ----- 8. boxplots and stats -------------------
-# Define custom colors
 # Define custom colors for the 4 groups
 color_palette <- c(
   "self-reported CD_c1" = '#02CAF5',
@@ -569,7 +567,6 @@ color_palette <- c(
   "no self-reported CD_c1" = '#AA42F5',
   "no self-reported CD_c2" = '#FF5F5F'
 )
-
 
 ##---- 8.1 aperiodic exponent general ------------
 df_corr_ape %>%
@@ -752,3 +749,4 @@ df_corr_apo %>%
     mean_apo = mean(mean_aperiodic_offset, na.rm = TRUE),
     sd_apo = sd(mean_aperiodic_offset, na.rm = TRUE)
   )
+

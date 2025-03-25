@@ -801,7 +801,7 @@ df_corr_apo%>%
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_aperiodic_offset, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
+  geom_boxplot(size = 0.75,outlier.colour = 'NA', width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = function(p) sprintf("p = %.2g", p), test = 'wilcox.test', color = 'black')+
   labs(y = 'mean aperiodic offset')+
@@ -859,7 +859,6 @@ df_corr_apo%>%
 
 cor.test(df_corr_apo$age,df_corr_apo$mean_aperiodic_offset)# significant (p = 0.036) r = -0.31
 
-
 ##------ 8.3 rel and absolute delta frontal---------------
 df_corr_frontal_filtered_group%>%
   mutate(cluster_2 = fct_recode(cluster_2,
@@ -867,7 +866,7 @@ df_corr_frontal_filtered_group%>%
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_delta_power, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
+  geom_boxplot(size = 0.75,outlier.colour = 'NA', width=0.5)+
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
   labs(y = 'mean delta power [μV^2] in frontal ROI')+
@@ -909,15 +908,15 @@ wilcox.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs,
             conf.int = FALSE)
 t.test(mean_delta_power_abs~cluster_2, data = df_corr_frontal_filtered_abs, alternative = "less", paired = FALSE)
 
-##----- 8.4 rel beta -----------------
+##----- 8.4 mean beta -----------------
 df_corr_central_filtered_group%>%
   mutate(cluster_2 = fct_recode(cluster_2,
                             "c1" = "c1",
                             "c2" = "c2"))%>%
   group_by(cluster_2)%>%
   ggplot(aes(x = cluster_2, y = mean_beta_power, color = cluster_2))+
-  geom_boxplot(size = 0.75,outlier.colour = 'black', width=0.5)+
-  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+                                         # Add p-value to plot
+  geom_boxplot(size = 0.75,outlier.colour = NA, width=0.5)+
+  geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2)+   
   geom_signif(comparisons = list(c("c1","c2")),map_signif_level = TRUE, color = 'black')+
   labs(y = 'mean beta power [μV^2] in central ROI')+
   scale_color_manual(values = color_palette) +

@@ -309,7 +309,7 @@ for (variable in variables) {
     # Use t-test here
     geom_signif(
       comparisons = list(c("c1", "c2")),
-      test = "t.test",
+      test = "wilcox.test",
       map_signif_level = FALSE,      # Converts p to *, **, etc. (set to FALSE for exact p)
       color = "black",
       textsize = 3.5,

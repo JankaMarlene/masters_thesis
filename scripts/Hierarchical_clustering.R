@@ -31,15 +31,6 @@ clean_data$group[clean_data$group == "withoutPCS"] <- "no self-reported CD"
 str(cog_df)
 summary(cog_df)
 
-# Store group labels in a separate variable and exclude label (group column) from the dataset to do clustering
-# Later true labels will be used to check how good clustering turned out
-cog_label <- cog_df$group
-cog_label[cog_label == "withPCS"] <- "self-reported CD"
-cog_label[cog_label == "withoutPCS"] <- "no self-reported CD"
-cog_df$group <- NULL
-str(cog_df)
-
-
 # Build distance matrix
 # Since all values are continuous numerical values I use euclidean distance method
 dist_mat <- dist(cog_df, method = 'euclidean')
@@ -414,19 +405,133 @@ named_stats_tables
 # Initialize an empty list to store the plots
 plot_list <- list()
 
-# Loop over each variable
+
+#-------- 
+# Cognitive variables in the four groups
+clean_data <- clean_data %>%
+  mutate(
+    group_combined = paste(group, cluster_label, sep = "_")
+  )
+
+# Your 4-group color palette
+color_palette <- c(
+  "no self-reported CD_c1" = '#6ADDF8',
+  "self-reported CD_c1" = '#009EC4',
+  "no self-reported CD_c2" = '#FDB57A',
+  "self-reported CD_c2" = '#D97700'
+)
+
+# Define variables to plot
+variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
+
+# Make sure group_combined is a factor with correct levels
+clean_data$group_combined <- factor(clean_data$group_combined, levels = names(color_palette))
+
+# Initialize list for plots
+plot_list <- list()
+
+# Loop over variables
 for (variable in variables) {
-  # Create boxplot for the current variable grouped by cluster and fill by group
-  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable), fill = group)) +
-    geom_boxplot(position = position_dodge(width = 0.75)) +
-    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
   
-  # Append the plot to the list
+  # Get all pairwise combinations of groups
+  pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
+  
+  # Run Wilcoxon tests and get p-values
+  pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+    wilcox.test(
+      clean_data[[variable]][clean_data$group_combined == groups[1]],
+      clean_data[[variable]][clean_data$group_combined == groups[2]],
+      exact = FALSE
+    )$p.value
+  })
+  
+  # Filter to significant comparisons
+  significant_comparisons <- pairwise_comparisons[which(pairwise_results < 0.05)]
+  p_values <- pairwise_results[which(pairwise_results < 0.05)]
+  
+  ylim_buffer <- max(clean_data[[variable]], na.rm = TRUE) * 0.2  # 20% headroom
+  ymax <- max(clean_data[[variable]], na.rm = TRUE) + ylim_buffer
+  
+  # Create the plot
+  plot <- ggplot(clean_data, aes(x = group_combined, y = !!sym(variable), color = group_combined)) +
+    geom_boxplot(fill = "white", outlier.shape = NA, width = 0.6, size = 0.9) +
+    geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
+    scale_color_manual(values = color_palette) +
+    labs(x = "", y = variable) +
+    theme_classic() +
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(color = NA, angle = 45, hjust = 1),         
+      axis.ticks.x = element_line(),         
+      axis.title.x = element_blank(),        
+      text = element_text(size = 14)
+    )+
+    coord_cartesian(ylim = c(NA, ymax * 1.15)) 
+  
+  # Add significance bars if any
+  if (length(significant_comparisons) > 0) {
+    plot <- plot +
+      geom_signif(
+        comparisons = significant_comparisons,
+        annotations = sapply(p_values, function(p) sprintf("p = %.2g", p)),
+        color = "black",
+        textsize = 3.5,
+        step_increase = 0.1
+      )
+  }
+  
+  # Store plot
   plot_list[[variable]] <- plot
 }
 
-# Arrange plots in a grid
-grid.arrange(grobs = plot_list, ncol = 2)
+# Display all plots
+grid.arrange(grobs = plot_list, ncol = 3)
+
+
+# Store all comparison results in a list
+all_stats <- list()
+
+for (variable in variables) {
+  
+  # Pairwise Wilcoxon tests
+  pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
+  pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+    wilcox.test(
+      clean_data[[variable]][clean_data$group_combined == groups[1]],
+      clean_data[[variable]][clean_data$group_combined == groups[2]],
+      exact = FALSE
+    )$p.value
+  })
+  
+  # Create a summary table
+  stat_table <- data.frame(
+    Variable = rep(variable, length(pairwise_results)),
+    Group1 = sapply(pairwise_comparisons, `[`, 1),
+    Group2 = sapply(pairwise_comparisons, `[`, 2),
+    p_value = pairwise_results
+  )
+  
+  # Add adjusted p-values (Bonferroni)
+  stat_table$p_adj_bonferroni <- p.adjust(stat_table$p_value, method = "bonferroni")
+  
+  # Effect sizes
+  effsize <- wilcox_effsize(clean_data, formula = as.formula(paste(variable, "~ group_combined")))
+  stat_table <- left_join(stat_table, effsize, by = c("Group1" = "group1", "Group2" = "group2"))
+  
+  # Store in list
+  all_stats[[variable]] <- stat_table
+}
+
+summary_stats_all <- do.call(rbind, all_stats)
+
+summary_stats_all <- do.call(rbind, all_stats)
+View(summary_stats_all)
+
+write.csv(summary_stats_all, "summary_stats_all_cog_groups.csv", row.names = FALSE)
+
+
+
+
 
 
 # Initialize an empty list to store the test results for withPCS group
@@ -949,12 +1054,35 @@ new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "ps
 # Initialize an empty list to store the plots
 plot_list <- list()
 
-# Loop over each new variable
+# Custom color palette
+color_palette <- c("c1" = '#02CAF5', "c2" = "#F59541")
+
+# Make sure cluster labels match color keys (e.g., "c1", "c2")
+clean_data$cluster_label <- factor(paste0("c", cog_df_cl$cluster))
+
+# Initialize an empty list to store the plots
+plot_list <- list()
+
+# Loop over each variable
 for (variable in new_variables) {
   # Create boxplot for the current variable grouped by cluster
-  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
-    geom_boxplot(position = position_dodge(width = 0.75)) +
-    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  plot <- ggplot(clean_data, aes(x = cluster_label, y = !!sym(variable), color = cluster_label)) +
+    geom_boxplot(position = position_dodge(width = 0.75), fill = "white", outlier.shape = NA) +
+    geom_jitter(width = 0.15, alpha = 0.6, size = 2, aes(color = cluster_label)) +
+    scale_color_manual(values = color_palette) +
+    labs(x = "", y = variable) +
+    
+    # Use t-test here
+    geom_signif(
+      comparisons = list(c("c1", "c2")),
+      test = "t.test",
+      map_signif_level = TRUE,      # Converts p to *, **, etc. (set to FALSE for exact p)
+      color = "black",
+      textsize = 3.5,
+      tip_length = 0.01
+    ) +
+    
+    theme(legend.position = "none")
   
   # Append the plot to the list
   plot_list[[variable]] <- plot
@@ -1018,6 +1146,140 @@ named_stats_tables
 
 # Initialize an empty list to store the plots
 plot_list <- list()
+
+
+# Vector of variables for which to create boxplots
+new_variables <- c("facit_f_FS", "hads_a_total_score", "hads_d_total_score", "psqi_total_score")
+
+# Cognitive variables in the four groups
+clean_data <- clean_data %>%
+  mutate(
+    group_combined = paste(group, cluster_label, sep = "_")
+  )
+
+# Your 4-group color palette
+color_palette <- c(
+  "no self-reported CD_c1" = '#6ADDF8',
+  "self-reported CD_c1" = '#009EC4',
+  "no self-reported CD_c2" = '#FDB57A',
+  "self-reported CD_c2" = '#D97700'
+)
+
+
+# Make sure group_combined is a factor with correct levels
+clean_data$group_combined <- factor(clean_data$group_combined, levels = names(color_palette))
+
+# Initialize list for plots
+plot_list <- list()
+
+# Loop over variables
+for (variable in new_variables) {
+  
+  # Get all pairwise combinations of groups
+  pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
+  
+  # Run Wilcoxon tests
+  p_values_raw <- sapply(pairwise_comparisons, function(groups) {
+    wilcox.test(
+      clean_data[[variable]][clean_data$group_combined == groups[1]],
+      clean_data[[variable]][clean_data$group_combined == groups[2]],
+      exact = FALSE
+    )$p.value
+  })
+  
+  # Bonferroni correction
+  p_adj_bonf <- p.adjust(p_values_raw, method = "bonferroni")
+  
+  # Use consistent index
+  sig_idx <- which(!is.na(p_adj_bonf) & p_adj_bonf < 0.05)
+  significant_comparisons <- pairwise_comparisons[sig_idx]
+  p_values <- p_adj_bonf[sig_idx]
+  
+  ylim_buffer <- max(clean_data[[variable]], na.rm = TRUE) * 0.2  # 20% headroom
+  ymax <- max(clean_data[[variable]], na.rm = TRUE) + ylim_buffer
+  
+  # Create the plot
+  plot <- ggplot(clean_data, aes(x = group_combined, y = !!sym(variable), color = group_combined)) +
+    geom_boxplot(fill = "white", outlier.shape = NA, width = 0.6, size = 0.9) +
+    geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
+    scale_color_manual(values = color_palette) +
+    labs(x = "", y = variable) +
+    theme_classic() +
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(color = NA, angle = 45, hjust = 1),         
+      axis.ticks.x = element_line(),         
+      axis.title.x = element_blank(),        
+      text = element_text(size = 14)
+    )+
+    coord_cartesian(ylim = c(NA, ymax * 1.15)) 
+  
+  # Add significance bars if any
+  if (length(significant_comparisons) > 0) {
+    plot <- plot +
+      geom_signif(
+        comparisons = significant_comparisons,
+        annotations = sapply(p_values, function(p) sprintf("p = %.2g", p)),
+        color = "black",
+        textsize = 3.5,
+        step_increase = 0.1
+      )
+  }
+  
+  # Store plot
+  plot_list[[variable]] <- plot
+}
+
+# Display all plots
+grid.arrange(grobs = plot_list, ncol = 2)
+
+
+
+
+
+# Store all comparison results in a list
+all_stats <- list()
+
+for (variable in new_variables) {
+  
+  # Pairwise Wilcoxon tests
+  pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
+  pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+    wilcox.test(
+      clean_data[[variable]][clean_data$group_combined == groups[1]],
+      clean_data[[variable]][clean_data$group_combined == groups[2]],
+      exact = FALSE
+    )$p.value
+  })
+  
+  # Create a summary table
+  stat_table <- data.frame(
+    Variable = rep(variable, length(pairwise_results)),
+    Group1 = sapply(pairwise_comparisons, `[`, 1),
+    Group2 = sapply(pairwise_comparisons, `[`, 2),
+    p_value = pairwise_results
+  )
+  
+  # Add adjusted p-values (Bonferroni)
+  stat_table$p_adj_bonferroni <- p.adjust(stat_table$p_value, method = "bonferroni")
+  
+  # Effect sizes
+  effsize <- wilcox_effsize(clean_data, formula = as.formula(paste(variable, "~ group_combined")))
+  stat_table <- left_join(stat_table, effsize, by = c("Group1" = "group1", "Group2" = "group2"))
+  
+  # Store in list
+  all_stats[[variable]] <- stat_table
+}
+
+summary_stats_all <- do.call(rbind, all_stats)
+
+summary_stats_all <- do.call(rbind, all_stats)
+View(summary_stats_all)
+
+write.csv(summary_stats_all, "summary_stats_all.csv", row.names = FALSE)
+
+
+
 
 # Loop over each variable
 for (variable in new_variables) {

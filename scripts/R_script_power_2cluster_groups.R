@@ -566,10 +566,10 @@ output_folder <- "plots/final/cluster2_groups/plots"
 
 # Define custom colors for the 4 groups
 color_palette <- c(
-  "self-reported CD_c1" = '#02CAF5',
-  "self-reported CD_c2" = '#F59541',
-  "no self-reported CD_c1" = '#AA42F5',
-  "no self-reported CD_c2" = '#FF5F5F'
+  "no self-reported CD_c1" = '#6ADDF8',
+  "self-reported CD_c1" = '#009EC4',
+  "no self-reported CD_c2" = '#FDB57A',
+  "self-reported CD_c2" = '#D97700'
 )
 
 ##---- 8.1 aperiodic exponent general ------------

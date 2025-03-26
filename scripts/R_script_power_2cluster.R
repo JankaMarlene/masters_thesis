@@ -207,6 +207,30 @@ df_corr_frontal%>%
 # in order to get the z value
 result <- coin::wilcox_test(data = df_corr_frontal,hads_d_total_score~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
 
+# HADS A
+df_corr_frontal%>%
+  group_by(cluster_2)%>%
+  ggplot(aes(hads_a_total_score))+
+  geom_histogram(color = "black",
+                 fill = "white", bins = sqrt(100))+
+  facet_wrap(~cluster_2,scales = 'free')+
+  theme_classic()# c2 is very skew, c1 also a little
+
+shapiro.test(shapiro_df_self-reportedCD$hads_a_total_score)
+shapiro.test(shapiro_df_no_self-reportedCDPCS$hads_a_total_score)
+leveneTest(hads_a_total_score~cluster_2,data = df_corr_frontal)# not significant
+t.test(hads_a_total_score~cluster_2, data = df_corr_frontal, alternative = "two.sided", paired = FALSE)# p = 0.095
+wilcox.test(hads_a_total_score~cluster_2, data = df_corr_frontal, 
+            exact = FALSE, 
+            correct = FALSE, 
+            conf.int = FALSE)# 0.0276
+#effsize
+df_corr_frontal%>%
+  ungroup()%>%
+  wilcox_effsize(hads_a_total_score~cluster_2)# moderate
+
+# in order to get the z value
+result <- coin::wilcox_test(data = df_corr_frontal,hads_a_total_score~cluster_2, comparisons = list(c('c1','c2')), alternative = 'two.sided')
 
 # TMT A
 df_corr_frontal%>%
@@ -322,6 +346,8 @@ table_behav <- df_corr_frontal%>%
             sd_facit = sd(facit_f_FS, na.rm = T),
             mean_hads = mean(hads_d_total_score, na.rm = T),
             sd_hads = sd(hads_d_total_score, na.rm = T),
+            mean_hads_a = mean(hads_a_total_score, na.rm = T),
+            sd_hads_a = sd(hads_a_total_score, na.rm = T),
             mean_tmta = mean(tmt_a_time),
             sd_tmta = sd(tmt_a_time),
             mean_tmtb_a = mean(tmt_diff),
@@ -380,7 +406,7 @@ table_delta_frontal_filtered <- table_delta_filtered%>%
   filter(table_delta_filtered$channel %in% frontal_channels)
 
 df_corr_frontal_filtered <- table_delta_frontal_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,years_of_education,moca)%>%
+  group_by(participant_id,cluster_2,tmt_a_time, tmt_b_time, facit_f_FS, tmt_diff,pvt_reaction_time,age,years_of_education,moca)%>%
   summarise(mean_delta_power = mean(rel_delta))
 
 df_corr_frontal_filtered%>%
@@ -403,7 +429,7 @@ table_frontal_filtered_group <- table_delta_filtered_group%>%
   filter(table_delta_filtered_group$channel %in% frontal_channels)
 
 df_corr_frontal_filtered_group <- table_frontal_filtered_group%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
+  group_by(participant_id,cluster_2,tmt_a_time,tmt_b_time,facit_f_FS, tmt_diff,age,moca,hads_a_total_score, pvt_reaction_time,hads_d_total_score)%>%
   summarise(mean_delta_power = mean(rel_delta),
             mean_delta_power = mean(rel_delta),
             mean_aperiodic_exponent = mean(aperiodic_exponent))
@@ -460,7 +486,7 @@ table_central_filtered <- table_beta_filtered%>%
   filter(table_beta_filtered$channel %in% central_channels)
 
 df_corr_central_filtered <- table_central_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca,hads_d_total_score)%>%
+  group_by(participant_id,cluster_2,tmt_a_time,tmt_b_time,facit_f_FS, tmt_diff,age, moca,pvt_reaction_time,hads_a_total_score,hads_d_total_score)%>%
   summarise(mean_beta_power = mean(rel_beta))
 
 df_corr_central_filtered%>%
@@ -483,7 +509,7 @@ table_central_filtered_group <- table_beta_filtered_group%>%
   filter(table_beta_filtered_group$channel %in% central_channels)
 
 df_corr_central_filtered_group <- table_central_filtered_group%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age, moca, hads_d_total_score)%>%
+  group_by(participant_id,cluster_2,tmt_a_time,tmt_b_time,facit_f_FS, tmt_diff,age, moca, pvt_reaction_time,hads_a_total_score,hads_d_total_score)%>%
   summarise(mean_beta_power = mean(rel_beta))
 
 df_corr_central_filtered_group%>%
@@ -505,7 +531,7 @@ table_ape_filtered <-table_power_5%>%
 
 
 df_corr_ape <- table_ape_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
+  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_a_total_score, hads_d_total_score)%>%
   summarise(mean_aperiodic_exponent = mean(aperiodic_exponent))
 
 df_corr_ape%>%
@@ -525,7 +551,7 @@ table_apo_filtered <-table_power_5%>%
   ungroup()
 
 df_corr_apo <- table_apo_filtered%>%
-  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_d_total_score)%>%
+  group_by(participant_id,cluster_2,tmt_a_time,facit_f_FS, tmt_diff,age,moca,hads_a_total_score,hads_d_total_score)%>%
   summarise(mean_aperiodic_offset = mean(aperiodic_offset))
 
 df_corr_apo%>%
@@ -1039,11 +1065,11 @@ p8<- df_corr_frontal_filtered_group%>%
   stat_cor(aes(color = "Correlation: "),method = "spearman", label.x = 12, label.y = 40,hjust=0)
 ggMarginal(p8, type = "densigram")
 
-cor.test(df_corr_frontal_filtered_group$facit_f_FS,df_corr_frontal_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
+cor.test(df_corr_frontal_filtered_group$tmt_b_time,df_corr_frontal_filtered_group$hads_a_total_score, method = 'spearman', exact = FALSE)
 
 # TMT with FACIT
 df_corr_frontal_filtered%>%
-  ggplot(aes(x = facit_f_FS, y = tmt_a_time))+
+  ggplot(aes(x = facit_f_FS, y = tmt_b_time))+
   geom_point()
 
 cor.test(df_corr_frontal_filtered$tmt_a_time,df_corr_frontal_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
@@ -1057,7 +1083,7 @@ cor.test(df_corr_frontal_filtered$tmt_diff,df_corr_frontal_filtered$facit_f_FS, 
 cor.test(df_corr_frontal_filtered$moca,df_corr_frontal_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
 
 # HADS with TMT-A/B-A and MoCA
-cor.test(df_corr_frontal_filtered_group$tmt_a_time,df_corr_frontal_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
+cor.test(df_corr_frontal_filtered_group$pvt_reaction_time,df_corr_frontal_filtered_group$facit_f_FS, method = 'spearman', exact = FALSE)
 cor.test(df_corr_frontal_filtered_group$tmt_diff,df_corr_frontal_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
 cor.test(df_corr_frontal_filtered_group$moca,df_corr_frontal_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
 
@@ -1077,7 +1103,7 @@ df_corr_frontal_filtered_group%>%
   ggplot(aes(x = mean_delta_power,y = tmt_a_time, color = cluster_2))+
   geom_point()
 
-cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtered_group$tmt_a_time, method = 'spearman', exact = FALSE)
+cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtered_group$pvt_reaction_time, method = 'spearman', exact = FALSE)
 
 df_corr_frontal_filtered_group%>%
   group_by(cluster_2)%>%
@@ -1192,6 +1218,7 @@ p7<- df_corr_frontal_filtered_group%>%
   )
 
 ggMarginal(p7, type = "densigram")
+
 cor.test(df_corr_frontal_filtered_group$mean_delta_power,df_corr_frontal_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
 
 
@@ -1201,7 +1228,7 @@ df_corr_central_filtered_group%>%
   ggplot(aes(x = mean_beta_power,y = tmt_a_time, color = cluster_2))+
   geom_point()
 
-cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$tmt_a_time, method = 'spearman', exact = FALSE)
+cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$pvt_reaction_time, method = 'spearman', exact = FALSE)
 
 
 df_corr_central_filtered_group%>%
@@ -1222,22 +1249,6 @@ cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered
 cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$hads_d_total_score, method = 'spearman', exact = FALSE)
 #moca
 cor.test(df_corr_central_filtered_group$mean_beta_power,df_corr_central_filtered_group$moca, method = 'spearman', exact = FALSE)
-
-# beta 1
-df_corr_central1_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta1_power,y = facit_f_FS,color = cluster_2))+
-  geom_point()
-
-cor.test(df_corr_central1_filtered$mean_beta1_power,df_corr_central1_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
-
-# beta 2
-df_corr_central2_filtered%>%
-  group_by(cluster_2)%>%
-  ggplot(aes(x = mean_beta2_power,y = facit_f_FS,color = cluster_2))+
-  geom_point()
-
-cor.test(df_corr_central2_filtered$mean_beta2_power,df_corr_central2_filtered$facit_f_FS, method = 'spearman', exact = FALSE)
 
 # beta and delta
 corr_power <- cbind(df_corr_central_filtered_group,df_corr_frontal_filtered_group)

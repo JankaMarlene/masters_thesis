@@ -52,6 +52,7 @@ set(gca, 'FontSize', 17);
 % Define the file name for saving the figure (as PNG)
 file_name = fullfile(output_folder, 'beta_C1.png');
 saveas(fig, file_name); % Save the figure in PNG format at the specified location
+exportgraphics(fig, file_name, 'Resolution', 300);
 
 %Beta C2
  fig = figure;

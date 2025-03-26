@@ -5,6 +5,18 @@ library(dendextend)
 library(ggplot2)
 library(gridExtra)
 library(purrr)
+library(car)
+library(readr)
+library(ggdist)
+library(ggExtra)# displaying distributions next to plots
+library(ggsignif)# displaying stats in plots
+library(ggpubr)
+library(coin)# need this for z value of wilcox test
+library(effectsize)
+library(effsize)# for cohens d
+library(backports) 
+library(rstatix)# for wilcox test
+library(FSA)
 library(vroom)
 library(cowplot)
 theme_set(theme_cowplot())
@@ -48,8 +60,25 @@ rect.hclust(hclust_ward, k = 2, border = 2:30)
 abline(h = 28, col = 'red')
 # Visualize tree with different colored branches
 ward_dend_obj <- as.dendrogram(hclust_ward)
-ward_col_dend <- color_branches(ward_dend_obj, h = 28)
-plot(ward_col_dend)
+# Cut into 2 clusters
+dend_cut <- cutree(hclust_ward, k = 2)
+
+# Assign cluster labels to dendrogram
+ward_col_dend <- color_branches(ward_dend_obj, k = 2)
+# Get cluster order to assign colors properly
+labels_ordered <- labels(ward_col_dend)
+cluster_ordered <- dend_cut[labels_ordered]
+
+# Create a vector of colors corresponding to cluster
+custom_colors <- ifelse(cluster_ordered == 1, "#F59541", "#02CAF5")
+
+# Apply custom colors to branches
+ward_col_dend <- color_branches(ward_dend_obj, k = 2,
+                                col = c("#F59541", "#02CAF5"))
+
+plot(ward_col_dend,
+     ylab = "Height",
+     ylim = c(0, 40 + 2)) 
 
 # Visualize the clusters see YT Video Hierarchical Clustering in R Spencer Pao
 # install.packages("factoextra")
@@ -265,8 +294,14 @@ t_test_cluster_2
 #--------
 # Cognitive variables actual values
 
+# Custom color palette
+color_palette <- c("c1" = '#02CAF5', "c2" = "#F59541")
+
 # Vector of variables for which to create boxplots
 variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time","tmt_diff")
+
+# Make sure cluster labels match color keys (e.g., "c1", "c2")
+clean_data$cluster_label <- factor(paste0("c", cog_df_cl$cluster))
 
 # Initialize an empty list to store the plots
 plot_list <- list()
@@ -274,10 +309,24 @@ plot_list <- list()
 # Loop over each variable
 for (variable in variables) {
   # Create boxplot for the current variable grouped by cluster
-  plot <- ggplot(clean_data, aes(x = as.factor(cog_df_cl$cluster), y = !!sym(variable))) +
-    geom_boxplot(position = position_dodge(width = 0.75)) +
-    labs(x = "Cluster", y = variable, title = paste("Distribution of", variable, "by Cluster"))
+  plot <- ggplot(clean_data, aes(x = cluster_label, y = !!sym(variable), color = cluster_label)) +
+    geom_boxplot(position = position_dodge(width = 0.75), fill = "white", outlier.shape = NA) +
+    geom_jitter(width = 0.15, alpha = 0.6, size = 2, aes(color = cluster_label)) +
+    scale_color_manual(values = color_palette) +
+    labs(x = "", y = variable) +
   
+    # Use t-test here
+    geom_signif(
+      comparisons = list(c("c1", "c2")),
+      test = "t.test",
+      map_signif_level = FALSE,      # Converts p to *, **, etc. (set to FALSE for exact p)
+      color = "black",
+      textsize = 3.5,
+      tip_length = 0.01
+    ) +
+    
+    theme(legend.position = "none")
+                       
   # Append the plot to the list
   plot_list[[variable]] <- plot
 }

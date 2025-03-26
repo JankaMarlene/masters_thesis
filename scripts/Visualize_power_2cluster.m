@@ -47,12 +47,12 @@ hc=colorbar;
 caxis([0.346 2.97])
 xlabel(hc,'beta Power [μV^2]');
 %title ('cluster 1 ');
-set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
+set(findobj(gca,'type','patch'),'facecolor', '#02CAF5'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 17);
 % Define the file name for saving the figure (as PNG)
 file_name = fullfile(output_folder, 'beta_C1.png');
 saveas(fig, file_name); % Save the figure in PNG format at the specified location
-exportgraphics(fig, file_name, 'Resolution', 300);
+%exportgraphics(fig, file_name, 'Resolution', 300);
 
 %Beta C2
  fig = figure;
@@ -60,8 +60,8 @@ topoplot(data_beta_c2.data,EEG_epoched_5.chanlocs,'colormap',viridis,'electrodes
 hc=colorbar;
 caxis([0.346 2.97])
 xlabel(hc,'beta Power [μV^2]');
-%title ('ohne PCS ');
-set(findobj(gca,'type','patch'),'facecolor', '#02CAF5'); % Change [0.5, 0.5, 0.5] to your desired color
+%title ('cluster 2 ');
+set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 17);
 file_name = fullfile(output_folder, 'beta_C2.png');
 saveas(fig, file_name); % Save the figure in PNG format at the specified location
@@ -72,8 +72,8 @@ topoplot(data_delta_c1.data,EEG_epoched_5.chanlocs,'colormap',viridis,'electrode
 hc=colorbar;
 caxis([0.172 1.92])
 xlabel(hc,'delta Power [μV^2]');
-%title ('with PCS ');
-set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
+%title ('Cluster 1 ');
+set(findobj(gca,'type','patch'),'facecolor', '#02CAF5'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 17);
 file_name = fullfile(output_folder, 'delta_C1.png');
 saveas(fig, file_name); % Save the figure in PNG format at the specified location
@@ -84,8 +84,8 @@ topoplot(data_delta_c2.data,EEG_epoched_5.chanlocs,'colormap',viridis,'electrode
 hc=colorbar;
 caxis([0.172 1.92]);
 xlabel(hc,'delta Power [μV^2]');
-%title ('without PCS ');
-set(findobj(gca,'type','patch'),'facecolor', '#02CAF5'); % Change [0.5, 0.5, 0.5] to your desired color
+%title ('Cluster 2 ');
+set(findobj(gca,'type','patch'),'facecolor', '#F59541'); % Change [0.5, 0.5, 0.5] to your desired color
 set(gca, 'FontSize', 17);
 file_name = fullfile(output_folder, 'delta_C2.png');
 saveas(fig, file_name); % Save the figure in PNG format at the specified location

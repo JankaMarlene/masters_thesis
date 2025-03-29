@@ -1,0 +1,7 @@
+"Variable","Chi_squared","df","p_value"
+"pvt_reaction_time",47.029,3,3.426e-10
+"nback_miss_1",22.672,3,4.726e-05
+"nback_miss_2",27.642,3,4.318e-06
+"tmt_a_time",38.848,3,1.869e-08
+"tmt_b_time",34.861,3,1.303e-07
+"tmt_diff",17.649,3,0.0005195

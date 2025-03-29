@@ -213,6 +213,21 @@ t_test_cluster_2 <- t.test(age ~ group, data = cluster_2_data)
 # Display t-test results
 t_test_cluster_2
 
+variables_age <- c("age")
+
+kruskal_results_age <- data.frame()
+
+  test <- kruskal.test(as.formula(paste(age, "~ group_combined")), data = clean_data)
+  
+  kruskal_results_age <- rbind(kruskal_results_age, data.frame(
+    Variable = variable,
+    Chi_squared = round(test$statistic, 3),
+    df = test$parameter,
+    p_value = signif(test$p.value, 4)
+  ))
+  
+  write.csv(significant_results_cog, "kruskal_results_cog.csv", row.names = FALSE)
+  
 #--------
 # Education
 
@@ -289,6 +304,19 @@ t_test_cluster_2 <- t.test(years_of_education ~ group, data = cluster_2_data)
 
 # Display t-test results
 t_test_cluster_2
+
+variables_edu <- c("years_of_education")
+
+kruskal_results_edu <- data.frame()
+
+test <- kruskal.test(as.formula(paste("years_of_education", "~ group_combined")), data = clean_data)
+
+kruskal_results_edu <- rbind(kruskal_results_edu, data.frame(
+  Variable = variable,
+  Chi_squared = round(test$statistic, 3),
+  df = test$parameter,
+  p_value = signif(test$p.value, 4)
+))
 
 #--------
 # Cognitive variables actual values
@@ -432,24 +460,6 @@ color_palette <- c(
 # Make sure group_combined is a factor with correct levels
 clean_data$group_combined <- factor(clean_data$group_combined, levels = names(color_palette))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Initialize list for plots
 plot_list <- list()
 
@@ -459,6 +469,8 @@ for (variable in variables) {
   # Get all pairwise combinations of groups
   pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
   
+  print(paste("Variable:", variable, "—", length(pairwise_comparisons), "pairwise comparisons"))
+  
   # Run Wilcoxon tests
   p_values_raw <- sapply(pairwise_comparisons, function(groups) {
     wilcox.test(
@@ -467,6 +479,7 @@ for (variable in variables) {
       exact = FALSE
     )$p.value
   })
+  
   
   # Bonferroni correction
   p_adj_bonf <- p.adjust(p_values_raw, method = "bonferroni")
@@ -495,6 +508,7 @@ for (variable in variables) {
     )+
     coord_cartesian(ylim = c(NA, ymax * 1.15)) 
   
+  
   # Add significance bars if any
   if (length(significant_comparisons) > 0) {
     plot <- plot +
@@ -503,7 +517,7 @@ for (variable in variables) {
         annotations = sapply(p_values, function(p) sprintf("p = %.2g", p)),
         color = "black",
         textsize = 3.5,
-        step_increase = 0.1
+        step_increase = 0.15
       )
   }
   
@@ -552,12 +566,25 @@ for (variable in variables) {
 summary_stats_all <- do.call(rbind, all_stats)
 
 summary_stats_all <- do.call(rbind, all_stats)
-View(summary_stats_all)
 
-write.csv(summary_stats_all, "summary_stats_all_cog_groups.csv", row.names = FALSE)
+significant_results_cog <- summary_stats_all %>%
+  filter(!is.na(p_adj_bonferroni) & p_adj_bonferroni < 0.05)
 
 
+kruskal_results_cog <- data.frame()
 
+for (variable in variables) {
+  test <- kruskal.test(as.formula(paste(variable, "~ group_combined")), data = clean_data)
+  
+  kruskal_results_cog <- rbind(kruskal_results_cog, data.frame(
+    Variable = variable,
+    Chi_squared = round(test$statistic, 3),
+    df = test$parameter,
+    p_value = signif(test$p.value, 4)
+  ))
+}
+
+print(kruskal_results_cog)
 
 
 
@@ -1303,7 +1330,24 @@ summary_stats_all <- do.call(rbind, all_stats)
 summary_stats_all <- do.call(rbind, all_stats)
 View(summary_stats_all)
 
-write.csv(summary_stats_all, "summary_stats_all.csv", row.names = FALSE)
+significant_results_quest <- summary_stats_all %>%
+  filter(!is.na(p_adj_bonferroni) & p_adj_bonferroni < 0.05)
+
+
+kruskal_results_quest <- data.frame()
+
+for (variable in new_variables) {
+  test <- kruskal.test(as.formula(paste(variable, "~ group_combined")), data = clean_data)
+  
+  kruskal_results <- rbind(kruskal_results, data.frame(
+    Variable = variable,
+    Chi_squared = round(test$statistic, 3),
+    df = test$parameter,
+    p_value = signif(test$p.value, 4)
+  ))
+}
+
+print(kruskal_results)
 
 
 

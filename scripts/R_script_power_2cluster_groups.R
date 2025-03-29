@@ -572,6 +572,9 @@ color_palette <- c(
   "self-reported CD_c2" = '#D97700'
 )
 
+# Ensure group_combined is a factor in the desired order
+df_corr_ape$group_combined <- factor(df_corr_ape$group_combined, levels = names(color_palette))
+
 ##---- 8.1 aperiodic exponent general ------------
 plot_ape <- df_corr_ape %>%
   group_by(group_combined) %>%
@@ -587,7 +590,7 @@ plot_ape <- df_corr_ape %>%
   theme(text = element_text(size = 14))
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot.png"), plot = plot_ape)
+ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot_new.png"), plot = plot_ape)
 
 # Wilcoxon test and effect size
 pairwise.wilcox.test(df_corr_ape$mean_aperiodic_exponent, df_corr_ape$group_combined, p.adjust.method = "bonferroni")
@@ -608,7 +611,7 @@ plot_apo <- df_corr_apo %>%
   theme(text = element_text(size = 14))
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot.png"), plot = plot_apo)
+ggsave(filename = file.path(output_folder, "aperiodic_exponent_boxplot_new.png"), plot = plot_apo)
 
 pairwise.wilcox.test(df_corr_apo$mean_aperiodic_offset, df_corr_apo$group_combined, p.adjust.method = "bonferroni")
 df_corr_apo %>% ungroup() %>% wilcox_effsize(mean_aperiodic_offset ~ group_combined)
@@ -657,6 +660,9 @@ pairwise_results <- sapply(pairwise_comparisons, function(groups) {
 significant_comparisons <- pairwise_comparisons[which(pairwise_results < 0.05)]
 p_values <- pairwise_results[which(pairwise_results < 0.05)]
 
+# Ensure group_combined is a factor in the desired order
+df_corr_frontal_filtered_group$group_combined <- factor(df_corr_frontal_filtered_group$group_combined, levels = names(color_palette))
+
 # Plot
 plot_rel_delta <- df_corr_frontal_filtered_group %>%
   group_by(group_combined) %>%
@@ -665,10 +671,10 @@ plot_rel_delta <- df_corr_frontal_filtered_group %>%
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
   geom_signif(
     comparisons = significant_comparisons,
-    map_signif_level = TRUE, 
+    map_signif_level = FALSE, 
     test = 'wilcox.test', 
-    color = 'black',
-    annotations = sapply(p_values, function(p) sprintf("p = %.2g", p))
+    color = 'black'
+    #annotations = sapply(p_values, function(p) sprintf("p = %.2g", p))
   ) +
   labs(y = 'Mean Relative Delta Power [μV²] (Frontal ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
@@ -677,13 +683,13 @@ plot_rel_delta <- df_corr_frontal_filtered_group %>%
   theme(text = element_text(size = 14), axis.text.x = element_text(angle = 45, hjust = 1)  # Rotate x-axis labels
         )
 # Save the plot
-ggsave(filename = file.path(output_folder, "rel_delta_boxplot_1.png"), 
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot_1_new.png"), 
        plot = plot_rel_delta,
        width = 10,
        height = 7)
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "rel_delta_boxplot.png"), plot = plot_rel_delta)
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot_2_new.png"), plot = plot_rel_delta)
 
 # Define pairwise comparisons for the Wilcoxon test
 pairwise_comparisons <- combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE)
@@ -736,7 +742,13 @@ pairwise_results_abs <- sapply(pairwise_comparisons_abs, function(groups) {
 
 # Only keep significant results (p-value < 0.05)
 significant_comparisons_abs <- pairwise_comparisons_abs[which(pairwise_results_abs < 0.05)]
-p_values_abs <- pairwise_results_abs[which(pairwise_results_abs < 0.05)]
+# Adjust p-values using Bonferroni
+adjusted_p_values_abs <- p.adjust(pairwise_results_abs, method = "bonferroni")
+
+# Keep only significant ones after adjustment
+significant_comparisons_abs <- pairwise_comparisons_abs[which(adjusted_p_values_abs < 0.05)]
+p_values_abs <- adjusted_p_values_abs[which(adjusted_p_values_abs < 0.05)]
+
 
 # Create a data frame to store the significant comparisons and p-values
 comparison_df_abs <- data.frame(
@@ -750,6 +762,10 @@ comparison_df_abs <- data.frame(
 max_y_abs <- max(df_corr_frontal_filtered_abs$mean_delta_power_abs)
 y_positions_abs <- seq(max_y_abs * 0.8, max_y_abs * 0.95, length.out = length(p_values_abs))
 
+# Ensure group_combined is a factor in the desired order
+df_corr_frontal_filtered_abs$group_combined <- factor(df_corr_frontal_filtered_abs$group_combined, levels = names(color_palette))
+
+
 # Plot
 plot_abs_delta <- df_corr_frontal_filtered_abs %>%
   group_by(group_combined) %>%
@@ -758,11 +774,11 @@ plot_abs_delta <- df_corr_frontal_filtered_abs %>%
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
   geom_signif(
     comparisons = significant_comparisons_abs,
-    map_signif_level = TRUE, 
+    map_signif_level = FALSE, 
     test = 'wilcox.test', 
     color = 'black',
-    y_position = y_positions_abs, # Specify y-positions for annotations
-    annotations = sapply(p_values_abs, function(p) sprintf("p = %.2g", p))
+    y_position = y_positions_abs # Specify y-positions for annotations
+    #annotations = sapply(p_values_abs, function(p) sprintf("p = %.2g", p))
   ) +
   labs(y = 'Mean Absolute Delta Power [μV²] (Frontal ROI)', x = 'Group and Cluster') +
   scale_color_manual(values = color_palette) +
@@ -771,10 +787,10 @@ plot_abs_delta <- df_corr_frontal_filtered_abs %>%
   theme(text = element_text(size = 14), axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "abs_delta_boxplot.png"), plot = plot_abs_delta)
+ggsave(filename = file.path(output_folder, "abs_delta_boxplot_new.png"), plot = plot_abs_delta)
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "abs_delta_boxplot_1.png"), 
+ggsave(filename = file.path(output_folder, "abs_delta_boxplot_1_new.png"), 
        plot = plot_abs_delta,
        width = 10,
        height = 7)
@@ -800,12 +816,11 @@ plot_rel_beta <- df_corr_central_filtered_group %>%
   ggplot(aes(x = group_combined, y = mean_beta_power, color = group_combined)) +
   geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
-  geom_signif(
-    comparisons = combn(unique(df_corr_central_filtered_group$group_combined), 2, simplify = FALSE),
-    map_signif_level = TRUE,
-    test = "wilcox.test",
-    color = "black"
-  ) +
+ # geom_signif(
+    #comparisons = combn(unique(df_corr_central_filtered_group$group_combined), 2, simplify = FALSE),
+    #map_signif_level = FALSE,
+    #test = "wilcox.test",
+    #color = "black"
   labs(y = 'Mean Relative Beta Power [μV²] (Central ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +
@@ -814,10 +829,10 @@ plot_rel_beta <- df_corr_central_filtered_group %>%
         )
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "rel_beta_boxplot.png"), plot = plot_rel_beta)
+ggsave(filename = file.path(output_folder, "rel_beta_boxplot_new.png"), plot = plot_rel_beta)
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "rel_beta_boxplot_1.png"), 
+ggsave(filename = file.path(output_folder, "rel_beta_boxplot_1_new.png"), 
        plot = plot_rel_beta,
        width = 10,
        height = 7)

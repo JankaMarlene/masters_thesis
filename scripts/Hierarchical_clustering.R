@@ -105,6 +105,10 @@ str(clean_data)
 # Checking sex in cluster
 table(cog_df_cl$cluster,clean_data$sex)
 
+# Statistical comparison
+kruskal.test(age ~ group_combined, data = df_corr_frontal)
+df_corr_frontal %>% ungroup() %>% wilcox_effsize(age ~ group_combined)
+
 #--------
 
 cluster_info <- clean_data %>%

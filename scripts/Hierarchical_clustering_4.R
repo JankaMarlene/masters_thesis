@@ -536,23 +536,6 @@ for (variable in new_variables) {
 
 print(kruskal_results_4_quest_groups)
 
-
-variables_age <- c("age")
-
-kruskal_results_age <- data.frame()
-
-test <- kruskal.test(as.formula(paste("age", "~ group_combined")), data = clean_data)
-
-kruskal_results_age <- rbind(kruskal_results_age, data.frame(
-  Chi_squared = round(test$statistic, 3),
-  df = test$parameter,
-  p_value = signif(test$p.value, 4)
-))
-
-
-write.csv(kruskal_results_age, "kruskal_results_4_age_groups.csv", row.names = FALSE)
-
-
 # Make sure cluster is a factor with correct levels
 clean_data$cluster <- factor(clean_data$cluster, levels = names(color_palette))
 

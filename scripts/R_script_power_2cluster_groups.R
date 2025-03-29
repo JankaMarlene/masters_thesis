@@ -810,6 +810,9 @@ df_corr_frontal_filtered_abs %>%
 
 ##----- 8.4 Relative Beta Power (Central ROI) -----------------
 
+# Ensure group_combined is a factor in the desired order
+df_corr_central_filtered_group$group_combined <- factor(df_corr_central_filtered_group$group_combined, levels = names(color_palette))
+
 # Boxplot with significance for all group comparisons
 plot_rel_beta <- df_corr_central_filtered_group %>%
   group_by(group_combined) %>%

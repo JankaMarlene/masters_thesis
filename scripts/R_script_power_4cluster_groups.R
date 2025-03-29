@@ -599,17 +599,21 @@ output_folder <- "plots/final/cluster4_groups/plots"
 
 # Define custom colors for the 4 clusters
 color_palette <- c(
-  "self-reported CD_c1" = '#02CAF5',
-  "self-reported CD_c2" = '#F59541',
-  "no self-reported CD_c1" = '#AA42F5',
-  "no self-reported CD_c2" = '#FF5F5F',
-  "self-reported CD_c3" = "#33A02C",
-  "self-reported CD_c4" = "#FB9A99",
-  "no self-reported CD_c3" = "#E31A1C",
-  "no self-reported CD_c4" = "#FDBF6F"
+  "no self-reported CD_c1" = "#FA8DB1",
+  "self-reported CD_c1" = "#C21C66",
+  "no self-reported CD_c2" = '#FDB57A',
+  "self-reported CD_c2" = '#D97700',
+  "no self-reported CD_c3" = "#D1A9EB",
+  "self-reported CD_c3" = "#8953B1",
+  "no self-reported CD_c4" = "#80D88A",
+  "self-reported CD_c4" = "#2E7D32"
+  
 )
 
 ## ---- 8.1 Aperiodic Exponent --------------------------------------------------
+
+# Make sure group_combined is a factor with correct levels
+df_corr_ape$group_combined <- factor(df_corr_ape$group_combined, levels = names(color_palette))
 
 # Boxplot
 df_corr_ape %>%
@@ -721,20 +725,14 @@ comparison_df <- data.frame(
 max_y <- max(df_corr_frontal_filtered_group$mean_delta_power)
 y_positions <- seq(max_y * 0.8, max_y * 0.95, length.out = length(p_values))
 
+# Make sure group_combined is a factor with correct levels
+df_corr_frontal_filtered_group$group_combined <- factor(df_corr_frontal_filtered_group$group_combined, levels = names(color_palette))
 # Plot
 plot_rel_delta <- df_corr_frontal_filtered_group %>%
   group_by(group_combined) %>%
   ggplot(aes(x = group_combined, y = mean_delta_power, color = group_combined)) +
   geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
-  geom_signif(
-    comparisons = significant_comparisons,
-    map_signif_level = TRUE, 
-    test = 'wilcox.test', 
-    color = 'black',
-    y_position = y_positions, # Specify y-positions for annotations
-    annotations = sapply(p_values, function(p) sprintf("p = %.2g", p))
-  ) +
   labs(y = 'Mean Relative Delta Power [μV²] (Frontal ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +
@@ -743,7 +741,7 @@ plot_rel_delta <- df_corr_frontal_filtered_group %>%
   )
 
 # Save the plot
-ggsave(filename = file.path(output_folder, "rel_delta_boxplot.png"), 
+ggsave(filename = file.path(output_folder, "rel_delta_boxplot_new.png"), 
        plot = plot_rel_delta,
        width = 10,
        height = 7)
@@ -816,6 +814,9 @@ comparison_df <- data.frame(
 max_y <- max(df_corr_frontal_filtered_group$mean_delta_power)
 y_positions <- seq(max_y * 0.8, max_y * 0.95, length.out = length(p_values))
 
+# Make sure group_combined is a factor with correct levels
+df_corr_frontal_filtered_group$group_combined <- factor(df_corr_frontal_filtered_group$group_combined, levels = names(color_palette))
+
 # Plot
 plot_rel_delta <- df_corr_frontal_filtered_group %>%
   group_by(group_combined) %>%
@@ -872,18 +873,13 @@ df_corr_frontal_filtered_abs %>%
   wilcox_effsize(mean_delta_power_abs ~ group_combined)
 
 ##----- 8.4 Relative Beta Power (Central ROI) -----------------
-
+# Make sure group_combined is a factor with correct levels
+df_corr_central_filtered_group$group_combined <- factor(df_corr_central_filtered_group$group_combined, levels = names(color_palette))
 # Boxplot with Wilcoxon significance markers
 plot_rel_beta <- df_corr_central_filtered_group %>%
   ggplot(aes(x = group_combined, y = mean_beta_power, color = group_combined)) +
   geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
   geom_jitter(width = 0.2, height = 0, alpha = 0.6, size = 2) +
-  geom_signif(
-    comparisons = combn(unique(df_corr_central_filtered_group$group_combined), 2, simplify = FALSE),
-    map_signif_level = TRUE,
-    test = "wilcox.test",
-    color = "black"
-  ) +
   labs(y = 'Mean Relative Beta Power [μV²] (Central ROI)', x = 'group and cluster') +
   scale_color_manual(values = color_palette) +
   theme_classic() +

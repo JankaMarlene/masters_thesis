@@ -645,12 +645,17 @@ print(leveneTest(mean_aperiodic_exponent ~ cluster_4, data = df_corr_ape))
 output_folder <- "plots/final/cluster4/plots"
 
 # Define color palette for 4 clusters
+# Your 4-group color palette
 color_palette <- c(
-  "c1" = '#02CAF5',
+  "c1" = "#F5418C",
   "c2" = "#F59541",
   "c3" = "#B589D6",
-  "c4" = "#F5418C"
+  "c4" = "#4CAF50"
 )
+
+# Ensure group_combined is a factor in the desired order
+df_corr_ape$group_combined <- factor(df_corr_ape$group_combined, levels = names(color_palette))
+
 
 plot_and_stats <- function(df, outcome, ylabel) {
   outcome_sym <- rlang::sym(outcome)
@@ -683,13 +688,13 @@ plot_and_stats <- function(df, outcome, ylabel) {
   p <- ggplot(df, aes(x = cluster_4, y = !!outcome_sym, color = cluster_4)) +
     geom_boxplot(size = 0.75, outlier.colour = NA, width = 0.5) +
     geom_jitter(width = 0.2, alpha = 0.6, size = 2) +
-    stat_pvalue_manual(
-      pairwise_stats,
-      hide.ns = FALSE,
-      label = "p.adj.signif",  # or use paste() for raw p-values
-      tip.length = 0.01,
-      size = 4
-    ) +
+    #stat_pvalue_manual(
+      #pairwise_stats,
+      #hide.ns = FALSE,
+      #label = "p.adj.signif",  # or use paste() for raw p-values
+      #tip.length = 0.01,
+      #size = 4
+    #) +
     expand_limits(y = top_y * 1.3) +  # Extra headroom for long comparisons
     scale_color_manual(values = color_palette) +
     theme_classic(base_size = 14) +
@@ -699,7 +704,7 @@ plot_and_stats <- function(df, outcome, ylabel) {
   print(p)
 
   # Save the plot as PNG
-  plot_name <- paste0(gsub(" ", "_", outcome), "_boxplot.png")  # Save using outcome name
+  plot_name <- paste0(gsub(" ", "_", outcome), "_boxplot_new.png")  # Save using outcome name
   file_name <- file.path(output_folder, plot_name)
   
   ggsave(filename = file_name, plot = p, width = 8, height = 6)

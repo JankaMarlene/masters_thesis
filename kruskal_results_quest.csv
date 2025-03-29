@@ -1,0 +1,7 @@
+"Variable","Group1","Group2","p_value","p_adj_bonferroni",".y.","effsize","n1","n2","magnitude"
+"facit_f_FS","self-reported CD_c1","no self-reported CD_c2",0.00185834106340167,0.01115004638041,"facit_f_FS",0.43713105955851,32,19,"moderate"
+"facit_f_FS","no self-reported CD_c2","self-reported CD_c2",0.00241116571204434,0.014466994272266,"facit_f_FS",0.567718811439706,19,10,"large"
+"hads_a_total_score","self-reported CD_c1","no self-reported CD_c2",0.00255793947542981,0.0153476368525789,"hads_a_total_score",0.423752120802989,32,19,"moderate"
+"hads_a_total_score","no self-reported CD_c2","self-reported CD_c2",0.00283637413864728,0.0170182448318837,"hads_a_total_score",0.558585561566232,19,10,"large"
+"psqi_total_score","self-reported CD_c1","no self-reported CD_c2",0.00533830936696035,0.0320298562017621,"psqi_total_score",0.437203265649425,26,15,"moderate"
+"psqi_total_score","no self-reported CD_c2","self-reported CD_c2",0.00174148832260002,0.0104489299356001,"psqi_total_score",0.631812616598594,15,10,"large"

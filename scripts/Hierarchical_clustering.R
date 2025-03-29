@@ -31,6 +31,14 @@ clean_data$group[clean_data$group == "withoutPCS"] <- "no self-reported CD"
 str(cog_df)
 summary(cog_df)
 
+# Store group labels in a separate variable and exclude label (group column) from the dataset to do clustering
+# Later true labels will be used to check how good clustering turned out
+cog_label <- cog_df$group
+cog_label[cog_label == "withPCS"] <- "self-reported CD"
+cog_label[cog_label == "withoutPCS"] <- "no self-reported CD"
+cog_df$group <- NULL
+str(cog_df)
+
 # Build distance matrix
 # Since all values are continuous numerical values I use euclidean distance method
 dist_mat <- dist(cog_df, method = 'euclidean')
@@ -421,11 +429,26 @@ color_palette <- c(
   "self-reported CD_c2" = '#D97700'
 )
 
-# Define variables to plot
-variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time", "tmt_b_time", "tmt_diff")
-
 # Make sure group_combined is a factor with correct levels
 clean_data$group_combined <- factor(clean_data$group_combined, levels = names(color_palette))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Initialize list for plots
 plot_list <- list()
@@ -436,8 +459,8 @@ for (variable in variables) {
   # Get all pairwise combinations of groups
   pairwise_comparisons <- combn(levels(clean_data$group_combined), 2, simplify = FALSE)
   
-  # Run Wilcoxon tests and get p-values
-  pairwise_results <- sapply(pairwise_comparisons, function(groups) {
+  # Run Wilcoxon tests
+  p_values_raw <- sapply(pairwise_comparisons, function(groups) {
     wilcox.test(
       clean_data[[variable]][clean_data$group_combined == groups[1]],
       clean_data[[variable]][clean_data$group_combined == groups[2]],
@@ -445,9 +468,13 @@ for (variable in variables) {
     )$p.value
   })
   
-  # Filter to significant comparisons
-  significant_comparisons <- pairwise_comparisons[which(pairwise_results < 0.05)]
-  p_values <- pairwise_results[which(pairwise_results < 0.05)]
+  # Bonferroni correction
+  p_adj_bonf <- p.adjust(p_values_raw, method = "bonferroni")
+  
+  # Use consistent index
+  sig_idx <- which(!is.na(p_adj_bonf) & p_adj_bonf < 0.05)
+  significant_comparisons <- pairwise_comparisons[sig_idx]
+  p_values <- p_adj_bonf[sig_idx]
   
   ylim_buffer <- max(clean_data[[variable]], na.rm = TRUE) * 0.2  # 20% headroom
   ymax <- max(clean_data[[variable]], na.rm = TRUE) + ylim_buffer
@@ -485,7 +512,7 @@ for (variable in variables) {
 }
 
 # Display all plots
-grid.arrange(grobs = plot_list, ncol = 3)
+grid.arrange(grobs = plot_list, ncol = 2)
 
 
 # Store all comparison results in a list

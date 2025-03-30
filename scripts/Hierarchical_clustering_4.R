@@ -103,6 +103,14 @@ str(clean_data)
 # Checking sex in cluster
 table(cog_df_cl$cluster,clean_data$sex)
 
+
+
+# Statistical comparison
+kruskal.test(facit_f_FS ~ group_combined, data = clean_data)
+
+dunnTest(facit_f_FS ~ group_combined, data = clean_data, method = "bonferroni")
+
+
 #--------
 cluster_info <- clean_data %>%
   select(participant_id, cluster)
@@ -332,13 +340,99 @@ variables <- c("pvt_reaction_time", "nback_miss_1", "nback_miss_2", "tmt_a_time"
 plot_list <- list()
 
 
-# Your 4-group color palette
+# Your 4-group color palette uuuuuussseeed!!!!
 color_palette <- c(
   "1" = "#F5418C",
   "2" = "#F59541",
   "3" = "#B589D6",
   "4" = "#4CAF50"
 )
+
+
+
+clean_data$group_combined <- factor(clean_data$group_combined, levels = names(color_palette))
+
+plot_list <- list()
+
+for (variable in variables) {
+  
+  # Clean: remove NAs for this variable
+  data_subset <- clean_data %>%
+    select(group_combined, !!sym(variable)) %>%
+    filter(!is.na(.[[2]]))
+  
+  if (nrow(data_subset) < 2) next
+  
+  # Run Dunn test
+  dunn_result <- tryCatch({
+    dunnTest(x = data_subset[[variable]], g = data_subset$group_combined, method = "bonferroni")
+  }, error = function(e) return(NULL))
+  
+  significant_comparisons <- list()
+  p_values <- c()
+  
+  if (!is.null(dunn_result)) {
+    dunn_df <- dunn_result$res
+    sig_df <- dunn_df %>% filter(P.adj < 0.05)
+    
+    if (nrow(sig_df) > 0) {
+      significant_comparisons <- strsplit(as.character(sig_df$Comparison), " - ")
+      p_values <- round(sig_df$P.adj, 3)
+    }
+  }
+  
+  # Plot range
+  ylim_buffer <- max(data_subset[[variable]], na.rm = TRUE) * 0.2
+  ymax <- max(data_subset[[variable]], na.rm = TRUE) + ylim_buffer
+  
+  plot <- ggplot(data_subset, aes(x = group_combined, y = .data[[variable]])) +
+    geom_boxplot(aes(color = group_combined), fill = "white", outlier.shape = NA, width = 0.6, size = 0.9) +
+    geom_jitter(aes(color = group_combined), width = 0.2, alpha = 0.6, size = 2) +
+    scale_color_manual(values = color_palette) +
+    labs(x = "", y = variable) +
+    theme_classic() +
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      axis.title.x = element_ban(),
+      text = element_text(size = 14)
+    ) +
+    coord_cartesian(ylim = c(NA, ymax * 1.15))
+  
+  
+  # Add annotations only if there are significant results
+  if (length(significant_comparisons) > 0) {
+    plot <- plot +
+      geom_signif(
+        comparisons = significant_comparisons,
+        annotations = sapply(p_values, function(p) {
+          if (p < 0.001) return("***")
+          else if (p < 0.01) return("**")
+          else if (p < 0.05) return("*")
+          else return()
+        }),
+        color = "black",
+        textsize = 5,
+        step_increase = 0.12
+      )
+  }
+  
+  plot_list[[variable]] <- plot
+}
+
+# Display all plots (regardless of significance)
+if (length(plot_list) > 0) {
+  grid.arrange(grobs = plot_list, ncol = 2)
+} else {
+  message("No valid plots to display.")
+}
+
+
+
+
+
+
+
 
 
 # Ensure cluster is a factor with correct levels
@@ -392,19 +486,19 @@ grid.arrange(grobs = plot_list, ncol = 2)
 # Cognitive variables in the four groups
 clean_data <- clean_data %>%
   mutate(
-    group_combined = paste(group, cluster_label, sep = "_")
+    group_combined = paste(group, cluster, sep = "_")
   )
 
 # Your 4-group color palette
 color_palette <- c(
-  "no self-reported CD_c1" = "#FA8DB1",
-  "self-reported CD_c1" = "#C21C66",
-  "no self-reported CD_c2" = '#FDB57A',
-  "self-reported CD_c2" = '#D97700',
-  "no self-reported CD_c3" = "#D1A9EB",
-  "self-reported CD_c3" = "#8953B1",
-  "no self-reported CD_c4" = "#80D88A",
-  "self-reported CD_c4" = "#2E7D32"
+  "no self-reported CD_1" = "#FA8DB1",
+  "self-reported CD_1" = "#C21C66",
+  "no self-reported CD_2" = '#FDB57A',
+  "self-reported CD_2" = '#D97700',
+  "no self-reported CD_3" = "#D1A9EB",
+  "self-reported CD_3" = "#8953B1",
+  "no self-reported CD_4" = "#80D88A",
+  "self-reported CD_4" = "#2E7D32"
   
 )
 

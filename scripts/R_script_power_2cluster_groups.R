@@ -575,6 +575,11 @@ color_palette <- c(
 # Ensure group_combined is a factor in the desired order
 df_corr_ape$group_combined <- factor(df_corr_ape$group_combined, levels = names(color_palette))
 
+# Statistical comparison
+kruskal.test( ~ group_combined, data = clean_data)
+pairwise.wilcox.test(clean_data$psqi_total_score, clean_data$group_combined, p.adjust.method = "bonferroni")
+dunnTest(nback_miss_ ~ group_combined, data = clean_data, method = "bonferroni")
+
 ##---- 8.1 aperiodic exponent general ------------
 plot_ape <- df_corr_ape %>%
   group_by(group_combined) %>%

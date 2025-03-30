@@ -654,7 +654,7 @@ color_palette <- c(
 )
 
 # Ensure group_combined is a factor in the desired order
-df_corr_ape$group_combined <- factor(df_corr_ape$group_combined, levels = names(color_palette))
+df_corr_frontal_filtered_group$group_combined <- factor(df_corr_frontal_filtered_group$group_combined, levels = names(color_palette))
 
 
 plot_and_stats <- function(df, outcome, ylabel) {
@@ -721,13 +721,13 @@ plot_and_stats(df_corr_central_filtered_group, "mean_beta_power_abs", "Absolute 
 # Perform Wilcoxon tests and store p-values for relative delta power (df_corr_frontal_filtered_group)
 
 # Define pairwise comparisons for the Wilcoxon test
-pairwise_comparisons_delta <- combn(unique(df_corr_frontal_filtered_group$group_combined), 2, simplify = FALSE)
+pairwise_comparisons_delta <- combn(unique(df_corr_frontal_filtered_group$cluster_4), 2, simplify = FALSE)
 
 # Perform Wilcoxon tests and store results
 pairwise_results_delta <- sapply(pairwise_comparisons_delta, function(groups) {
   test_result <- wilcox.test(
-    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[1]],
-    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$group_combined == groups[2]],
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$cluster_4 == groups[1]],
+    df_corr_frontal_filtered_group$mean_delta_power[df_corr_frontal_filtered_group$cluster_4 == groups[2]],
     exact = FALSE
   )
   test_result$p.value
@@ -742,6 +742,8 @@ comparison_df_delta <- data.frame(
 
 # Display the table of comparisons and p-values in the console
 print(comparison_df_delta)
+
+
 
 # --------- 8.5 Summary tables of EEG values per cluster_4 ---------
 

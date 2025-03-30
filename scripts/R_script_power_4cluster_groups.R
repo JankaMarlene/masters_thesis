@@ -872,6 +872,8 @@ df_corr_frontal_filtered_abs %>%
   ungroup() %>%
   wilcox_effsize(mean_delta_power_abs ~ group_combined)
 
+kruskal.test(df_corr_frontal_filtered_group ~ group_combined, data = df_corr_frontal_filtered_group)
+
 ##----- 8.4 Relative Beta Power (Central ROI) -----------------
 # Make sure group_combined is a factor with correct levels
 df_corr_central_filtered_group$group_combined <- factor(df_corr_central_filtered_group$group_combined, levels = names(color_palette))

@@ -1,4 +1,5 @@
 %% Skript for excluding the EOG channel after ICA
+%% The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 % 1. load the already existing ICA weights
 % 2. IC Label
 % 3. Additional artifact removal

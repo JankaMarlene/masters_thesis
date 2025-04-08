@@ -1,4 +1,5 @@
 %% Power Analysis Script for my Master's thesis
+%% The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 % 0. Preliminaries
 % 1. Spectral Parameterization
 % 2. create table with all relevant values

@@ -1,4 +1,5 @@
 %% 1. Script to read in and do some general preprocessing to the data
+%% The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 % 0. Preliminaries
 % 1. Define the current dataset
     % 1.1. Read in Markers and define trials

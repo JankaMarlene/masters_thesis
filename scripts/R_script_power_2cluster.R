@@ -1,4 +1,5 @@
 ## R Script for power analysis
+## The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 # ---------- content -----------------------
 # 1. load packages
 # 2. load data

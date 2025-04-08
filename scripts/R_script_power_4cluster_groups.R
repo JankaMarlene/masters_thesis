@@ -1,4 +1,5 @@
 ## R Script for power analysis
+## The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 # ---------- content -----------------------
 # 1. load packages
 # 2. load data
@@ -16,18 +17,6 @@
 # 8.3 rel and abs delta frontal
 # 8.4 rel beta central
 # 8.5 tables of all EEG values
-# 9. plot behavioral data and corr tests
-# 9.1 just behavioral data
-# 9.2 corr tests with behav - EEG data
-# 9.2.1 rel delta w TMTA & B-A
-# 9.2.2 rel delta w moca
-# 9.2.3 rel/abs delta w FACIT
-# 9.2.4 rel delta w hads
-# 9.2.5 rel beta w TMTA & B-A
-# 9.2.6 rel beta w FACIT
-# 9.2.7 aperiodic exponent with everything
-# 9.2.8 aperiodic offset with everything
-# 10. r squared
 
 #------------ 1. load packages------------------
 library(tidyverse)

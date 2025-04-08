@@ -1,4 +1,5 @@
 %% 2. Main Preprocessing Script
+%% The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 % 0. Preliminaries
 % 1. read in data and convert into EEGLAB structure
 % 2. exclude big artifacts 

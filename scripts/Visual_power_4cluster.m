@@ -1,4 +1,5 @@
 %% Script to visualize the power data (topoplots and power spectrum)
+%% The original code was sourced from the GitHub repository LGodbersen/Masters-thesis and subsequently modified to accommodate my dataset. (https://github.com/LGodbersen/Masters-thesis)
 % overview
 % 0. Preliminaries
 % 1. topoplots
